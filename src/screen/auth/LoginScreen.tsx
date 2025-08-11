@@ -6,7 +6,7 @@ import {
 } from 'react-native';
 import React from 'react';
 import { colors } from '../../theme/Colors';
-import { Formik } from 'formik';
+import { useFormik } from 'formik';
 import * as yup from 'yup';
 import InputText from '../../components/textInputFild/InputText';
 
@@ -18,73 +18,68 @@ import InputText from '../../components/textInputFild/InputText';
 //   handleSubmit : (e?: React.FormEvent<HTMLFormElement> | undefined) => void
 // }
 
-const LoginScreen = () => {
+const LoginScreen = ({navigation}) => {
+
+  const formik = useFormik({
+      initialValues: {
+        email: '',
+        password: '',
+      },
+      validationSchema: yup.object().shape({
+        email: yup
+          .string()
+          .matches(/^([\w-\.]+@([\w-]+\.)+[\w-]{2,4})?$/, 'email is not valid.!')
+          .required('please enter email.!'),
+        password: yup
+          .string()
+          .matches(/^.{6,}$/, 'password must be 6 characters')
+          .required('please enter password'),
+        conformPassword: yup
+          .string()
+          .oneOf([yup.ref('password')], 'Passwords does not match')
+          .required('please enter conformpassword'),
+      }),
+      onSubmit: values => {
+          console.log(values);
+          values.email = '';
+          values.password = '';
+      },
+    });
+
   return (
-    <Formik
-      initialValues={{
-        email : '',
-        password : ''
-      }}
-
-      onSubmit={(values) => {
-        console.log(values);
-        values.email = ""
-        values.password = ""
-      }}
-
-      validationSchema={yup.object().shape({
-        email : yup.string()
-                  .matches(/^([\w-\.]+@([\w-]+\.)+[\w-]{2,4})?$/, 'email is not valid.!')
-                  .required('please enter email.!'),
-        password : yup.string()
-                      .matches(/^.{6,}$/,'password must be 6 characters')
-                      .required('please enter password')
-      })}>
-
-      {({values,errors,handleChange,touched,handleSubmit,})=>(
         <View style={styles.container}>
           <View style={styles.loginContainer}>
             <Text style={styles.title}>Login</Text>
 
-            {/* <TextInput 
-              placeholder="Enter email" 
-              style={styles.textInput} 
-              value={values.email} 
-              onChangeText={handleChange('email')} 
-            />
-            {touched.email && errors.email && (<Text style={styles.errorText}>{errors.email}</Text>)} */}
-
             <InputText 
               placeHolder={"enter email"} 
-              values={values.email} 
-              handleChange={handleChange('email')} 
+              values={formik.values.email} 
+              handleChange={formik.handleChange('email')} 
               label={'email'} 
-              touched={touched.email} 
-              errors={errors.email}
+              touched={formik.touched.email} 
+              errors={formik.errors.email}
             />
 
             <InputText 
               placeHolder={"enter password"} 
-              values={values.password} 
-              handleChange={handleChange('password')} 
+              values={formik.values.password} 
+              handleChange={formik.handleChange('password')} 
               label={'password'} 
-              touched={touched.password} 
-              errors={errors.password}
+              touched={formik.touched.password} 
+              errors={formik.errors.password}
             />
 
-
-            {/* <TextInput placeholder="Enter password" style={styles.textInput} value={values.password} onChangeText={handleChange('password')} />
-            {touched.password && errors.password && (<Text style={styles.errorText}>{errors.password}</Text>)} */}
-
-            <TouchableOpacity style={styles.loginBtn} onPress={handleSubmit}>
+            <TouchableOpacity style={styles.loginBtn} onPress={formik.handleSubmit}>
               <Text style={styles.btnText}>Login</Text>
             </TouchableOpacity>
 
+            <View style={styles.footer}>
+              <Text style={styles.textLine}>Dont any account.</Text>
+              <Text style={styles.textLogin} onPress={()=>navigation.replace("registration")}>Registration.!</Text>
+            </View>
+
           </View>
         </View>
-      )}
-
-    </Formik>
   );
 };
 
@@ -109,15 +104,6 @@ const styles = StyleSheet.create({
     marginTop: 20,
     fontWeight: '700',
   },
-  // textInput: {
-  //   backgroundColor: '#fff',
-  //   marginHorizontal: 10,
-  //   fontSize: 20,
-  //   paddingLeft: 10,
-  //   borderRadius: 10,
-  //   marginTop: 30,
-  //   marginBottom: 5,
-  // },
   loginBtn: {
     backgroundColor: colors.button.button,
     height:40,
@@ -137,5 +123,22 @@ const styles = StyleSheet.create({
     color:"red",
     marginBottom:-10,
     marginLeft:15
+  },
+  footer:{
+    flexDirection:"row",
+    gap:10,
+    justifyContent:"center",
+    marginTop:10
+  },
+  textLine:{
+    fontSize:15,
+    fontWeight:"500"
+  },
+  textLogin:{
+    fontSize:15,
+    fontWeight:"500",
+    color:colors.text.blue,
+    borderBottomWidth:1,
+    borderBottomColor:colors.text.blue
   }
 });

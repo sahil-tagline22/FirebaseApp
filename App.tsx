@@ -2,6 +2,7 @@ import { NavigationContainer } from '@react-navigation/native';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import LoginScreen from './src/screen/auth/LoginScreen';
 import HomeScreen from './src/screen/HomeScreen';
+import RegistrationScreen from './src/screen/auth/RegistrationScreen';
 // import Anonymous from './src/screen/Anonymous';
 
 const Stack = createNativeStackNavigator();
@@ -11,6 +12,13 @@ const App = () => {
     <NavigationContainer>
       <Stack.Navigator>
         {/* <Stack.Screen name='anonymous' component={Anonymous} /> */}
+        <Stack.Screen
+          name="registration"
+          component={RegistrationScreen}
+          options={{
+            headerShown: false,
+          }}
+        />
         <Stack.Screen
           name="login"
           component={LoginScreen}
