@@ -1,10 +1,8 @@
 import { StyleSheet, Text, View } from 'react-native'
 import React from 'react'
-import auth from '@react-native-firebase/auth'
 
-const Home = () => {
-  const user = auth();
-  console.log("user data" , user);
+const HomeScreen = () => {
+  console.log("user data" , );
   return (
     <View>
       <Text>Home</Text>
@@ -12,6 +10,6 @@ const Home = () => {
   )
 }
 
-export default Home
+export default HomeScreen
 
 const styles = StyleSheet.create({})
