@@ -4,7 +4,7 @@ export const lightColors = {
   destructive: '#E32B4A',
   transparent: 'transparent',
   screen : '#f2f0ef',
-  separator: '#181D2D26',
+  separator: '#01030926',
 
   text: {
     primary: '#181D2D',

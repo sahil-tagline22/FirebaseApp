@@ -5,16 +5,21 @@ import { useFormik } from 'formik';
 import * as yup from 'yup';
 import InputText from '../../components/textInputFild/InputText';
 import auth from '@react-native-firebase/auth'
+import fireStore from '@react-native-firebase/firestore'
 
 const RegistrationScreen = ({navigation}) => {
 
   const formik = useFormik({
     initialValues: {
+      name:'',
       email: '',
       password: '',
       conformPassword: '',
     },
     validationSchema: yup.object().shape({
+      name: yup
+        .string()
+        .required('please enter name.!'),
       email: yup
         .string()
         .matches(/^([\w-\.]+@([\w-]+\.)+[\w-]{2,4})?$/, 'email is not valid.!')
@@ -22,18 +27,27 @@ const RegistrationScreen = ({navigation}) => {
       password: yup
         .string()
         .matches(/^.{6,}$/, 'password must be 6 characters')
-        .required('please enter password'),
+        .required('please enter password.!'),
       conformPassword: yup
         .string()
         .oneOf([yup.ref('password')], 'Passwords does not match')
-        .required('please enter conformpassword'),
+        .required('please enter conformpassword.!'),
     }),
     onSubmit: async (values) => {
         console.log(values);
         
         try{
-          await auth().createUserWithEmailAndPassword(values.email,values.password);
-          console.log("user create successfully");
+          const newUser =  await auth().createUserWithEmailAndPassword(values.email,values.password)
+          console.log("user create successfully", newUser);
+          console.log(values.name)
+          console.log(newUser.user.email)
+          console.log(newUser.user.uid)
+          await fireStore().collection('users').doc(newUser.user.uid).set({
+            name : values.name,
+            email : newUser.user.email,
+            uid : newUser.user.uid
+          })
+          values.name = '';
           values.email = '';
           values.password = '';
           values.conformPassword = '';
@@ -51,6 +65,15 @@ const RegistrationScreen = ({navigation}) => {
       <View style={styles.loginContainer}>
         <Text style={styles.title}>Registration</Text>
 
+        <InputText
+          placeHolder={'Enter Username'}
+          values={formik.values.name}
+          handleChange={formik.handleChange('name')}
+          label={'name'}
+          touched={formik.touched.name}
+          errors={formik.errors.name}
+        />
+        
         <InputText
           placeHolder={'Enter email'}
           values={formik.values.email}
@@ -104,7 +127,7 @@ const styles = StyleSheet.create({
     backgroundColor: colors.screen,
     flex: 1,
     marginHorizontal: 10,
-    marginVertical: 210,
+    marginVertical: 170,
     borderRadius: 10,
   },
   title: {
