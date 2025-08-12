@@ -4,10 +4,12 @@ import {createDrawerNavigator} from '@react-navigation/drawer'
 import HomeScreen from '../screen/HomeScreen';
 import ThemeScreen from '../screen/ThemeScreen';
 import Icon from 'react-native-vector-icons/MaterialIcons'
-import ChatScreen from '../screen/ChatScreen';
 import auth from '@react-native-firebase/auth'
+import UserScreen from '../screen/UserScreen';
+
 
 const Drawer = createDrawerNavigator();
+
 
 const HomeDrawer = () => {
 
@@ -15,6 +17,7 @@ const HomeDrawer = () => {
         auth().signOut();
         console.log("user logout");
     }
+
   return (
     <Drawer.Navigator>
       <Drawer.Screen name='home' component={HomeScreen} options={{
@@ -30,11 +33,13 @@ const HomeDrawer = () => {
         headerTitleAlign:"center"
       }} />
 
-      <Drawer.Screen name='chat' component={ChatScreen} options={{
-        drawerIcon:({color,size})=>(<Icon name='chat' color={color} size={size} />),
+      <Drawer.Screen name='userScreen' component={UserScreen} options={{
+        drawerIcon:({color,size})=>(<Icon name='group' color={color} size={size} />),
+        title:"User-chat",
         headerTitle : "User-Chat",
         headerTitleAlign:"center",
       }} />
+
     </Drawer.Navigator>
   )
 }

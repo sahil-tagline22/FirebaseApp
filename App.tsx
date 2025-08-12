@@ -9,6 +9,7 @@ import { ActivityIndicator, Button, View } from 'react-native';
 // import Anonymous from './src/screen/Anonymous';
 import { StyleSheet } from 'react-native';
 import HomeDrawer from './src/navigation/HomeDrawer';
+import ChatScreen from './src/screen/ChatScreen';
 
 const Stack = createNativeStackNavigator();
 
@@ -74,6 +75,7 @@ const App = () => {
             </>
           )
         }
+        <Stack.Screen name='chat' component={ChatScreen} />
       </Stack.Navigator>
     </NavigationContainer>
   );
