@@ -1,11 +1,22 @@
 import { StyleSheet, Text, View } from 'react-native'
-import React from 'react'
+import React, { useEffect, useState } from 'react'
+import auth from '@react-native-firebase/auth'
 
-const HomeScreen = ({user}) => {
-  console.log("user data" , user);
+const HomeScreen = () => {
+  const [user,setUser] = useState();
+
+  useEffect(()=>{
+    const userGet = ()=>{
+      const user = auth().currentUser;
+      setUser(user.email);
+      console.log("user",user.email);
+    }
+    userGet();
+  },[])
+
   return (
     <View>
-      <Text>user : {user.email}</Text>
+      <Text>user :{user}</Text>
     </View>
   )
 }

@@ -8,6 +8,7 @@ import auth from '@react-native-firebase/auth'
 import { ActivityIndicator, Button, View } from 'react-native';
 // import Anonymous from './src/screen/Anonymous';
 import { StyleSheet } from 'react-native';
+import HomeDrawer from './src/navigation/HomeDrawer';
 
 const Stack = createNativeStackNavigator();
 
@@ -52,11 +53,7 @@ const App = () => {
       <Stack.Navigator>
         {
           user ? 
-          (<Stack.Screen name="home" options={{
-            headerRight:()=><Button title='logout' onPress={handleLogout} />
-          }}>
-            {props => <HomeScreen {...props} user={user} />}
-          </Stack.Screen>)
+          (<Stack.Screen name="drawer" component={HomeDrawer} options={{headerShown:false}} />)
           :
           (
             <>
