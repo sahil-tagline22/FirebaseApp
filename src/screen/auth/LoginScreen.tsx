@@ -1,4 +1,6 @@
 import {
+  ActivityIndicator,
+  Alert,
   StyleSheet,
   Text,
   TouchableOpacity,
@@ -9,6 +11,7 @@ import { colors } from '../../theme/Colors';
 import { useFormik } from 'formik';
 import * as yup from 'yup';
 import InputText from '../../components/textInputFild/InputText';
+import auth from '@react-native-firebase/auth'
 
 // interface FormikYup {
 //   values : {email:string,password:string};
@@ -34,15 +37,22 @@ const LoginScreen = ({navigation}) => {
           .string()
           .matches(/^.{6,}$/, 'password must be 6 characters')
           .required('please enter password'),
-        conformPassword: yup
-          .string()
-          .oneOf([yup.ref('password')], 'Passwords does not match')
-          .required('please enter conformpassword'),
       }),
-      onSubmit: values => {
+      onSubmit: async (values) => {
           console.log(values);
-          values.email = '';
-          values.password = '';
+    
+          try {
+            await auth().signInWithEmailAndPassword(values.email,values.password);
+            console.log("user login successfully");
+            values.email = '';
+            values.password = '';
+          } catch (error) {
+            if(error.code === "auth/invalid-credential"){
+              Alert.alert("Alert","email and password invalid")
+            }
+            console.log("error", error)
+          }
+
       },
     });
 
@@ -117,12 +127,6 @@ const styles = StyleSheet.create({
   btnText:{
     fontSize:20,
     color : colors.text.inverted
-  },
-  errorText:{
-    fontSize:15,
-    color:"red",
-    marginBottom:-10,
-    marginLeft:15
   },
   footer:{
     flexDirection:"row",

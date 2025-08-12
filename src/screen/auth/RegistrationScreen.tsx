@@ -1,9 +1,10 @@
-import { StyleSheet, Text, TouchableOpacity, View } from 'react-native';
+import { Alert, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
 import React from 'react';
 import { colors } from '../../theme/Colors';
 import { useFormik } from 'formik';
 import * as yup from 'yup';
 import InputText from '../../components/textInputFild/InputText';
+import auth from '@react-native-firebase/auth'
 
 const RegistrationScreen = ({navigation}) => {
 
@@ -27,11 +28,21 @@ const RegistrationScreen = ({navigation}) => {
         .oneOf([yup.ref('password')], 'Passwords does not match')
         .required('please enter conformpassword'),
     }),
-    onSubmit: values => {
+    onSubmit: async (values) => {
         console.log(values);
-        values.email = '';
-        values.password = '';
-        values.conformPassword = '';
+        
+        try{
+          await auth().createUserWithEmailAndPassword(values.email,values.password);
+          console.log("user create successfully");
+          values.email = '';
+          values.password = '';
+          values.conformPassword = '';
+        }catch(error){
+          if(error.code === "auth/email-already-in-use"){
+            Alert.alert("Alert","The email address is already in use by another account.")
+          }
+          console.log("error",error)
+        }
     },
   });
 
@@ -93,7 +104,7 @@ const styles = StyleSheet.create({
     backgroundColor: colors.screen,
     flex: 1,
     marginHorizontal: 10,
-    marginVertical: 220,
+    marginVertical: 210,
     borderRadius: 10,
   },
   title: {
@@ -107,7 +118,7 @@ const styles = StyleSheet.create({
     height: 40,
     width: 200,
     alignSelf: 'center',
-    marginTop: 35,
+    marginTop: 20,
     borderRadius: 10,
     justifyContent: 'center',
     alignItems: 'center',

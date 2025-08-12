@@ -1,5 +1,6 @@
 import { StyleSheet, Text, TextInput, View } from 'react-native'
 import React from 'react'
+import { colors } from '../../theme/Colors'
 
 interface inputTextProps {
   placeHolder : string,
@@ -38,7 +39,7 @@ const styles = StyleSheet.create({
   },
   errorText:{
     fontSize:15,
-    color:"red",
+    color:colors.text.danger,
     marginBottom:-10,
     marginLeft:15
   }

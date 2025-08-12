@@ -1,11 +1,11 @@
 import { StyleSheet, Text, View } from 'react-native'
 import React from 'react'
 
-const HomeScreen = () => {
-  console.log("user data" , );
+const HomeScreen = ({user}) => {
+  console.log("user data" , user);
   return (
     <View>
-      <Text>Home</Text>
+      <Text>user : {user.email}</Text>
     </View>
   )
 }
