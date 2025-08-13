@@ -44,11 +44,6 @@ const App = () => {
       </View>
     ) 
   }
-
-  const handleLogout = ()=>{
-    auth().signOut();
-  }
-
   return (
     <NavigationContainer>
       <Stack.Navigator>
