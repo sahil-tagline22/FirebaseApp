@@ -8,26 +8,23 @@ const ChatScreen = () => {
 
   const route = useRoute();
   const {userId,sentToUid} = route.params;
+  const chatId = [userId,sentToUid].sort().join('_');
   console.log(userId,sentToUid);
 
   const [messages, setMessages] = useState([])
   console.log("massages",messages);
 
   useEffect(() => {
-    const getAllMsg = async ()=>{
-      const msg = await fireStore().collection('chats').doc('123456789').collection('messages').orderBy('createdAt','desc').get()
-      console.log("msg", msg);
-
-      const allMsgMap = msg.docs.map(item=>{
-        return{
-          ...item.data(),
-          createdAt :item.data.createdAt
-        };
-      });
-      setMessages(allMsgMap);
-    }
-    getAllMsg();
-  }, [])
+      const getAllMsg = async() => await fireStore().collection('chats').doc(chatId).collection('messages').orderBy('createdAt','desc').onSnapshot((data)=>{
+          const allMsg = data.docs.map((item)=>{
+            return{
+              ...item.data(),createdAt : item.data().createdAt.toDate()
+            }
+          })
+          setMessages(allMsg)
+        })
+      getAllMsg();
+  }, [chatId])
 
   const onSend = (messagesArray) => {
     console.log(messagesArray);
@@ -41,7 +38,7 @@ const ChatScreen = () => {
     setMessages(previousMessages =>
       GiftedChat.append(previousMessages, userMsg),
     )
-    fireStore().collection('chats').doc('123456789').collection('messages').add(userMsg);
+    fireStore().collection('chats').doc(chatId).collection('messages').add(userMsg);
   };
 
   return(
