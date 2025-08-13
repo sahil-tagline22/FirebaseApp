@@ -49,7 +49,12 @@ const App = () => {
       <Stack.Navigator>
         {
           user ? 
-          (<Stack.Screen name="drawer" component={HomeDrawer} options={{headerShown:false}} />)
+          (
+            <>
+              <Stack.Screen name="drawer" component={HomeDrawer} options={{headerShown:false}} />
+              <Stack.Screen name='chat' component={ChatScreen} options={{headerShown:false}} />
+            </>
+          )
           :
           (
             <>
@@ -70,7 +75,7 @@ const App = () => {
             </>
           )
         }
-        <Stack.Screen name='chat' component={ChatScreen} />
+       
       </Stack.Navigator>
     </NavigationContainer>
   );

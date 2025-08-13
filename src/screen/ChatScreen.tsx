@@ -1,10 +1,12 @@
 import { useRoute } from '@react-navigation/native'
 import React, { useState, useEffect } from 'react'
-import { View } from 'react-native'
+import { StyleSheet, TouchableOpacity, View } from 'react-native'
 import { GiftedChat } from 'react-native-gifted-chat'
 import fireStore from '@react-native-firebase/firestore'
+import Icon from 'react-native-vector-icons/MaterialIcons'
+import { Text } from 'react-native-gesture-handler'
 
-const ChatScreen = () => {
+const ChatScreen = ({navigation}) => {
 
   const route = useRoute();
   const {userId,sentToUid} = route.params;
@@ -43,15 +45,46 @@ const ChatScreen = () => {
 
   return(
     <View style={{flex:1}}>
-      <GiftedChat
-      messages={messages}
-      onSend={messages => onSend(messages)}
-      user={{
-        _id: userId,
-      }}
-    />
+      <View style={styles.header}>
+        <TouchableOpacity style={styles.backIcon} onPress={()=>navigation.goBack()}>
+          <Icon name='arrow-back-ios-new' color="#000" size={30}  />
+        </TouchableOpacity>
+        <Text style={styles.textTitle}>Chat</Text>
+      </View>
+      <View style={styles.container}>
+        <GiftedChat
+        messages={messages}
+        onSend={messages => onSend(messages)}
+        user={{
+          _id: userId,
+        }}
+      />
+      </View>
     </View>
   )
 }
 
 export default ChatScreen;
+
+const styles = StyleSheet.create({
+  header : {
+    height:60,
+    elevation:4,
+    backgroundColor:'rgb(255, 255, 255)',
+    borderBottomColor:'rgb(216, 216, 216)',
+    borderBottomWidth:2,
+    alignItems:"center",
+    flexDirection:"row"
+  },
+  container:{
+    flex:1,
+    backgroundColor:"#ffffff",
+  },
+  backIcon:{
+    marginLeft:5
+  },
+  textTitle:{
+    marginLeft:150,
+    fontSize:20
+  }
+})

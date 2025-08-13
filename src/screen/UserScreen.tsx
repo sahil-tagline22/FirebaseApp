@@ -1,4 +1,4 @@
-import { FlatList, Image, StatusBar, StyleSheet, Text, TouchableOpacity, View } from 'react-native'
+import { FlatList, Image, SafeAreaView, StatusBar, StyleSheet, Text, TouchableOpacity, View } from 'react-native'
 import React, { useEffect, useState } from 'react'
 import fireStore from '@react-native-firebase/firestore'
 import auth from '@react-native-firebase/auth'
@@ -25,7 +25,8 @@ const UserScreen = ({navigation}) => {
     console.log("users",users);
     
   return (
-    <View style={styles.container}>
+      <View style={styles.container}>
+        <SafeAreaView>
         <StatusBar barStyle={'dark-content'} />
         <FlatList
             data={users}
@@ -46,6 +47,7 @@ const UserScreen = ({navigation}) => {
             )} 
         />
         
+    </SafeAreaView>
     </View>
   )
 }
