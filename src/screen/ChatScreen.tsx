@@ -45,13 +45,13 @@ const ChatScreen = ({navigation}) => {
 
   return(
     <View style={{flex:1}}>
-      <View style={styles.header}>
+      {/* <View style={styles.header}>
         <TouchableOpacity style={styles.backIcon} onPress={()=>navigation.goBack()}>
           <Icon name='arrow-back-ios-new' color="#000" size={30}  />
         </TouchableOpacity>
         <Text style={styles.textTitle}>Chat</Text>
       </View>
-      <View style={styles.container}>
+      <View style={styles.container}> */}
         <GiftedChat
         messages={messages}
         onSend={messages => onSend(messages)}
@@ -59,7 +59,7 @@ const ChatScreen = ({navigation}) => {
           _id: userId,
         }}
       />
-      </View>
+      {/* </View> */}
     </View>
   )
 }

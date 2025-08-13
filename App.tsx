@@ -1,11 +1,10 @@
 import { NavigationContainer } from '@react-navigation/native';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import LoginScreen from './src/screen/auth/LoginScreen';
-import HomeScreen from './src/screen/HomeScreen';
 import RegistrationScreen from './src/screen/auth/RegistrationScreen';
 import { useEffect, useState } from 'react';
 import auth from '@react-native-firebase/auth'
-import { ActivityIndicator, Button, View } from 'react-native';
+import { ActivityIndicator, View } from 'react-native';
 // import Anonymous from './src/screen/Anonymous';
 import { StyleSheet } from 'react-native';
 import HomeDrawer from './src/navigation/HomeDrawer';
@@ -16,7 +15,7 @@ const Stack = createNativeStackNavigator();
 const App = () => {
 
   const [user,setUser] = useState(null);
-  const [loader,setLoader] = useState(true);
+  const [loader,setLoader] = useState<boolean>(true);
 
   useEffect(()=>{
 
@@ -52,7 +51,7 @@ const App = () => {
           (
             <>
               <Stack.Screen name="drawer" component={HomeDrawer} options={{headerShown:false}} />
-              <Stack.Screen name='chat' component={ChatScreen} options={{headerShown:false}} />
+              <Stack.Screen name='chat' component={ChatScreen} options={{headerShown:true}} />
             </>
           )
           :
