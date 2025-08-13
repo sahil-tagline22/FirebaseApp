@@ -1,101 +1,48 @@
-// import { useRoute } from '@react-navigation/native';
-// import { useEffect, useState } from 'react';
-// import { GiftedChat } from 'react-native-gifted-chat'
-// import auth from '@react-native-firebase/auth'
-// import fireStore from '@react-native-firebase/firestore'
-// import { View } from 'react-native/types_generated/index';
-
-// const ChatScreen = () => {
-//     const route = useRoute();
-//     const {sentToName,sentToUid} = route.params;
-
-//     const [messages, setMessages] = useState([]);
-//     const [userId,setUserId] = useState();
- 
-//   useEffect(() => {
-//     const getUserId = ()=>{
-//         const getUser = auth().currentUser?.uid;
-//         console.log("hgdfahdgsfhc",getUser)
-//         setUserId(getUser);
-//     }
-//     getUserId();
-//   }, [])
-
-//   const onSend = (msgArray) => {
-//     const msg = msgArray[0];
-//     const userMsg = {
-//         ...msg,
-//         sentBy : sentToUid,
-//         sentTo : userId,
-//         createAt : new Date()
-//     }
-//     setMessages(previousMessages => GiftedChat.append(previousMessages, userMsg))
-//     const chatId = userId > sentToUid ? setUserId + "-" + userId : userId + '-' + setUserId
-
-//     fireStore().collection('Chats').doc(chatId).collection('messages').add({...userMsg,createdAt:fireStore.FieldValue.serverTimestamp()});
-//   };
-
-//   const getAllMessage = async () =>{
-//     const chatId = userId > setUserId ? setUserId+'-'+userId : userId+'-'+sentToUid
-//     const msgResponse = await fireStore().collection('Chats').doc(chatId).collection('messages').orderBy('createdAt',"desc").get()
-
-//     const allTheMsges = msgResponse.docs.map(item=>{
-//         return{
-//             ...item.data(),
-//             createdAt:docSanp.data().createdAt.toData()
-//         }
-//     })
-//     setMessages(allTheMsges)
-//   }
-
-//   useEffect(()=>{
-//     getAllMessage()
-//   },[])
-
-//   return (
-//     <View style={{flex:1,}}>
-//       <GiftedChat
-//         messages={messages}
-//         onSend={messages => onSend(messages)}
-//         user={{
-//           _id: sentToUid,
-//         }}
-//       />
-//     </View>
-//   )
-// }
-
-// export default ChatScreen;
-
-
-import React, { useState, useCallback, useEffect } from 'react'
+import { useRoute } from '@react-navigation/native'
+import React, { useState, useEffect } from 'react'
 import { View } from 'react-native'
 import { GiftedChat } from 'react-native-gifted-chat'
+import fireStore from '@react-native-firebase/firestore'
 
 const ChatScreen = () => {
 
+  const route = useRoute();
+  const {userId,sentToUid} = route.params;
+  console.log(userId,sentToUid);
+
   const [messages, setMessages] = useState([])
+  console.log("massages",messages);
 
   useEffect(() => {
-    setMessages([
-      {
-        _id: 1,
-        text: 'Hello developer',
-        createdAt: new Date(),
-        user: {
-          _id: 2,
-          name: 'React Native',
-          avatar: 'https://placeimg.com/140/140/any',
-        },
-      },
-    ])
+    const getAllMsg = async ()=>{
+      const msg = await fireStore().collection('chats').doc('123456789').collection('messages').orderBy('createdAt','desc').get()
+      console.log("msg", msg);
+
+      const allMsgMap = msg.docs.map(item=>{
+        return{
+          ...item.data(),
+          createdAt :item.data.createdAt
+        };
+      });
+      setMessages(allMsgMap);
+    }
+    getAllMsg();
   }, [])
 
-  const onSend = useCallback((messages = []) => {
+  const onSend = (messagesArray) => {
+    console.log(messagesArray);
+    const msg = messagesArray[0];
+    const userMsg = {
+      ...msg,
+      sentBy : userId,
+      sentTo : sentToUid,
+      createdAt : new Date()
+    }
     setMessages(previousMessages =>
-      GiftedChat.append(previousMessages, messages),
+      GiftedChat.append(previousMessages, userMsg),
     )
-  }, [])
+    fireStore().collection('chats').doc('123456789').collection('messages').add(userMsg);
+  };
 
   return(
     <View style={{flex:1}}>
@@ -103,7 +50,7 @@ const ChatScreen = () => {
       messages={messages}
       onSend={messages => onSend(messages)}
       user={{
-        _id: 1,
+        _id: userId,
       }}
     />
     </View>

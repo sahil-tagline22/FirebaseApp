@@ -9,10 +9,12 @@ import Icon from 'react-native-vector-icons/MaterialIcons'
 const UserScreen = ({navigation}) => {
 
     const [users,setUsers] = useState(null);
+    const [id,setId] = useState();
 
     useEffect(()=>{
         const userid = auth().currentUser?.uid;
         console.log("id",userid);
+        setId(userid);
         const getUsers = async ()=>{
             const getAllUser = await fireStore().collection('users').where('uid','!=',userid).get()
             const allUser = getAllUser.docs.map((item)=>item.data())
@@ -37,7 +39,7 @@ const UserScreen = ({navigation}) => {
                         <Text style={styles.userValue}>{item.name}</Text>
                         <Text style={styles.userValue}>{item.email}</Text>
                     </View>
-                    <TouchableOpacity style={styles.chatIcon} onPress={()=>navigation.navigate("chat",{sentToName : item.name, sentToUid : item.uid})}>
+                    <TouchableOpacity style={styles.chatIcon} onPress={()=>navigation.navigate("chat",{userId : id, sentToUid : item.uid})}>
                         <Icon name='chat' color="#000" size={40} />
                     </TouchableOpacity>
                 </View>
