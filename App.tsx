@@ -9,6 +9,7 @@ import { ActivityIndicator, View } from 'react-native';
 import { StyleSheet } from 'react-native';
 import HomeDrawer from './src/navigation/HomeDrawer';
 import ChatScreen from './src/screen/ChatScreen';
+import SplashScreen from './src/screen/SplashScreen';
 
 const Stack = createNativeStackNavigator();
 
@@ -40,11 +41,11 @@ const App = () => {
   //     </View>
   //   );
   // }
-  const initialRouteName = user ? 'drawer' : 'login'
+  // const initialRouteName = user ? 'drawer' : 'login'
   return (
     <NavigationContainer>
-      <Stack.Navigator initialRouteName={initialRouteName}>
-        
+      <Stack.Navigator>
+        <Stack.Screen name='splash' component={SplashScreen} options={{headerShown:false}} />
         <Stack.Screen name='login' component={LoginScreen} options={{headerShown: false,}} />
         <Stack.Screen name='registration' component={RegistrationScreen} />
         <Stack.Screen name='drawer' component={HomeDrawer} />
