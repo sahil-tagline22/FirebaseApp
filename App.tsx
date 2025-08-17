@@ -9,13 +9,19 @@ import { ActivityIndicator, View } from 'react-native';
 import { StyleSheet } from 'react-native';
 import HomeDrawer from './src/navigation/HomeDrawer';
 import ChatScreen from './src/screen/ChatScreen';
-import SplashScreen from './src/screen/SplashScreen';
+import CustomScreen from './src/screen/SplashScreen';
+import SplashScreen from 'react-native-splash-screen';
+
 
 const Stack = createNativeStackNavigator();
 
 const App = () => {
   const [user, setUser] = useState<any | null>(null);
   const [loader, setLoader] = useState<boolean>(true);
+
+  useEffect(()=>{
+    SplashScreen.hide();
+  },[])
 
   useEffect(() => {
     getUser();
@@ -45,7 +51,7 @@ const App = () => {
   return (
     <NavigationContainer>
       <Stack.Navigator>
-        <Stack.Screen name='splash' component={SplashScreen} options={{headerShown:false}} />
+        <Stack.Screen name='splash' component={CustomScreen} options={{headerShown:false}} />
         <Stack.Screen name='login' component={LoginScreen} options={{headerShown: false,}} />
         <Stack.Screen name='registration' component={RegistrationScreen} />
         <Stack.Screen name='drawer' component={HomeDrawer} />
