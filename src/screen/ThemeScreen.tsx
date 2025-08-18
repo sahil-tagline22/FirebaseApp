@@ -3,7 +3,7 @@ import React, { useEffect, useState } from 'react';
 import getRemoteConfig from '@react-native-firebase/remote-config';
 
 const ThemeScreen = () => {
-  const [theme, setTheme] = useState();
+  const [theme, setTheme] = useState<string>();
   useEffect(() => {
     const appTheme = async () => {
       try {

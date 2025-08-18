@@ -5,11 +5,18 @@ import auth from '@react-native-firebase/auth'
 import { Images } from '../assets/Images'
 import { colors } from '../theme/Colors'
 import Icon from 'react-native-vector-icons/MaterialIcons'
+import { NativeStackNavigationProp } from '@react-navigation/native-stack'
+import { RootStackParamList } from '../types/RootStackParamList'
 
-const UserScreen = ({navigation}) => {
+interface UserScreenProps {
+    navigation : NativeStackNavigationProp<RootStackParamList,'userScreen'> 
+}
 
-    const [users,setUsers] = useState(null);
-    const [id,setId] = useState();
+const UserScreen = ({navigation}:UserScreenProps) => {
+
+    const [users,setUsers] = useState<any[]>([]);
+    console.log("users get from data base-->" ,users);
+    const [id,setId] = useState<string>();
 
     useEffect(()=>{
         const userid = auth().currentUser?.uid;
@@ -30,7 +37,7 @@ const UserScreen = ({navigation}) => {
         <StatusBar barStyle={'dark-content'} />
         <FlatList
             data={users}
-            keyExtractor={(index)=>index}
+            keyExtractor={(item,index)=>index.toString()}
             renderItem={({item})=>(
                 <View style={styles.userListContainer}>
                     <View style={styles.imageContainer}>

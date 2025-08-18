@@ -6,8 +6,18 @@ import * as yup from 'yup';
 import InputText from '../../components/textInputFild/InputText';
 import auth from '@react-native-firebase/auth'
 import fireStore from '@react-native-firebase/firestore'
+import { NativeStackNavigationProp } from '@react-navigation/native-stack';
+import { RootStackParamList } from '../../types/RootStackParamList';
+import { useAppDispatch } from '../../redux/Store';
+import { loginUser } from '../../redux/slice/AuthSlice';
 
-const RegistrationScreen = ({navigation}) => {
+interface RegistrationScreenProps {
+  navigation : NativeStackNavigationProp<RootStackParamList,'registration'>
+}
+
+const RegistrationScreen = ({navigation}:RegistrationScreenProps) => {
+
+  const dispatch = useAppDispatch();
 
   const formik = useFormik({
     initialValues: {
@@ -38,20 +48,24 @@ const RegistrationScreen = ({navigation}) => {
         
         try{
           const newUser =  await auth().createUserWithEmailAndPassword(values.email,values.password)
-          console.log("user create successfully", newUser);
-          console.log(values.name)
-          console.log(newUser.user.email)
-          console.log(newUser.user.uid)
+          console.log("new user create successfully", newUser);
+          if(newUser){
+            dispatch(loginUser(newUser.user));
+            navigation.replace("bottom");
+          }
+  
           await fireStore().collection('users').doc(newUser.user.uid).set({
             name : values.name,
             email : newUser.user.email,
             uid : newUser.user.uid
           })
+
           values.name = '';
           values.email = '';
           values.password = '';
           values.conformPassword = '';
-        }catch(error){
+          
+        }catch(error:any){
           if(error.code === "auth/email-already-in-use"){
             Alert.alert("Alert","The email address is already in use by another account.")
           }
@@ -120,7 +134,7 @@ export default RegistrationScreen;
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    marginTop: 40,
+    // marginTop: 40,
     backgroundColor: colors.background,
   },
   loginContainer: {

@@ -4,14 +4,41 @@ import ThemeScreen from '../screen/ThemeScreen';
 import UserScreen from '../screen/UserScreen';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import IconDisplay from '../components/IconPrint/IconDisplay';
-
+import { StyleSheet, Text, TouchableOpacity } from 'react-native';
+import { colors } from '../theme/Colors';
+import auth from '@react-native-firebase/auth'
+import { RootStackParamList } from '../types/RootStackParamList';
+import { NativeStackNavigationProp } from '@react-navigation/native-stack';
+import { useAppDispatch } from '../redux/Store';
+import { logoutUser } from '../redux/slice/AuthSlice';
 
 const Bottom = createBottomTabNavigator();
 
-const BottomTabNavigate = () => {
+interface BottomTabNavigateProps {
+  navigation : NativeStackNavigationProp<RootStackParamList,'drawerHome'>
+}
+
+const BottomTabNavigate = ({navigation}:BottomTabNavigateProps) => {
+
+  const dispatch = useAppDispatch();
+
+   const handleLogout = () => {
+      auth().signOut();
+      dispatch(logoutUser());
+      navigation.replace("login");
+      console.log('user logout');
+    };
 
   return (
-    <Bottom.Navigator>
+    <Bottom.Navigator 
+      screenOptions={{
+        headerRight : ()=>(
+          <TouchableOpacity style={styles.btnContainer} onPress={handleLogout}>
+            <Text style={styles.btnText}>LogOut</Text>
+          </TouchableOpacity>
+        )
+      }}
+    >
       <Bottom.Screen
         name="drawerHome"
         component={HomeScreen}
@@ -55,3 +82,19 @@ const BottomTabNavigate = () => {
 };
 
 export default BottomTabNavigate;
+
+const styles = StyleSheet.create({
+  btnContainer:{
+    backgroundColor:colors.button.button,
+    height:30,
+    width:70,
+    marginRight:15,
+    borderRadius:20,
+    alignItems:"center",
+    justifyContent:"center"
+  },
+  btnText:{
+    fontSize:15,
+    color:colors.text.inverted
+  }
+})

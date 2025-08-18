@@ -2,10 +2,10 @@ export type RootStackParamList = {
     login : undefined,
     registration : undefined,
     bottom : undefined,
-    chat : undefined,
-}
-
-export type BottomParamList = {
+    chat : {
+        userId? : string | number,
+        sentToUid : string | number,
+    }
     drawerHome : undefined,
     drawerTheme: undefined,
     userScreen : undefined

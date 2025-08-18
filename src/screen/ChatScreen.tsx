@@ -1,19 +1,26 @@
-import { useRoute } from '@react-navigation/native';
+import { RouteProp, useRoute } from '@react-navigation/native';
 import React, { useState, useEffect } from 'react';
 import { StyleSheet, TouchableOpacity, View } from 'react-native';
 import { GiftedChat } from 'react-native-gifted-chat';
 import fireStore from '@react-native-firebase/firestore';
 import Icon from 'react-native-vector-icons/MaterialIcons';
 import { Text } from 'react-native-gesture-handler';
+import { colors } from '../theme/Colors';
+import { NativeStackNavigationProp } from '@react-navigation/native-stack';
+import { RootStackParamList } from '../types/RootStackParamList';
 
-const ChatScreen = ({ navigation }) => {
-  const route = useRoute();
+interface ChatScreenProps {
+  navigation : NativeStackNavigationProp<RootStackParamList,'chat'>
+}
+
+const ChatScreen = ({ navigation }:ChatScreenProps) => {
+  const route = useRoute<RouteProp<RootStackParamList,'chat'>>();
   const { userId, sentToUid } = route.params;
   const chatId = [userId, sentToUid].sort().join('_');
   console.log(userId, sentToUid);
 
-  const [messages, setMessages] = useState([]);
-  console.log('massages', messages);
+  const [messages, setMessages] = useState<any[]>([]);
+  console.log("get massage -->",messages);
 
   useEffect(() => {
     const getAllMsg = async () =>
@@ -34,7 +41,7 @@ const ChatScreen = ({ navigation }) => {
     getAllMsg();
   }, [chatId]);
 
-  const onSend = messagesArray => {
+  const onSend = (messagesArray:any[]) => {
     console.log(messagesArray);
     const msg = messagesArray[0];
     const userMsg = {
@@ -54,14 +61,13 @@ const ChatScreen = ({ navigation }) => {
   };
 
   return (
-    <View style={{ flex: 1, backgroundColor: 'red' }}>
-      {/* <View style={styles.header}>
+    <View style={styles.container}>
+      <View style={styles.header}>
         <TouchableOpacity style={styles.backIcon} onPress={()=>navigation.goBack()}>
           <Icon name='arrow-back-ios-new' color="#000" size={30}  />
         </TouchableOpacity>
         <Text style={styles.textTitle}>Chat</Text>
       </View>
-      <View style={styles.container}> */}
       <GiftedChat
         messages={messages}
         onSend={messages => onSend(messages)}
@@ -69,7 +75,6 @@ const ChatScreen = ({ navigation }) => {
           _id: userId,
         }}
       />
-      {/* </View> */}
     </View>
   );
 };
@@ -88,7 +93,7 @@ const styles = StyleSheet.create({
   },
   container: {
     flex: 1,
-    backgroundColor: '#ffffff',
+    backgroundColor: colors.background,
   },
   backIcon: {
     marginLeft: 5,

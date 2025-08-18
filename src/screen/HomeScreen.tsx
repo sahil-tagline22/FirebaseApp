@@ -1,16 +1,16 @@
-import { StyleSheet, Text, View } from 'react-native'
-import React, { useEffect, useState } from 'react'
-import auth from '@react-native-firebase/auth'
+import { Text, View } from 'react-native'
+import { useAppSelector } from '../redux/Store'
 
 const HomeScreen = () => {
+
+  const user = useAppSelector((state)=>state.auth.user)
   
   return (
     <View>
-      <Text>home</Text>
+      <Text>user -: {user?.email}</Text>
     </View>
   )
 }
 
 export default HomeScreen
 
-const styles = StyleSheet.create({})
