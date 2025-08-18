@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useCallback } from 'react';
 import HomeScreen from '../screen/HomeScreen';
 import ThemeScreen from '../screen/ThemeScreen';
 import UserScreen from '../screen/UserScreen';
@@ -6,7 +6,7 @@ import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import IconDisplay from '../components/IconPrint/IconDisplay';
 import { StyleSheet, Text, TouchableOpacity } from 'react-native';
 import { colors } from '../theme/Colors';
-import auth from '@react-native-firebase/auth'
+import auth from '@react-native-firebase/auth';
 import { RootStackParamList } from '../types/RootStackParamList';
 import { NativeStackNavigationProp } from '@react-navigation/native-stack';
 import { useAppDispatch } from '../redux/Store';
@@ -15,42 +15,56 @@ import { logoutUser } from '../redux/slice/AuthSlice';
 const Bottom = createBottomTabNavigator();
 
 interface BottomTabNavigateProps {
-  navigation : NativeStackNavigationProp<RootStackParamList,'drawerHome'>
+  navigation: NativeStackNavigationProp<RootStackParamList, 'drawerHome'>;
 }
 
-const BottomTabNavigate = ({navigation}:BottomTabNavigateProps) => {
-
+const BottomTabNavigate = ({ navigation }: BottomTabNavigateProps) => {
   const dispatch = useAppDispatch();
 
-   const handleLogout = () => {
-      auth().signOut();
-      dispatch(logoutUser());
-      navigation.replace("login");
-      console.log('user logout');
-    };
+  const handleLogout = useCallback(() => {
+    auth().signOut();
+    dispatch(logoutUser());
+    navigation.replace('login');
+    console.log('user logout');
+  }, [dispatch, navigation]);
+
+  const headerRight = useCallback(
+    () => (
+      <TouchableOpacity style={styles.btnContainer} onPress={handleLogout}>
+        <Text style={styles.btnText}>LogOut</Text>
+      </TouchableOpacity>
+    ),
+    [handleLogout],
+  );
+
+  const tabBarIcon = useCallback(
+    (props: {
+      focused: boolean;
+      color: string;
+      size: number;
+      name: 'home';
+    }) => (
+      <IconDisplay name={props.name} color={props.color} size={props.size} />
+    ),
+    [],
+  );
 
   return (
-    <Bottom.Navigator 
+    <Bottom.Navigator
       screenOptions={{
-        headerRight : ()=>(
-          <TouchableOpacity style={styles.btnContainer} onPress={handleLogout}>
-            <Text style={styles.btnText}>LogOut</Text>
-          </TouchableOpacity>
-        )
+        headerRight: headerRight,
       }}
     >
       <Bottom.Screen
         name="drawerHome"
         component={HomeScreen}
         options={{
-          tabBarIcon: ({ color, size }) => (
-            <IconDisplay name={"home"} color={color} size={size} />
-          ),
+          tabBarIcon: props => tabBarIcon({ ...props, name: 'home' }),
           headerTitle: 'Home',
           headerTitleAlign: 'center',
-          title:"Home"
+          title: 'Home',
         }}
-        />
+      />
 
       <Bottom.Screen
         name="drawerTheme"
@@ -61,7 +75,7 @@ const BottomTabNavigate = ({navigation}:BottomTabNavigateProps) => {
           ),
           headerTitle: 'Theme',
           headerTitleAlign: 'center',
-          title:"Theme"
+          title: 'Theme',
         }}
       />
 
@@ -84,17 +98,17 @@ const BottomTabNavigate = ({navigation}:BottomTabNavigateProps) => {
 export default BottomTabNavigate;
 
 const styles = StyleSheet.create({
-  btnContainer:{
-    backgroundColor:colors.button.button,
-    height:30,
-    width:70,
-    marginRight:15,
-    borderRadius:20,
-    alignItems:"center",
-    justifyContent:"center"
+  btnContainer: {
+    backgroundColor: colors.button.button,
+    height: 30,
+    width: 70,
+    marginRight: 15,
+    borderRadius: 20,
+    alignItems: 'center',
+    justifyContent: 'center',
   },
-  btnText:{
-    fontSize:15,
-    color:colors.text.inverted
-  }
-})
+  btnText: {
+    fontSize: 15,
+    color: colors.text.inverted,
+  },
+});

@@ -43,7 +43,7 @@ const LoginScreen = ({navigation}:LoginScreenProps) => {
       onSubmit: async (values) => {
           try {
             const user =  await auth().signInWithEmailAndPassword(values.email,values.password);
-            console.log("login user -->",user.user);
+            console.log("login user -->",user);
             if(user){
               dispatch(loginUser(user.user));
               navigation.replace("bottom");

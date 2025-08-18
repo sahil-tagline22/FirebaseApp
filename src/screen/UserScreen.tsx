@@ -4,9 +4,9 @@ import fireStore from '@react-native-firebase/firestore'
 import auth from '@react-native-firebase/auth'
 import { Images } from '../assets/Images'
 import { colors } from '../theme/Colors'
-import Icon from 'react-native-vector-icons/MaterialIcons'
 import { NativeStackNavigationProp } from '@react-navigation/native-stack'
 import { RootStackParamList } from '../types/RootStackParamList'
+import IconDisplay from '../components/IconPrint/IconDisplay'
 
 interface UserScreenProps {
     navigation : NativeStackNavigationProp<RootStackParamList,'userScreen'> 
@@ -23,7 +23,7 @@ const UserScreen = ({navigation}:UserScreenProps) => {
         console.log("id",userid);
         setId(userid);
         const getUsers = async ()=>{
-            const getAllUser = await fireStore().collection('users').where('uid','!=',userid).get()
+            const getAllUser = await fireStore().collection('users').where('uid','!=',userid).get();
             const allUser = getAllUser.docs.map((item)=>item.data())
             setUsers(allUser);
         }
@@ -48,7 +48,7 @@ const UserScreen = ({navigation}:UserScreenProps) => {
                         <Text style={styles.userValue}>{item.email}</Text>
                     </View>
                     <TouchableOpacity style={styles.chatIcon} onPress={()=>navigation.navigate("chat",{userId : id, sentToUid : item.uid})}>
-                        <Icon name='chat' color="#000" size={40} />
+                        <IconDisplay name='chat' color="#000" size={40} />
                     </TouchableOpacity>
                 </View>
             )} 
