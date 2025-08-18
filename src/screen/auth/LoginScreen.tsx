@@ -1,5 +1,4 @@
 import {
-  ActivityIndicator,
   Alert,
   StyleSheet,
   Text,
@@ -12,16 +11,18 @@ import { useFormik } from 'formik';
 import * as yup from 'yup';
 import InputText from '../../components/textInputFild/InputText';
 import auth from '@react-native-firebase/auth'
+import { useAppDispatch } from '../../redux/Store';
+import { loginUser } from '../../redux/slice/AuthSlice';
+import { NativeStackNavigationProp } from '@react-navigation/native-stack';
+import { RootStackParamList } from '../../types/RootStackParamList';
 
-// interface FormikYup {
-//   values : {email:string,password:string};
-//   errors : {email:string,password:string};
-//   handleChange : (e: React.ChangeEvent<any>)=> void;
-//   touched : {email:string,password:string};
-//   handleSubmit : (e?: React.FormEvent<HTMLFormElement> | undefined) => void
-// }
+interface LoginScreenProps {
+  navigation : NativeStackNavigationProp<RootStackParamList,"login">
+}
 
-const LoginScreen = ({navigation}) => {
+const LoginScreen = ({navigation}:LoginScreenProps) => {
+
+  const dispatch = useAppDispatch();
 
   const formik = useFormik({
       initialValues: {
@@ -38,19 +39,24 @@ const LoginScreen = ({navigation}) => {
           .matches(/^.{6,}$/, 'password must be 6 characters')
           .required('please enter password'),
       }),
+
       onSubmit: async (values) => {
-          console.log(values);
-    
           try {
-            await auth().signInWithEmailAndPassword(values.email,values.password);
-            console.log("user login successfully");
+            const user =  await auth().signInWithEmailAndPassword(values.email,values.password);
+            console.log("login user -->",user.user);
+            if(user){
+              dispatch(loginUser(user.user));
+              navigation.replace("bottom");
+            }
             values.email = '';
             values.password = '';
-          } catch (error) {
+
+          } catch (error:any) {
             if(error.code === "auth/invalid-credential"){
               Alert.alert("Alert","email and password invalid")
+            }else{
+              console.log(error);
             }
-            console.log("error", error)
           }
 
       },
