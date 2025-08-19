@@ -10,8 +10,15 @@ async function fetchSheetData() {
     const response = await fetch(CSV_URL);
     if (!response.ok)
       throw new Error(`Failed to fetch CSV: ${response.status}`);
-    const csv = await response.text();
-    return Papa.parse(csv, { header: true }).data;
+
+    // Remove BOM if present
+    let csv = await response.text();
+    csv = csv.replace(/^\uFEFF/, '');
+
+    const parsed = Papa.parse(csv, { header: true });
+    console.log('✅ CSV Headers:', parsed.meta.fields);
+
+    return parsed.data;
   } catch (err) {
     console.error('❌ Error fetching or parsing CSV:', err);
     throw err;
@@ -28,6 +35,8 @@ function cleanValue(value) {
 async function generateLocales() {
   const data = await fetchSheetData();
   const locales = {};
+
+  console.log('✅ Sample row:', data[0]); // Debug first row
 
   for (const row of data) {
     const key = row.key?.trim();

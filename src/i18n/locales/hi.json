@@ -1,4 +1,6 @@
 {
-  "continue": "आगे बढ़े",
-  "login": "लॉग इन"
+  "appName": "पशु आधार",
+  "select_language": "भाषा चुने",
+  "choose_preferred_language": "अपनी पसंदीदा भाषा चुनें",
+  "home": "घर"
 }
