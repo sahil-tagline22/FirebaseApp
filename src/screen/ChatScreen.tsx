@@ -1,14 +1,15 @@
 import { RouteProp, useRoute } from '@react-navigation/native';
 import React, { useState, useEffect } from 'react';
-import { StyleSheet, TouchableOpacity, View } from 'react-native';
-import { GiftedChat } from 'react-native-gifted-chat';
+import { Keyboard, KeyboardAvoidingView, Platform, ScrollView, StyleSheet, TouchableOpacity, TouchableWithoutFeedback, View } from 'react-native';
+import { GiftedChat, IMessage } from 'react-native-gifted-chat';
 import Icon from 'react-native-vector-icons/MaterialIcons';
 import { Text } from 'react-native-gesture-handler';
 import { colors } from '../theme/Colors';
 import { NativeStackNavigationProp } from '@react-navigation/native-stack';
 import { RootStackParamList } from '../types/RootStackParamList';
 import { getApp } from '@react-native-firebase/app';
-import { getFirestore, collection, doc, query, orderBy, onSnapshot, addDoc, fireStore } from '@react-native-firebase/firestore';
+import { getFirestore, collection, doc, query, orderBy, onSnapshot, addDoc} from '@react-native-firebase/firestore';
+import { Images } from '../assets/Images';
 
 interface ChatScreenProps {
   navigation : NativeStackNavigationProp<RootStackParamList,'chat'>
@@ -20,7 +21,7 @@ const ChatScreen = ({ navigation }:ChatScreenProps) => {
   const chatId = [userId, sentToUid].sort().join('_');
   console.log(userId, sentToUid);
 
-  const [messages, setMessages] = useState<any[]>([]);
+  const [messages, setMessages] = useState<IMessage[]>([]);
   console.log("get massage -->",messages);
 
   useEffect(() => {
@@ -32,7 +33,7 @@ const ChatScreen = ({ navigation }:ChatScreenProps) => {
     const q = query(massage,orderBy('createdAt','desc'));
 
     const getAllMsg = onSnapshot(q,data => {
-      const allMsg = data.docs.map(item=>({
+      const allMsg = data.docs.map(item => ({
         ...item.data(),
         createdAt: item.data().createdAt.toDate(),
       }));
@@ -62,6 +63,9 @@ const ChatScreen = ({ navigation }:ChatScreenProps) => {
   };
 
   return (
+   
+      <KeyboardAvoidingView  style={{flex:1}}>
+        <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
     <View style={styles.container}>
       <View style={styles.header}>
         <TouchableOpacity style={styles.backIcon} onPress={()=>navigation.goBack()}>
@@ -69,14 +73,18 @@ const ChatScreen = ({ navigation }:ChatScreenProps) => {
         </TouchableOpacity>
         <Text style={styles.textTitle}>Chat</Text>
       </View>
-      <GiftedChat
-        messages={messages}
-        onSend={messages => onSend(messages)}
-        user={{
-          _id: userId,
-        }}
-      />
+          <GiftedChat
+            // focusOnInputWhenOpeningKeyboard
+            messages={messages}
+            onSend={messages => onSend(messages)}
+            user={{
+              _id: userId,
+              avatar:Images.user
+            }}
+          />
     </View>
+        </TouchableWithoutFeedback>
+      </KeyboardAvoidingView>
   );
 };
 

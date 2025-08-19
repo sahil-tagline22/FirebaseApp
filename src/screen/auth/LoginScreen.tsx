@@ -10,11 +10,12 @@ import { colors } from '../../theme/Colors';
 import { useFormik } from 'formik';
 import * as yup from 'yup';
 import InputText from '../../components/textInputFild/InputText';
-import auth from '@react-native-firebase/auth'
 import { useAppDispatch } from '../../redux/Store';
 import { loginUser } from '../../redux/slice/AuthSlice';
 import { NativeStackNavigationProp } from '@react-navigation/native-stack';
 import { RootStackParamList } from '../../types/RootStackParamList';
+import {getAuth,signInWithEmailAndPassword} from '@react-native-firebase/auth'
+// import { getApp } from '@react-native-firebase/app';
 
 interface LoginScreenProps {
   navigation : NativeStackNavigationProp<RootStackParamList,"login">
@@ -42,7 +43,8 @@ const LoginScreen = ({navigation}:LoginScreenProps) => {
 
       onSubmit: async (values) => {
           try {
-            const user =  await auth().signInWithEmailAndPassword(values.email,values.password);
+            const auth = getAuth();
+            const user = await signInWithEmailAndPassword(auth,values.email,values.password)
             console.log("login user -->",user);
             if(user){
               dispatch(loginUser(user.user));

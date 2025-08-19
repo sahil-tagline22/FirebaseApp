@@ -44,7 +44,6 @@ const UserScreen = ({navigation}:UserScreenProps) => {
   return (
       <View style={styles.container}>
         <SafeAreaView>
-        <StatusBar barStyle={'dark-content'} />
         <FlatList
             data={users}
             keyExtractor={(item,index)=>index.toString()}

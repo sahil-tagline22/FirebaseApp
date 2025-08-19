@@ -1,4 +1,4 @@
-import { Text, View } from 'react-native'
+import { StatusBar, Text, View } from 'react-native'
 import { useAppSelector } from '../redux/Store'
 import { useEffect, useState } from 'react'
 import {getFirestore,collection,getDocs} from '@react-native-firebase/firestore'
@@ -26,6 +26,7 @@ const HomeScreen = () => {
   
   return (
     <View>
+      <StatusBar backgroundColor={"red"} />
       <Text>user -: {user?.email}</Text>
     </View>
   )

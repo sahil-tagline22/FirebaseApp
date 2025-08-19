@@ -54,6 +54,7 @@ const BottomTabNavigate = ({ navigation }: BottomTabNavigateProps) => {
     <Bottom.Navigator
       screenOptions={{
         headerRight: headerRight,
+        tabBarActiveTintColor:"blue"
       }}
     >
       <Bottom.Screen
