@@ -74,10 +74,10 @@ const LoginScreen = ({navigation}:LoginScreenProps) => {
   return (
         <View style={styles.container}>
           <View style={styles.loginContainer}>
-            <Text style={styles.title}>{t('Login')}</Text>
+            <Text style={styles.title}>{t('login_title')}</Text>
 
             <InputText 
-              placeHolder={t("enter email")} 
+              placeHolder={t("enter_email")} 
               values={formik.values.email} 
               handleChange={formik.handleChange('email')} 
               label={'email'} 
@@ -86,7 +86,7 @@ const LoginScreen = ({navigation}:LoginScreenProps) => {
             />
 
             <InputText 
-              placeHolder={t("enter password")} 
+              placeHolder={t("enter_password")} 
               values={formik.values.password} 
               handleChange={formik.handleChange('password')} 
               label={'password'} 
@@ -95,12 +95,12 @@ const LoginScreen = ({navigation}:LoginScreenProps) => {
             />
 
             <TouchableOpacity style={styles.loginBtn} onPress={formik.handleSubmit}>
-              <Text style={styles.btnText}>{t('Login')}</Text>
+              <Text style={styles.btnText}>{t('login_btn')}</Text>
             </TouchableOpacity>
 
             <View style={styles.footer}>
-              <Text style={styles.textLine}>{t('Dont any account')}.</Text>
-              <Text style={styles.textLogin} onPress={()=>navigation.replace("registration")}>{t('Registration')}.!</Text>
+              <Text style={styles.textLine}>{t('dont_any_account')}</Text>
+              <Text style={styles.textLogin} onPress={()=>navigation.replace("registration")}>{t('Registration_message')}</Text>
             </View>
 
           </View>

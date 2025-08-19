@@ -11,11 +11,16 @@ import { RootStackParamList } from '../../types/RootStackParamList';
 import { useAppDispatch } from '../../redux/Store';
 import { loginUser } from '../../redux/slice/AuthSlice';
 
+import { useTranslation } from 'react-i18next';
+import i18n from '../../i18n/i18nextConfig';
+
 interface RegistrationScreenProps {
   navigation : NativeStackNavigationProp<RootStackParamList,'registration'>
 }
 
 const RegistrationScreen = ({navigation}:RegistrationScreenProps) => {
+
+  const {t,i18n} = useTranslation();
 
   const dispatch = useAppDispatch();
 
@@ -77,10 +82,10 @@ const RegistrationScreen = ({navigation}:RegistrationScreenProps) => {
   return (
     <View style={styles.container}>
       <View style={styles.loginContainer}>
-        <Text style={styles.title}>Registration</Text>
+        <Text style={styles.title}>{t('registration_title')}</Text>
 
         <InputText
-          placeHolder={'Enter Username'}
+          placeHolder={t('enter_userName')}
           values={formik.values.name}
           handleChange={formik.handleChange('name')}
           label={'name'}
@@ -89,7 +94,7 @@ const RegistrationScreen = ({navigation}:RegistrationScreenProps) => {
         />
         
         <InputText
-          placeHolder={'Enter email'}
+          placeHolder={t('enter_email')}
           values={formik.values.email}
           handleChange={formik.handleChange('email')}
           label={'email'}
@@ -98,7 +103,7 @@ const RegistrationScreen = ({navigation}:RegistrationScreenProps) => {
         />
 
         <InputText
-          placeHolder={'Enter password'}
+          placeHolder={t('enter_password')}
           values={formik.values.password}
           handleChange={formik.handleChange('password')}
           label={'password'}
@@ -107,7 +112,7 @@ const RegistrationScreen = ({navigation}:RegistrationScreenProps) => {
         />
 
         <InputText
-          placeHolder={'Re-enter password'}
+          placeHolder={t('re_enter_password')}
           values={formik.values.conformPassword}
           handleChange={formik.handleChange('conformPassword')}
           label={'conformPassword'}
@@ -116,12 +121,12 @@ const RegistrationScreen = ({navigation}:RegistrationScreenProps) => {
         />
 
         <TouchableOpacity style={styles.loginBtn} onPress={formik.handleSubmit}>
-          <Text style={styles.btnText}>Registration</Text>
+          <Text style={styles.btnText}>{t('registration_btn')}</Text>
         </TouchableOpacity>
 
         <View style={styles.footer}>
-          <Text style={styles.textLine}>I have already account.</Text>
-          <Text style={styles.textLogin} onPress={()=>navigation.replace("login")}>Login.!</Text>
+          <Text style={styles.textLine}>{t('i_have_account')}</Text>
+          <Text style={styles.textLogin} onPress={()=>navigation.replace("login")}>{t('login_message')}</Text>
         </View>
         
       </View>

@@ -1,4 +1,21 @@
 {
-  "continue": "Continue",
-  "login": "Login"
+  "registration_title" : "Registration",
+  "enter_userName" : "Enter username",
+  "enter_email" : "Enter email",
+  "enter_password" : "Enter password",
+  "re_enter_password" : "Re-enter password",
+  "registration_btn" : "Registration",
+  "i_have_account":"I have already account.",
+  "login_message" : "Login..!",
+
+  
+  "login_title" : "Login",
+  "enter_email":"Enter email",
+  "enter_password" : "Enter password",
+  "login_btn" : "Login",
+  "dont_any_account" : "Dont any account",
+  "Registration_message" : "Registration..!",
+
+
+  "logOut" : "LogOut"
 }

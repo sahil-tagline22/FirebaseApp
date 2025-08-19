@@ -12,6 +12,9 @@ import { NativeStackNavigationProp } from '@react-navigation/native-stack';
 import { useAppDispatch } from '../redux/Store';
 import { logoutUser } from '../redux/slice/AuthSlice';
 
+
+import { useAppTranslation } from '../hooks/useAppTranslation';
+
 const Bottom = createBottomTabNavigator();
 
 interface BottomTabNavigateProps {
@@ -27,6 +30,8 @@ interface BottomTabBarIconProps {
 const BottomTabNavigate = ({ navigation }: BottomTabNavigateProps) => {
   const dispatch = useAppDispatch();
 
+  const {t} = useAppTranslation();
+
   const handleLogout = useCallback(() => {
     auth().signOut();
     dispatch(logoutUser());
@@ -37,10 +42,10 @@ const BottomTabNavigate = ({ navigation }: BottomTabNavigateProps) => {
   const headerRight = useCallback(
     () => (
       <TouchableOpacity style={styles.btnContainer} onPress={handleLogout}>
-        <Text style={styles.btnText}>LogOut</Text>
+        <Text style={styles.btnText}>{t('logOut')}</Text>
       </TouchableOpacity>
     ),
-    [handleLogout],
+    [handleLogout,t],
   );
 
   const tabBarIcon = useCallback(
@@ -64,7 +69,7 @@ const BottomTabNavigate = ({ navigation }: BottomTabNavigateProps) => {
           tabBarIcon: (props:BottomTabBarIconProps) => tabBarIcon({ ...props, name: 'home' }),
           headerTitle: 'Home',
           headerTitleAlign: 'center',
-          title: 'Home',
+          title: "Home",
         }}
       />
 
