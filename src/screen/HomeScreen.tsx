@@ -1,7 +1,7 @@
 import { Text, View } from 'react-native'
 import { useAppSelector } from '../redux/Store'
 import { useEffect, useState } from 'react'
-import fireStore from '@react-native-firebase/firestore'
+import {getFirestore,collection,getDocs} from '@react-native-firebase/firestore'
 
 const HomeScreen = () => {
 
@@ -10,9 +10,15 @@ const HomeScreen = () => {
 
   useEffect(()=>{
     const getAllUser = async()=>{
-      const getUsers = await fireStore().collection('users').get();
-      const user = getUsers.docs.map((item)=>item.data())
-      setUsers(user);
+      try{
+        const db = getFirestore();
+        const querySnapshot = await getDocs(collection(db,'users'));
+        const allUser = querySnapshot.docs.map(item=>item.data())
+        setUsers(allUser);
+      }
+      catch(error){
+        console.log("error",error);
+      }
       console.log("all user ger -->", users);
     }
     getAllUser();

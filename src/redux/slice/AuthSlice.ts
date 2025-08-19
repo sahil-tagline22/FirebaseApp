@@ -1,34 +1,8 @@
-import { createSlice } from '@reduxjs/toolkit';
-
-export interface User {
-  multiFactor: {
-    enrolledFactors: any[]; 
-  };
-  metadata: {
-    lastSignInTime: number;
-    creationTime: number;
-  };
-  photoURL: string | null;
-  phoneNumber: string | null;
-  tenantId: string | null;
-  displayName: string | null;
-  emailVerified: boolean;
-  isAnonymous: boolean;
-  uid: string;
-  email: string | null;
-  providerData: {
-    email: string | null;
-    providerId: string;
-    photoURL: string | null;
-    phoneNumber: string | null;
-    displayName: string | null;
-    uid: string;
-  }[];
-  providerId: string;
-}
+import { createSlice, PayloadAction } from '@reduxjs/toolkit';
+import {FirebaseAuthTypes} from '@react-native-firebase/auth'
 
 interface AuthStateType {
-  user: User | null;
+  user: FirebaseAuthTypes.User | null;
 }
 
 const initialState: AuthStateType = {
@@ -39,7 +13,7 @@ export const AuthSlice = createSlice({
   name: 'auth',
   initialState,
   reducers: {
-    loginUser: (state, action) => {
+    loginUser: (state, action:PayloadAction<FirebaseAuthTypes.User>) => {
       state.user = action.payload;
     },
     logoutUser: state => {

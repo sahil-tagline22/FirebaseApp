@@ -18,6 +18,12 @@ interface BottomTabNavigateProps {
   navigation: NativeStackNavigationProp<RootStackParamList, 'drawerHome'>;
 }
 
+interface BottomTabBarIconProps {
+  focused: boolean; 
+  color: string;   
+  size: number; 
+}
+
 const BottomTabNavigate = ({ navigation }: BottomTabNavigateProps) => {
   const dispatch = useAppDispatch();
 
@@ -38,12 +44,7 @@ const BottomTabNavigate = ({ navigation }: BottomTabNavigateProps) => {
   );
 
   const tabBarIcon = useCallback(
-    (props: {
-      focused: boolean;
-      color: string;
-      size: number;
-      name: 'home';
-    }) => (
+    (props:BottomTabBarIconProps & {name: 'home' | 'light-mode' | 'group';}) => (
       <IconDisplay name={props.name} color={props.color} size={props.size} />
     ),
     [],
@@ -59,7 +60,7 @@ const BottomTabNavigate = ({ navigation }: BottomTabNavigateProps) => {
         name="drawerHome"
         component={HomeScreen}
         options={{
-          tabBarIcon: props => tabBarIcon({ ...props, name: 'home' }),
+          tabBarIcon: (props:BottomTabBarIconProps) => tabBarIcon({ ...props, name: 'home' }),
           headerTitle: 'Home',
           headerTitleAlign: 'center',
           title: 'Home',
@@ -70,9 +71,7 @@ const BottomTabNavigate = ({ navigation }: BottomTabNavigateProps) => {
         name="drawerTheme"
         component={ThemeScreen}
         options={{
-          tabBarIcon: ({ color, size }) => (
-            <IconDisplay name="light-mode" color={color} size={size} />
-          ),
+          tabBarIcon: (props:BottomTabBarIconProps) => tabBarIcon({ ...props, name: 'light-mode' }),
           headerTitle: 'Theme',
           headerTitleAlign: 'center',
           title: 'Theme',
@@ -83,9 +82,7 @@ const BottomTabNavigate = ({ navigation }: BottomTabNavigateProps) => {
         name="userScreen"
         component={UserScreen}
         options={{
-          tabBarIcon: ({ color, size }) => (
-            <IconDisplay name="group" color={color} size={size} />
-          ),
+          tabBarIcon: (props:BottomTabBarIconProps) => tabBarIcon({ ...props, name: 'group' }),
           headerTitle: 'User-Chat',
           headerTitleAlign: 'center',
           title: 'User-chat',

@@ -2,12 +2,13 @@ import { RouteProp, useRoute } from '@react-navigation/native';
 import React, { useState, useEffect } from 'react';
 import { StyleSheet, TouchableOpacity, View } from 'react-native';
 import { GiftedChat } from 'react-native-gifted-chat';
-import fireStore from '@react-native-firebase/firestore';
 import Icon from 'react-native-vector-icons/MaterialIcons';
 import { Text } from 'react-native-gesture-handler';
 import { colors } from '../theme/Colors';
 import { NativeStackNavigationProp } from '@react-navigation/native-stack';
 import { RootStackParamList } from '../types/RootStackParamList';
+import { getApp } from '@react-native-firebase/app';
+import { getFirestore, collection, doc, query, orderBy, onSnapshot, addDoc, fireStore } from '@react-native-firebase/firestore';
 
 interface ChatScreenProps {
   navigation : NativeStackNavigationProp<RootStackParamList,'chat'>
@@ -23,25 +24,25 @@ const ChatScreen = ({ navigation }:ChatScreenProps) => {
   console.log("get massage -->",messages);
 
   useEffect(() => {
-    const getAllMsg = async () =>
-      await fireStore()
-        .collection('chats')
-        .doc(chatId)
-        .collection('messages')
-        .orderBy('createdAt', 'desc')
-        .onSnapshot(data => {
-          const allMsg = data.docs.map(item => {
-            return {
-              ...item.data(),
-              createdAt: item.data().createdAt.toDate(),
-            };
-          });
-          setMessages(allMsg);
-        });
-    getAllMsg();
+    const app = getApp();
+    const fireStore = getFirestore(app);
+
+    const massage = collection(doc(collection(fireStore,'chats'),chatId),'messages');
+
+    const q = query(massage,orderBy('createdAt','desc'));
+
+    const getAllMsg = onSnapshot(q,data => {
+      const allMsg = data.docs.map(item=>({
+        ...item.data(),
+        createdAt: item.data().createdAt.toDate(),
+      }));
+      setMessages(allMsg);
+    })
+
+    return getAllMsg;
   }, [chatId]);
 
-  const onSend = (messagesArray:any[]) => {
+  const onSend = async (messagesArray:any[]) => {
     console.log(messagesArray);
     const msg = messagesArray[0];
     const userMsg = {
@@ -53,11 +54,11 @@ const ChatScreen = ({ navigation }:ChatScreenProps) => {
     setMessages(previousMessages =>
       GiftedChat.append(previousMessages, userMsg),
     );
-    fireStore()
-      .collection('chats')
-      .doc(chatId)
-      .collection('messages')
-      .add(userMsg);
+    const app = getApp();
+    const fireStore = getFirestore(app);
+    const masses = collection(doc(collection(fireStore,'chats'),chatId),'messages');
+
+    await addDoc(masses,userMsg);
   };
 
   return (

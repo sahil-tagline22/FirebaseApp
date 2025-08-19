@@ -3,8 +3,8 @@ export type RootStackParamList = {
     registration : undefined,
     bottom : undefined,
     chat : {
-        userId? : string | number,
-        sentToUid : string | number,
+        userId : string,
+        sentToUid : string,
     }
     drawerHome : undefined,
     drawerTheme: undefined,

@@ -1,12 +1,13 @@
 import { FlatList, Image, SafeAreaView, StatusBar, StyleSheet, Text, TouchableOpacity, View } from 'react-native'
 import React, { useEffect, useState } from 'react'
-import fireStore from '@react-native-firebase/firestore'
-import auth from '@react-native-firebase/auth'
 import { Images } from '../assets/Images'
 import { colors } from '../theme/Colors'
 import { NativeStackNavigationProp } from '@react-navigation/native-stack'
 import { RootStackParamList } from '../types/RootStackParamList'
 import IconDisplay from '../components/IconPrint/IconDisplay'
+import { getApp } from '@react-native-firebase/app'
+import {getFirestore,collection,query,where,getDocs} from '@react-native-firebase/firestore'
+import {getAuth} from '@react-native-firebase/auth'
 
 interface UserScreenProps {
     navigation : NativeStackNavigationProp<RootStackParamList,'userScreen'> 
@@ -19,15 +20,24 @@ const UserScreen = ({navigation}:UserScreenProps) => {
     const [id,setId] = useState<string>();
 
     useEffect(()=>{
-        const userid = auth().currentUser?.uid;
-        console.log("id",userid);
-        setId(userid);
-        const getUsers = async ()=>{
-            const getAllUser = await fireStore().collection('users').where('uid','!=',userid).get();
-            const allUser = getAllUser.docs.map((item)=>item.data())
-            setUsers(allUser);
+        const fetchUser = async()=>{ 
+            const app = getApp();
+            const auth = getAuth(app);
+            const fireStore = getFirestore(app);
+
+            const userid = auth.currentUser?.uid;
+            console.log("id",userid);
+            setId(userid);
+            if(userid){
+                const usersRef = collection(fireStore,'users');
+                const q = query(usersRef,where('uid', '!=',userid ));
+                const users = await getDocs(q);
+                
+                const allUsers = users.docs.map(item=>item.data());
+                setUsers(allUsers);
+            }
         }
-        getUsers();
+        fetchUser();
     },[])
     console.log("users",users);
     
@@ -47,7 +57,7 @@ const UserScreen = ({navigation}:UserScreenProps) => {
                         <Text style={styles.userValue}>{item.name}</Text>
                         <Text style={styles.userValue}>{item.email}</Text>
                     </View>
-                    <TouchableOpacity style={styles.chatIcon} onPress={()=>navigation.navigate("chat",{userId : id, sentToUid : item.uid})}>
+                    <TouchableOpacity style={styles.chatIcon} onPress={()=>navigation.navigate("chat",{userId : id!, sentToUid : item.uid})}>
                         <IconDisplay name='chat' color="#000" size={40} />
                     </TouchableOpacity>
                 </View>

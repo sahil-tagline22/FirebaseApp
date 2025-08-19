@@ -14,9 +14,6 @@ const Stack = createNativeStackNavigator<RootStackParamList>();
 const HomeStackNavigator = () => {
   const user = useAppSelector(state => state.auth.user);
   console.log('redux persist data-->', user);
-  // useEffect(()=>{
-  //   SplashScreen.hide();
-  // },[])
 
   const initialRouteName = useMemo(() => (user ? 'bottom' : 'login'), [user]);
 

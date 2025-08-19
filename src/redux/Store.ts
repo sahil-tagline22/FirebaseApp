@@ -7,7 +7,7 @@ import { TypedUseSelectorHook, useDispatch, useSelector } from "react-redux";
 
 const rootReducer = combineReducers({
     auth : authReducer
-})
+});
 
 const persistConfig = {
     key : 'root',
@@ -20,7 +20,7 @@ export const store = configureStore({
     reducer:persistedReducer,
     // middleware : (getDefaultMiddleware) => getDefaultMiddleware().concat(logger)
       middleware: getDefaultMiddleware =>
-    __DEV__ && false
+      (__DEV__ && false)
       ? getDefaultMiddleware({
           serializableCheck: false,
         }).concat(logger)

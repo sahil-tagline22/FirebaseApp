@@ -1,18 +1,21 @@
 import { ActivityIndicator, StyleSheet, Text, View } from 'react-native';
 import React, { useEffect, useState } from 'react';
-import getRemoteConfig from '@react-native-firebase/remote-config';
+import { getApp } from '@react-native-firebase/app';
+import {getRemoteConfig,setDefaults,fetchAndActivate,getValue} from '@react-native-firebase/remote-config';
 
 const ThemeScreen = () => {
   const [theme, setTheme] = useState<string>();
   useEffect(() => {
     const appTheme = async () => {
       try {
-        await getRemoteConfig().setDefaults({ app_theme: 'light' });
+        const app = getApp();
+        const remoteConfig = getRemoteConfig(app);
 
-        await getRemoteConfig().fetch(0);
-        await getRemoteConfig().activate();
+        await setDefaults(remoteConfig,{ app_theme: 'light' });
 
-        const Theme = getRemoteConfig().getValue('app_theme').asString();
+        await fetchAndActivate(remoteConfig);
+        
+        const Theme = getValue(remoteConfig,'app_theme').asString();
         setTheme(Theme);
       } catch (error) {
         console.log(error);
