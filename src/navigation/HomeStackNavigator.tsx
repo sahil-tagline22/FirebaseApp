@@ -8,11 +8,11 @@ import RegistrationScreen from '../screen/auth/RegistrationScreen';
 import HomeDrawer from './BottomTabNavigate';
 import ChatScreen from '../screen/ChatScreen';
 import { useAppSelector } from '../redux/Store';
-import babelConfig from '../../babel.config';
 
 const Stack = createNativeStackNavigator<RootStackParamList>();
 
 const HomeStackNavigator = () => {
+
   const user = useAppSelector(state => state.auth.user);
   console.log('redux persist data-->', user);
 

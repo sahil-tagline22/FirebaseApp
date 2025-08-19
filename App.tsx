@@ -6,11 +6,15 @@ import { useEffect } from 'react';
 import SplashScreen from 'react-native-splash-screen';
 import { StatusBar } from 'react-native';
 
+
 const App = () => {
+
   useEffect(() => {
     SplashScreen.hide();
   }, []);
+  
   return (
+
     <Provider store={store}>
       <PersistGate persistor={persister}>
         <StatusBar

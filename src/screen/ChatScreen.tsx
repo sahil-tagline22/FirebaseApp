@@ -1,6 +1,15 @@
 import { RouteProp, useRoute } from '@react-navigation/native';
 import React, { useState, useEffect } from 'react';
-import { Keyboard, KeyboardAvoidingView, Platform, ScrollView, StyleSheet, TouchableOpacity, TouchableWithoutFeedback, View } from 'react-native';
+import {
+  Keyboard,
+  KeyboardAvoidingView,
+  Platform,
+  ScrollView,
+  StyleSheet,
+  TouchableOpacity,
+  TouchableWithoutFeedback,
+  View,
+} from 'react-native';
 import { GiftedChat, IMessage } from 'react-native-gifted-chat';
 import Icon from 'react-native-vector-icons/MaterialIcons';
 import { Text } from 'react-native-gesture-handler';
@@ -8,42 +17,53 @@ import { colors } from '../theme/Colors';
 import { NativeStackNavigationProp } from '@react-navigation/native-stack';
 import { RootStackParamList } from '../types/RootStackParamList';
 import { getApp } from '@react-native-firebase/app';
-import { getFirestore, collection, doc, query, orderBy, onSnapshot, addDoc} from '@react-native-firebase/firestore';
+import {
+  getFirestore,
+  collection,
+  doc,
+  query,
+  orderBy,
+  onSnapshot,
+  addDoc,
+} from '@react-native-firebase/firestore';
 import { Images } from '../assets/Images';
 
 interface ChatScreenProps {
-  navigation : NativeStackNavigationProp<RootStackParamList,'chat'>
+  navigation: NativeStackNavigationProp<RootStackParamList, 'chat'>;
 }
 
-const ChatScreen = ({ navigation }:ChatScreenProps) => {
-  const route = useRoute<RouteProp<RootStackParamList,'chat'>>();
+const ChatScreen = ({ navigation }: ChatScreenProps) => {
+  const route = useRoute<RouteProp<RootStackParamList, 'chat'>>();
   const { userId, sentToUid } = route.params;
   const chatId = [userId, sentToUid].sort().join('_');
   console.log(userId, sentToUid);
 
   const [messages, setMessages] = useState<IMessage[]>([]);
-  console.log("get massage -->",messages);
+  console.log('get massage -->', messages);
 
   useEffect(() => {
     const app = getApp();
     const fireStore = getFirestore(app);
 
-    const massage = collection(doc(collection(fireStore,'chats'),chatId),'messages');
+    const massage = collection(
+      doc(collection(fireStore, 'chats'), chatId),
+      'messages',
+    );
 
-    const q = query(massage,orderBy('createdAt','desc'));
+    const q = query(massage, orderBy('createdAt', 'desc'));
 
-    const getAllMsg = onSnapshot(q,data => {
+    const getAllMsg = onSnapshot(q, data => {
       const allMsg = data.docs.map(item => ({
         ...item.data(),
         createdAt: item.data().createdAt.toDate(),
       }));
       setMessages(allMsg);
-    })
+    });
 
     return getAllMsg;
   }, [chatId]);
 
-  const onSend = async (messagesArray:any[]) => {
+  const onSend = async (messagesArray: any[]) => {
     console.log(messagesArray);
     const msg = messagesArray[0];
     const userMsg = {
@@ -57,34 +77,39 @@ const ChatScreen = ({ navigation }:ChatScreenProps) => {
     );
     const app = getApp();
     const fireStore = getFirestore(app);
-    const masses = collection(doc(collection(fireStore,'chats'),chatId),'messages');
+    const masses = collection(
+      doc(collection(fireStore, 'chats'), chatId),
+      'messages',
+    );
 
-    await addDoc(masses,userMsg);
+    await addDoc(masses, userMsg);
   };
 
   return (
-   
-      <KeyboardAvoidingView  style={{flex:1}}>
-        <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
-    <View style={styles.container}>
-      <View style={styles.header}>
-        <TouchableOpacity style={styles.backIcon} onPress={()=>navigation.goBack()}>
-          <Icon name='arrow-back-ios-new' color="#000" size={30}  />
-        </TouchableOpacity>
-        <Text style={styles.textTitle}>Chat</Text>
-      </View>
+    <KeyboardAvoidingView style={{ flex: 1 }}>
+      <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
+        <View style={styles.container}>
+          <View style={styles.header}>
+            <TouchableOpacity
+              style={styles.backIcon}
+              onPress={() => navigation.goBack()}
+            >
+              <Icon name="arrow-back-ios-new" color="#000" size={30} />
+            </TouchableOpacity>
+            <Text style={styles.textTitle}>Chat</Text>
+          </View>
           <GiftedChat
             // focusOnInputWhenOpeningKeyboard
             messages={messages}
             onSend={messages => onSend(messages)}
             user={{
               _id: userId,
-              avatar:Images.user
+              avatar: Images.user,
             }}
           />
-    </View>
-        </TouchableWithoutFeedback>
-      </KeyboardAvoidingView>
+        </View>
+      </TouchableWithoutFeedback>
+    </KeyboardAvoidingView>
   );
 };
 
