@@ -6,6 +6,8 @@ import { useAppDispatch, useAppSelector } from '../redux/Store'
 import { changeLanguage } from '../redux/slice/LanguageSlice'
 import ToggleSwitch from 'toggle-switch-react-native'
 import { changeTheme } from '../redux/slice/ThemeSlice'
+import { useThemeColor } from '../hooks/useThemeColor'
+import { colors } from '../theme/Colors'
 
 
 const languages = [
@@ -16,7 +18,16 @@ const languages = [
   {label: 'bengali', value : 'bn'},
 ]
 
+const themes = [
+  {label: 'Light', value : 'light'},
+  {label: 'Dark', value : 'dark'},
+  {label: 'Auto', value : 'auto'},
+]
+
 const SettingScreen = () => {
+
+  const color = useThemeColor();
+  const styles = useStyle();
 
   const dispatch = useAppDispatch();
   const language = useAppSelector(state=>state.language.lan)
@@ -25,7 +36,7 @@ const SettingScreen = () => {
   console.log("theme -->",theme);
 
   const [value,setValue] = useState<string | null>(language);
-  const [isEnable,setIsEnable] = useState(false);
+  // const [isEnable,setIsEnable] = useState(false);
 
   useEffect(()=>{
     if(!language){
@@ -35,26 +46,42 @@ const SettingScreen = () => {
     }
   },[language])
 
-  useEffect(()=>{
-    if(isEnable){
-      dispatch(changeTheme("dark"))
-    }else{
-      dispatch(changeTheme("light"))
-    }
-  },[isEnable,dispatch])
+  // useEffect(()=>{
+  //   if(isEnable){
+  //     dispatch(changeTheme("dark"))
+  //   }else{
+  //     dispatch(changeTheme("light"))
+  //   }
+  // },[isEnable,dispatch])
 
-  const ToggleSwitchBtn = ()=> setIsEnable(prev => !prev)
+  // const ToggleSwitchBtn = ()=> setIsEnable(prev => !prev)
 
   return (
     <View style={styles.container}>
       <View style={styles.ToggleContainer}>
-        <ToggleSwitch
+
+        <Dropdown
+          style={styles.dropdownContainer}
+          data={themes}
+          value={theme}
+          onChange={item => {
+            dispatch(changeTheme(item.value));
+          }}
+          labelField={'label'}
+          valueField={'value'}
+          selectedTextStyle={{color:color.text}}
+          
+        />
+
+        {/* <ToggleSwitch
           isOn={isEnable}
-          onColor={"black"}
-          offColor={"gray"}
+          onColor={color.switchColor}
+          offColor={color.switchColor}
+          labelStyle = {{color : color.text}}
           label={isEnable ? "dark" : "light"}
           onToggle={ToggleSwitchBtn}
-        />
+          thumbOnStyle={{backgroundColor:color.backGroundColor}}
+        /> */}
       </View>
       <Dropdown
         style={styles.dropdownContainer}
@@ -66,30 +93,38 @@ const SettingScreen = () => {
         }}
         labelField={'label'}
         valueField={'value'}
+        selectedTextStyle={{color:color.text}}
       />
-      <Text>{value}</Text>
+      <Text style={styles.text}>{value}</Text>
     </View>
   )
 }
 
 export default SettingScreen
 
-const styles = StyleSheet.create({
+const useStyle = () => {
+  const color = useThemeColor();
+  return StyleSheet.create({
     container:{
         flex:1,
         justifyContent:"center",
-        alignItems:"center"
+        alignItems:"center",
+        backgroundColor:color.backGroundColor
     },
     dropdownContainer:{
       height:30,
       width:300,
-      borderColor:"gray",
+      borderColor:color.borderColor,
       borderWidth:1,
       paddingHorizontal:8,
       borderRadius:8,
-      backgroundColor:"white"
+      backgroundColor:color.backGroundColor
     },
     ToggleContainer:{
       marginBottom:30
+    },
+    text : {
+      color : color.text
     }
-})
+  })
+}
