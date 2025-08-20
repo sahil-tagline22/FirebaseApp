@@ -1,12 +1,16 @@
 import { combineReducers, configureStore } from "@reduxjs/toolkit";
-import authReducer from './slice/AuthSlice'
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { persistReducer, persistStore } from "redux-persist";
 import logger from "redux-logger"
 import { TypedUseSelectorHook, useDispatch, useSelector } from "react-redux";
+import authReducer from './slice/AuthSlice'
+import languageReducer from './slice/LanguageSlice'
+import themeReducer from './slice/ThemeSlice'
 
 const rootReducer = combineReducers({
-    auth : authReducer
+    auth : authReducer,
+    language : languageReducer,
+    theme : themeReducer
 });
 
 const persistConfig = {
