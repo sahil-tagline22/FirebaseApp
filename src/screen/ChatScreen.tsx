@@ -26,12 +26,15 @@ import {
 } from '@react-native-firebase/firestore';
 import { Images } from '../assets/Images';
 import { useAppTranslation } from '../hooks/useAppTranslation';
+import { useThemeColor } from '../hooks/useThemeColor';
+import { useAppSelector } from '../redux/Store';
 
 interface ChatScreenProps {
   navigation: NativeStackNavigationProp<RootStackParamList, 'chat'>;
 }
 
 const ChatScreen = ({ navigation }: ChatScreenProps) => {
+
   const route = useRoute<RouteProp<RootStackParamList, 'chat'>>();
   const { userId, sentToUid } = route.params;
   const chatId = [userId, sentToUid].sort().join('_');
@@ -41,6 +44,8 @@ const ChatScreen = ({ navigation }: ChatScreenProps) => {
   console.log('get massage -->', messages);
 
   const {t} = useAppTranslation();
+  const color = useThemeColor();
+  const styles = useStyle();
 
   useEffect(() => {
     const app = getApp();
@@ -95,7 +100,7 @@ const ChatScreen = ({ navigation }: ChatScreenProps) => {
               style={styles.backIcon}
               onPress={() => navigation.goBack()}
             >
-              <Icon name="arrow-back-ios-new" color="#000" size={30} />
+              <Icon name="arrow-back-ios-new" color={color.text} size={30} />
             </TouchableOpacity>
             <Text style={styles.textTitle}>Chat</Text>
           </View>
@@ -116,25 +121,33 @@ const ChatScreen = ({ navigation }: ChatScreenProps) => {
 
 export default ChatScreen;
 
-const styles = StyleSheet.create({
-  header: {
-    height: 60,
-    elevation: 4,
-    backgroundColor: 'rgb(255, 255, 255)',
-    borderBottomColor: 'rgb(216, 216, 216)',
-    borderBottomWidth: 2,
-    alignItems: 'center',
-    flexDirection: 'row',
-  },
-  container: {
-    flex: 1,
-    backgroundColor: colors.background,
-  },
-  backIcon: {
-    marginLeft: 5,
-  },
-  textTitle: {
-    marginLeft: 150,
-    fontSize: 20,
-  },
-});
+const useStyle = () =>{
+  const color = useThemeColor();
+  const theme = useAppSelector(state=> state.theme.theme)
+
+  return StyleSheet.create({
+
+    header: {
+      height: 60,
+      elevation: 4,
+      // backgroundColor: 'rgb(255, 255, 255)',
+      borderBottomColor: theme === "light" ? 'rgb(216, 216, 216)' : "",
+      backgroundColor:color.header,
+      borderBottomWidth: 2,
+      alignItems: 'center',
+      flexDirection: 'row',
+    },
+    container: {
+      flex: 1,
+      backgroundColor: color.backGroundColor,
+    },
+    backIcon: {
+      marginLeft: 5,
+    },
+    textTitle: {
+      marginLeft: 150,
+      fontSize: 20,
+      color:color.text
+    },
+  });
+}

@@ -1,13 +1,13 @@
-import { StyleSheet, Switch, Text, View } from 'react-native'
+import { StyleSheet, Text, View } from 'react-native'
 import React, { useEffect, useState } from 'react'
 import {Dropdown} from 'react-native-element-dropdown'
 import i18next from 'i18next'
 import { useAppDispatch, useAppSelector } from '../redux/Store'
 import { changeLanguage } from '../redux/slice/LanguageSlice'
-import ToggleSwitch from 'toggle-switch-react-native'
+
 import { changeTheme } from '../redux/slice/ThemeSlice'
 import { useThemeColor } from '../hooks/useThemeColor'
-import { colors } from '../theme/Colors'
+
 
 
 const languages = [
@@ -36,8 +36,6 @@ const SettingScreen = () => {
   console.log("theme -->",theme);
 
   const [value,setValue] = useState<string | null>(language);
-  // const [isEnable,setIsEnable] = useState(false);
-
   useEffect(()=>{
     if(!language){
       return;
@@ -46,20 +44,12 @@ const SettingScreen = () => {
     }
   },[language])
 
-  // useEffect(()=>{
-  //   if(isEnable){
-  //     dispatch(changeTheme("dark"))
-  //   }else{
-  //     dispatch(changeTheme("light"))
-  //   }
-  // },[isEnable,dispatch])
 
-  // const ToggleSwitchBtn = ()=> setIsEnable(prev => !prev)
 
   return (
     <View style={styles.container}>
-      <View style={styles.ToggleContainer}>
 
+      <View style={styles.ToggleContainer}>
         <Dropdown
           style={styles.dropdownContainer}
           data={themes}
@@ -70,19 +60,9 @@ const SettingScreen = () => {
           labelField={'label'}
           valueField={'value'}
           selectedTextStyle={{color:color.text}}
-          
         />
-
-        {/* <ToggleSwitch
-          isOn={isEnable}
-          onColor={color.switchColor}
-          offColor={color.switchColor}
-          labelStyle = {{color : color.text}}
-          label={isEnable ? "dark" : "light"}
-          onToggle={ToggleSwitchBtn}
-          thumbOnStyle={{backgroundColor:color.backGroundColor}}
-        /> */}
       </View>
+
       <Dropdown
         style={styles.dropdownContainer}
         data={languages}
@@ -95,7 +75,8 @@ const SettingScreen = () => {
         valueField={'value'}
         selectedTextStyle={{color:color.text}}
       />
-      <Text style={styles.text}>{value}</Text>
+      {/* <Text style={styles.text}>{value}</Text> */}
+
     </View>
   )
 }

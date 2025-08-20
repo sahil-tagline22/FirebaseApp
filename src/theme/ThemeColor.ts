@@ -3,12 +3,14 @@ export const ThemeColor = {
         text : "#000",
         backGroundColor : "#fff", 
         borderColor : "gray",
-        switchColor : "gray"
+        switchColor : "gray",
+        header : "#fff"
     },
     DarkTheme : {
         text : "#ffffff",
         backGroundColor : "#000", 
         borderColor : "#fff",
-        switchColor : "#fff"
+        switchColor : "#fff",
+        header : "gray"
     }
 }

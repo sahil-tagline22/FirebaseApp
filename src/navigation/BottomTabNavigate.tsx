@@ -14,6 +14,7 @@ import { logoutUser } from '../redux/slice/AuthSlice';
 
 import { useAppTranslation } from '../hooks/useAppTranslation';
 import SettingScreen from '../screen/SettingScreen';
+import { useThemeColor } from '../hooks/useThemeColor';
 
 const Bottom = createBottomTabNavigator();
 
@@ -28,9 +29,11 @@ interface BottomTabBarIconProps {
 }
 
 const BottomTabNavigate = ({ navigation }: BottomTabNavigateProps) => {
+
   const dispatch = useAppDispatch();
 
   const { t } = useAppTranslation();
+  const color = useThemeColor();
 
   const handleLogout = useCallback(() => {
     auth().signOut();
@@ -62,6 +65,8 @@ const BottomTabNavigate = ({ navigation }: BottomTabNavigateProps) => {
       screenOptions={{
         headerRight: headerRight,
         tabBarActiveTintColor: 'blue',
+        headerStyle:{backgroundColor:color.header},
+        headerTitleStyle:{color:color.text}
       }}
     >
       <Bottom.Screen
