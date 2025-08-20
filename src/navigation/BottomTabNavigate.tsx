@@ -12,8 +12,8 @@ import { NativeStackNavigationProp } from '@react-navigation/native-stack';
 import { useAppDispatch } from '../redux/Store';
 import { logoutUser } from '../redux/slice/AuthSlice';
 
-
 import { useAppTranslation } from '../hooks/useAppTranslation';
+import SettingScreen from '../screen/SettingScreen';
 
 const Bottom = createBottomTabNavigator();
 
@@ -22,15 +22,15 @@ interface BottomTabNavigateProps {
 }
 
 interface BottomTabBarIconProps {
-  focused: boolean; 
-  color: string;   
-  size: number; 
+  focused: boolean;
+  color: string;
+  size: number;
 }
 
 const BottomTabNavigate = ({ navigation }: BottomTabNavigateProps) => {
   const dispatch = useAppDispatch();
 
-  const {t} = useAppTranslation();
+  const { t } = useAppTranslation();
 
   const handleLogout = useCallback(() => {
     auth().signOut();
@@ -42,14 +42,16 @@ const BottomTabNavigate = ({ navigation }: BottomTabNavigateProps) => {
   const headerRight = useCallback(
     () => (
       <TouchableOpacity style={styles.btnContainer} onPress={handleLogout}>
-        <Text style={styles.btnText}>{t('logOut')}</Text>
+        <Text style={styles.btnText}>{t('logout')}</Text>
       </TouchableOpacity>
     ),
-    [handleLogout,t],
+    [handleLogout, t],
   );
 
   const tabBarIcon = useCallback(
-    (props:BottomTabBarIconProps & {name: 'home' | 'light-mode' | 'group';}) => (
+    (
+      props: BottomTabBarIconProps & { name: 'home' | 'light-mode' | 'group' | 'settings' },
+    ) => (
       <IconDisplay name={props.name} color={props.color} size={props.size} />
     ),
     [],
@@ -59,17 +61,18 @@ const BottomTabNavigate = ({ navigation }: BottomTabNavigateProps) => {
     <Bottom.Navigator
       screenOptions={{
         headerRight: headerRight,
-        tabBarActiveTintColor:"blue"
+        tabBarActiveTintColor: 'blue',
       }}
     >
       <Bottom.Screen
         name="drawerHome"
         component={HomeScreen}
         options={{
-          tabBarIcon: (props:BottomTabBarIconProps) => tabBarIcon({ ...props, name: 'home' }),
-          headerTitle: 'Home',
+          tabBarIcon: (props: BottomTabBarIconProps) =>
+            tabBarIcon({ ...props, name: 'home' }),
+          headerTitle: t('home'),
           headerTitleAlign: 'center',
-          title: "Home",
+          title: t('home'),
         }}
       />
 
@@ -77,10 +80,11 @@ const BottomTabNavigate = ({ navigation }: BottomTabNavigateProps) => {
         name="drawerTheme"
         component={ThemeScreen}
         options={{
-          tabBarIcon: (props:BottomTabBarIconProps) => tabBarIcon({ ...props, name: 'light-mode' }),
-          headerTitle: 'Theme',
+          tabBarIcon: (props: BottomTabBarIconProps) =>
+            tabBarIcon({ ...props, name: 'light-mode' }),
+          headerTitle: t('theme'),
           headerTitleAlign: 'center',
-          title: 'Theme',
+          title: t('theme'),
         }}
       />
 
@@ -88,10 +92,23 @@ const BottomTabNavigate = ({ navigation }: BottomTabNavigateProps) => {
         name="userScreen"
         component={UserScreen}
         options={{
-          tabBarIcon: (props:BottomTabBarIconProps) => tabBarIcon({ ...props, name: 'group' }),
-          headerTitle: 'User-Chat',
+          tabBarIcon: (props: BottomTabBarIconProps) =>
+            tabBarIcon({ ...props, name: 'group' }),
+          headerTitle: t('user_chat'),
           headerTitleAlign: 'center',
-          title: 'User-chat',
+          title: t('user_chat'),
+        }}
+      />
+
+      <Bottom.Screen
+        name="setting"
+        component={SettingScreen}
+        options={{
+          tabBarIcon: (props: BottomTabBarIconProps) =>
+            tabBarIcon({ ...props, name: 'settings' }),
+          headerTitle: t('setting'),
+          headerTitleAlign: 'center',
+          title: t('setting'),
         }}
       />
     </Bottom.Navigator>

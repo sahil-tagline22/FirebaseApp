@@ -2,5 +2,22 @@
   "appName": "Animals Aadhaar",
   "select_language": "Select Language",
   "choose_preferred_language": "Choose your preferred language",
-  "home": "Home"
+  "home": "Home",
+  "login_title": "sign-in",
+  "enter_email": "Enter email",
+  "enter_password": "Enter password",
+  "login_btn": "Login",
+  "dont_any_account": "i don't have any account",
+  "registration_message": "Registration..!",
+  "registration_title": "Sign-up",
+  "enter_userName": "Enter name",
+  "re_enter_password": "Re-Enter password",
+  "registration_btn": "Registration",
+  "i_have_account": "i have already account",
+  "login_message": "Login..!",
+  "logout": "logout",
+  "theme": "Theme",
+  "user_chat": "User-Chat",
+  "enter_value": "Type your message",
+  "setting": "Setting"
 }

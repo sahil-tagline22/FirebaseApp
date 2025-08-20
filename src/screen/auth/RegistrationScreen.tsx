@@ -11,9 +11,8 @@ import { loginUser } from '../../redux/slice/AuthSlice';
 import {getAuth,createUserWithEmailAndPassword} from '@react-native-firebase/auth'
 import { getApp } from '@react-native-firebase/app';
 import {getFirestore,doc,setDoc} from '@react-native-firebase/firestore'
+import { useAppTranslation } from '../../hooks/useAppTranslation';
 
-import { useTranslation } from 'react-i18next';
-import i18n from '../../i18n/i18nextConfig';
 
 interface RegistrationScreenProps {
   navigation : NativeStackNavigationProp<RootStackParamList,'registration'>
@@ -21,7 +20,7 @@ interface RegistrationScreenProps {
 
 const RegistrationScreen = ({navigation}:RegistrationScreenProps) => {
 
-  const {t,i18n} = useTranslation();
+  const {t} = useAppTranslation();
 
   const dispatch = useAppDispatch();
 

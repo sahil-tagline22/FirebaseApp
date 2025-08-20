@@ -14,12 +14,9 @@ import { useAppDispatch } from '../../redux/Store';
 import { loginUser } from '../../redux/slice/AuthSlice';
 import { NativeStackNavigationProp } from '@react-navigation/native-stack';
 import { RootStackParamList } from '../../types/RootStackParamList';
-// import { getApp } from '@react-native-firebase/app';
 import {getAuth,signInWithEmailAndPassword} from '@react-native-firebase/auth'
+import { useAppTranslation } from '../../hooks/useAppTranslation';
 
-import { useTranslation } from 'react-i18next';
-import i18n from '../../i18n/i18nextConfig';
-const initI18n = i18n;
 
 
 interface LoginScreenProps {
@@ -28,7 +25,7 @@ interface LoginScreenProps {
 
 const LoginScreen = ({navigation}:LoginScreenProps) => {
 
-  const {t,i18n} = useTranslation();
+  const {t} = useAppTranslation();
 
   const dispatch = useAppDispatch();
 
@@ -100,7 +97,7 @@ const LoginScreen = ({navigation}:LoginScreenProps) => {
 
             <View style={styles.footer}>
               <Text style={styles.textLine}>{t('dont_any_account')}</Text>
-              <Text style={styles.textLogin} onPress={()=>navigation.replace("registration")}>{t('Registration_message')}</Text>
+              <Text style={styles.textLogin} onPress={()=>navigation.replace("registration")}>{t('registration_message')}</Text>
             </View>
 
           </View>

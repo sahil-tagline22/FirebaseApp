@@ -3,8 +3,6 @@ import React, { useState, useEffect } from 'react';
 import {
   Keyboard,
   KeyboardAvoidingView,
-  Platform,
-  ScrollView,
   StyleSheet,
   TouchableOpacity,
   TouchableWithoutFeedback,
@@ -27,6 +25,7 @@ import {
   addDoc,
 } from '@react-native-firebase/firestore';
 import { Images } from '../assets/Images';
+import { useAppTranslation } from '../hooks/useAppTranslation';
 
 interface ChatScreenProps {
   navigation: NativeStackNavigationProp<RootStackParamList, 'chat'>;
@@ -40,6 +39,8 @@ const ChatScreen = ({ navigation }: ChatScreenProps) => {
 
   const [messages, setMessages] = useState<IMessage[]>([]);
   console.log('get massage -->', messages);
+
+  const {t} = useAppTranslation();
 
   useEffect(() => {
     const app = getApp();
@@ -99,7 +100,7 @@ const ChatScreen = ({ navigation }: ChatScreenProps) => {
             <Text style={styles.textTitle}>Chat</Text>
           </View>
           <GiftedChat
-            // focusOnInputWhenOpeningKeyboard
+            placeholder={t('enter_value')}
             messages={messages}
             onSend={messages => onSend(messages)}
             user={{
