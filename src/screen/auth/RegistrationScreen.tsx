@@ -4,12 +4,13 @@ import { colors } from '../../theme/Colors';
 import { useFormik } from 'formik';
 import * as yup from 'yup';
 import InputText from '../../components/textInputFild/InputText';
-import auth from '@react-native-firebase/auth'
-import fireStore from '@react-native-firebase/firestore'
 import { NativeStackNavigationProp } from '@react-navigation/native-stack';
 import { RootStackParamList } from '../../types/RootStackParamList';
 import { useAppDispatch } from '../../redux/Store';
 import { loginUser } from '../../redux/slice/AuthSlice';
+import {getAuth,createUserWithEmailAndPassword} from '@react-native-firebase/auth'
+import { getApp } from '@react-native-firebase/app';
+import {getFirestore,doc,setDoc} from '@react-native-firebase/firestore'
 
 import { useTranslation } from 'react-i18next';
 import i18n from '../../i18n/i18nextConfig';
@@ -52,18 +53,21 @@ const RegistrationScreen = ({navigation}:RegistrationScreenProps) => {
         console.log(values);
         
         try{
-          const newUser =  await auth().createUserWithEmailAndPassword(values.email,values.password)
+          const app = getApp();
+          const auth = getAuth(app);
+          const newUser =  await createUserWithEmailAndPassword(auth,values.email,values.password)
           console.log("new user create successfully", newUser);
           if(newUser){
             dispatch(loginUser(newUser.user));
             navigation.replace("bottom");
           }
-  
-          await fireStore().collection('users').doc(newUser.user.uid).set({
+
+          const db = getFirestore(app);
+          await setDoc(doc(db,'users',newUser.user.uid),{
             name : values.name,
             email : newUser.user.email,
             uid : newUser.user.uid
-          })
+          });
 
           values.name = '';
           values.email = '';

@@ -14,8 +14,8 @@ import { useAppDispatch } from '../../redux/Store';
 import { loginUser } from '../../redux/slice/AuthSlice';
 import { NativeStackNavigationProp } from '@react-navigation/native-stack';
 import { RootStackParamList } from '../../types/RootStackParamList';
-import {getAuth,signInWithEmailAndPassword} from '@react-native-firebase/auth'
 // import { getApp } from '@react-native-firebase/app';
+import {getAuth,signInWithEmailAndPassword} from '@react-native-firebase/auth'
 
 import { useTranslation } from 'react-i18next';
 import i18n from '../../i18n/i18nextConfig';
