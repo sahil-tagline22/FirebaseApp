@@ -1,0 +1,23 @@
+{
+  "appName": "ਜਾਨਵਰਾਂ ਦਾ ਆਧਾਰ",
+  "select_language": "ਭਾਸ਼ਾ ਚੁਣੋ",
+  "choose_preferred_language": "ਆਪਣੀ ਪਸੰਦੀਦਾ ਭਾਸ਼ਾ ਚੁਣੋ",
+  "home": "ਘਰ",
+  "login_title": "ਸਾਈਨ - ਇਨ",
+  "enter_email": "ਈਮੇਲ ਦਾਖਲ ਕਰੋ",
+  "enter_password": "ਪਾਸਵਰਡ ਦਰਜ ਕਰੋ",
+  "login_btn": "ਲਾਗਿਨ",
+  "dont_any_account": "ਮੇਰੇ ਕੋਲ ਕੋਈ ਖਾਤਾ ਨਹੀਂ ਹੈ",
+  "registration_message": "ਰਜਿਸਟ੍ਰੇਸ਼ਨ..!",
+  "registration_title": "ਸਾਇਨ ਅਪ",
+  "enter_userName": "ਨਾਮ ਦਰਜ ਕਰੋ",
+  "re_enter_password": "ਪਾਸਵਰਡ ਦੋਬਾਰਾ ਭਰੋ",
+  "registration_btn": "ਰਜਿਸਟ੍ਰੇਸ਼ਨ",
+  "i_have_account": "ਮੇਰੇ ਕੋਲ ਪਹਿਲਾਂ ਹੀ ਖਾਤਾ ਹੈ",
+  "login_message": "ਲਾਗਿਨ..!",
+  "logout": "ਲਾਗਆਉਟ",
+  "theme": "ਥੀਮ",
+  "user_chat": "ਯੂਜ਼ਰ-ਚੈਟ",
+  "enter_value": "ਆਪਣਾ ਸੁਨੇਹਾ ਟਾਈਪ ਕਰੋ",
+  "setting": "ਸੈਟਿੰਗ"
+}

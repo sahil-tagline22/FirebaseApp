@@ -1,33 +1,27 @@
 import { Image, StyleSheet, Text, TouchableOpacity, View } from 'react-native'
-import React, { useEffect, useState } from 'react'
 import { DrawerContentScrollView, DrawerItemList } from '@react-navigation/drawer'
 import { Images } from '../../assets/Images'
 import { colors } from '../../theme/Colors'
 import auth from '@react-native-firebase/auth'
 import Icon from 'react-native-vector-icons/MaterialIcons'
+import { useAppSelector } from '../../redux/Store'
 
-const CustomDrawer = (props) => {
+const CustomDrawer = ({navigation,props}) => {
+
+    const loginUser = useAppSelector((state)=> state.auth.user)
+    console.log("login user email get in home screen -->",loginUser?.email);
 
     const handleLogout = () => {
       auth().signOut();
+      navigation.replace("login");
       console.log('user logout');
     };
-
-    const [user,setUser] = useState();
-      useEffect(()=>{
-        const userGet = ()=>{
-          const user = auth().currentUser;
-          setUser(user.email);
-          console.log("user",user.email);
-        }
-        userGet();
-      },[])
 
   return (
     <View style={styles.container}>
         <View style={styles.imageContainer}>
             <Image source={Images.user} style={styles.userImage} />
-            <Text style={styles.userDetail}>{user}</Text>
+            <Text style={styles.userDetail}>{loginUser?.email}</Text>
         </View>
       <DrawerContentScrollView {...props}>
         <DrawerItemList {...props}/>
@@ -45,12 +39,13 @@ export default CustomDrawer
 const styles = StyleSheet.create({
     container:{
         flex:1,
-        backgroundColor:"red"
+        backgroundColor:colors.background
     },
     imageContainer:{
-        flex:0.4,
+        flex:0.3,
         alignItems:"center",
-        // marginBottom:-10,
+        marginTop:50,
+        marginBottom:-40,
         borderBottomWidth:2,
         borderBottomColor:colors.separator
     },

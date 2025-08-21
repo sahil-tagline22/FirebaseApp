@@ -1,40 +1,76 @@
-import { useRoute } from '@react-navigation/native';
+import { RouteProp, useRoute } from '@react-navigation/native';
 import React, { useState, useEffect } from 'react';
-import { StyleSheet, TouchableOpacity, View } from 'react-native';
-import { GiftedChat } from 'react-native-gifted-chat';
-import fireStore from '@react-native-firebase/firestore';
+import {
+  Keyboard,
+  KeyboardAvoidingView,
+  StyleSheet,
+  TouchableOpacity,
+  TouchableWithoutFeedback,
+  useColorScheme,
+  View,
+} from 'react-native';
+import { GiftedChat, IMessage } from 'react-native-gifted-chat';
 import Icon from 'react-native-vector-icons/MaterialIcons';
 import { Text } from 'react-native-gesture-handler';
+import { colors } from '../theme/Colors';
+import { NativeStackNavigationProp } from '@react-navigation/native-stack';
+import { RootStackParamList } from '../types/RootStackParamList';
+import { getApp } from '@react-native-firebase/app';
+import {
+  getFirestore,
+  collection,
+  doc,
+  query,
+  orderBy,
+  onSnapshot,
+  addDoc,
+} from '@react-native-firebase/firestore';
+import { Images } from '../assets/Images';
+import { useAppTranslation } from '../hooks/useAppTranslation';
+import { useThemeColor } from '../hooks/useThemeColor';
+import { useAppSelector } from '../redux/Store';
 
-const ChatScreen = ({ navigation }) => {
-  const route = useRoute();
+interface ChatScreenProps {
+  navigation: NativeStackNavigationProp<RootStackParamList, 'chat'>;
+}
+
+const ChatScreen = ({ navigation }: ChatScreenProps) => {
+
+  const route = useRoute<RouteProp<RootStackParamList, 'chat'>>();
   const { userId, sentToUid } = route.params;
   const chatId = [userId, sentToUid].sort().join('_');
   console.log(userId, sentToUid);
 
-  const [messages, setMessages] = useState([]);
-  console.log('massages', messages);
+  const [messages, setMessages] = useState<IMessage[]>([]);
+  console.log('get massage -->', messages);
+
+  const {t} = useAppTranslation();
+  const color = useThemeColor();
+  const styles = useStyle();
 
   useEffect(() => {
-    const getAllMsg = async () =>
-      await fireStore()
-        .collection('chats')
-        .doc(chatId)
-        .collection('messages')
-        .orderBy('createdAt', 'desc')
-        .onSnapshot(data => {
-          const allMsg = data.docs.map(item => {
-            return {
-              ...item.data(),
-              createdAt: item.data().createdAt.toDate(),
-            };
-          });
-          setMessages(allMsg);
-        });
-    getAllMsg();
+    const app = getApp();
+    const fireStore = getFirestore(app);
+
+    const massage = collection(
+      doc(collection(fireStore, 'chats'), chatId),
+      'messages',
+    );
+
+    const q = query(massage, orderBy('createdAt', 'desc'));
+
+    const getAllMsg = onSnapshot(q, data => {
+      const allMsg = data.docs.map(item => ({
+        ...item.data(),
+        createdAt: item.data().createdAt.toDate(),
+      }));
+      setMessages(allMsg);
+    });
+
+    return getAllMsg;
   }, [chatId]);
 
-  const onSend = messagesArray => {
+  const onSend = async (messagesArray: any[]) => {
     console.log(messagesArray);
     const msg = messagesArray[0];
     const userMsg = {
@@ -46,55 +82,74 @@ const ChatScreen = ({ navigation }) => {
     setMessages(previousMessages =>
       GiftedChat.append(previousMessages, userMsg),
     );
-    fireStore()
-      .collection('chats')
-      .doc(chatId)
-      .collection('messages')
-      .add(userMsg);
+    const app = getApp();
+    const fireStore = getFirestore(app);
+    const masses = collection(
+      doc(collection(fireStore, 'chats'), chatId),
+      'messages',
+    );
+
+    await addDoc(masses, userMsg);
   };
 
   return (
-    <View style={{ flex: 1, backgroundColor: 'red' }}>
-      {/* <View style={styles.header}>
-        <TouchableOpacity style={styles.backIcon} onPress={()=>navigation.goBack()}>
-          <Icon name='arrow-back-ios-new' color="#000" size={30}  />
-        </TouchableOpacity>
-        <Text style={styles.textTitle}>Chat</Text>
-      </View>
-      <View style={styles.container}> */}
-      <GiftedChat
-        messages={messages}
-        onSend={messages => onSend(messages)}
-        user={{
-          _id: userId,
-        }}
-      />
-      {/* </View> */}
-    </View>
+    <KeyboardAvoidingView style={{ flex: 1 }}>
+      <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
+        <View style={styles.container}>
+          <View style={styles.header}>
+            <TouchableOpacity
+              style={styles.backIcon}
+              onPress={() => navigation.goBack()}
+            >
+              <Icon name="arrow-back-ios-new" color={color.text} size={30} />
+            </TouchableOpacity>
+            <Text style={styles.textTitle}>Chat</Text>
+          </View>
+          <GiftedChat
+            placeholder={t('enter_value')}
+            messages={messages}
+            onSend={messages => onSend(messages)}
+            user={{
+              _id: userId,
+              avatar: Images.user,
+            }}
+          />
+        </View>
+      </TouchableWithoutFeedback>
+    </KeyboardAvoidingView>
   );
 };
 
 export default ChatScreen;
 
-const styles = StyleSheet.create({
-  header: {
-    height: 60,
-    elevation: 4,
-    backgroundColor: 'rgb(255, 255, 255)',
-    borderBottomColor: 'rgb(216, 216, 216)',
-    borderBottomWidth: 2,
-    alignItems: 'center',
-    flexDirection: 'row',
-  },
-  container: {
-    flex: 1,
-    backgroundColor: '#ffffff',
-  },
-  backIcon: {
-    marginLeft: 5,
-  },
-  textTitle: {
-    marginLeft: 150,
-    fontSize: 20,
-  },
-});
+const useStyle = () =>{
+  const color = useThemeColor();
+  const theme = useAppSelector(state=> state.theme.theme);
+  const mobileTheme = useColorScheme();
+
+  return StyleSheet.create({
+
+    header: {
+      height: 60,
+      elevation: 4,
+      // backgroundColor: 'rgb(255, 255, 255)',
+      borderBottomColor: theme === "light" || mobileTheme === "light" ? 'rgb(216, 216, 216)' : "",
+      backgroundColor:color.header,
+      borderBottomWidth: 2,
+      alignItems: 'center',
+      flexDirection: 'row',
+    },
+    container: {
+      flex: 1,
+      backgroundColor: color.backGroundColor,
+    },
+    backIcon: {
+      marginLeft: 5,
+    },
+    textTitle: {
+      marginLeft: 150,
+      fontSize: 20,
+      color:color.text
+    },
+  });
+}

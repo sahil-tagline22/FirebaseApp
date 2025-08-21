@@ -1,0 +1,23 @@
+{
+  "appName": "પ્રાણીઓનો આધાર",
+  "select_language": "ભાષા પસંદ કરો",
+  "choose_preferred_language": "તમારી પસંદગીની ભાષા પસંદ કરો",
+  "home": "ઘર",
+  "login_title": "સાઇન ઇન કરો",
+  "enter_email": "ઈમેલ દાખલ કરો",
+  "enter_password": "પાસવર્ડ દાખલ કરો",
+  "login_btn": "લૉગિન કરો",
+  "dont_any_account": "મારી પાસે કોઈ ખાતું નથી",
+  "registration_message": "નોંધણી..!",
+  "registration_title": "સાઇન અપ કરો",
+  "enter_userName": "નામ દાખલ કરો",
+  "re_enter_password": "પાસવર્ડ ફરીથી દાખલ કરો",
+  "registration_btn": "નોંધણી",
+  "i_have_account": "મારી પાસે પહેલેથી એકાઉન્ટ છે",
+  "login_message": "લૉગિન..!",
+  "logout": "લોગઆઉટ",
+  "theme": "થીમ",
+  "user_chat": "વપરાશકર્તા-ચેટ",
+  "enter_value": "તમારો સંદેશ લખો",
+  "setting": "સેટિંગ"
+}

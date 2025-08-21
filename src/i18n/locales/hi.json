@@ -1,0 +1,23 @@
+{
+  "appName": "पशु आधार",
+  "select_language": "भाषा चुने",
+  "choose_preferred_language": "अपनी पसंदीदा भाषा चुनें",
+  "home": "घर",
+  "login_title": "दाखिल करना",
+  "enter_email": "ईमेल दर्ज करें",
+  "enter_password": "पास वर्ड दर्ज करें",
+  "login_btn": "लॉग इन करें",
+  "dont_any_account": "मेरे पास कोई खाता नहीं है",
+  "registration_message": "पंजीकरण..!",
+  "registration_title": "साइन अप करें",
+  "enter_userName": "नाम दर्ज करें",
+  "re_enter_password": "पासवर्ड फिर से दर्ज करें",
+  "registration_btn": "पंजीकरण",
+  "i_have_account": "मेरे पास पहले से ही खाता है",
+  "login_message": "लॉग इन करें..!",
+  "logout": "लॉग आउट",
+  "theme": "विषय",
+  "user_chat": "उपयोगकर्ता-चैट",
+  "enter_value": "अपना संदेश लिखें",
+  "setting": "सेटिंग"
+}

@@ -1,0 +1,23 @@
+{
+  "appName": "পশুদের আধার",
+  "select_language": "ভাষা নির্বাচন করুন",
+  "choose_preferred_language": "আপনার পছন্দের ভাষা বেছে নিন",
+  "home": "বাড়ি",
+  "login_title": "সাইন ইন",
+  "enter_email": "ইমেইল লিখুন",
+  "enter_password": "পাসওয়ার্ড লিখুন",
+  "login_btn": "লগইন করুন",
+  "dont_any_account": "আমার কোনো অ্যাকাউন্ট নেই",
+  "registration_message": "রেজিস্ট্রেশন..!",
+  "registration_title": "সাইন আপ করুন",
+  "enter_userName": "নাম লিখুন",
+  "re_enter_password": "পাসওয়ার্ড পুনরায় লিখুন",
+  "registration_btn": "নিবন্ধন",
+  "i_have_account": "আমার ইতিমধ্যে অ্যাকাউন্ট আছে",
+  "login_message": "লগইন..!",
+  "logout": "লগআউট",
+  "theme": "থিম",
+  "user_chat": "ব্যবহারকারী-চ্যাট",
+  "enter_value": "আপনার বার্তা টাইপ করুন",
+  "setting": "সেটিং"
+}

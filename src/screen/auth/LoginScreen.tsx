@@ -1,5 +1,4 @@
 import {
-  ActivityIndicator,
   Alert,
   StyleSheet,
   Text,
@@ -11,17 +10,24 @@ import { colors } from '../../theme/Colors';
 import { useFormik } from 'formik';
 import * as yup from 'yup';
 import InputText from '../../components/textInputFild/InputText';
-import auth from '@react-native-firebase/auth'
+import { useAppDispatch } from '../../redux/Store';
+import { loginUser } from '../../redux/slice/AuthSlice';
+import { NativeStackNavigationProp } from '@react-navigation/native-stack';
+import { RootStackParamList } from '../../types/RootStackParamList';
+import {getAuth,signInWithEmailAndPassword} from '@react-native-firebase/auth'
+import { useAppTranslation } from '../../hooks/useAppTranslation';
 
-// interface FormikYup {
-//   values : {email:string,password:string};
-//   errors : {email:string,password:string};
-//   handleChange : (e: React.ChangeEvent<any>)=> void;
-//   touched : {email:string,password:string};
-//   handleSubmit : (e?: React.FormEvent<HTMLFormElement> | undefined) => void
-// }
 
-const LoginScreen = ({navigation}) => {
+
+interface LoginScreenProps {
+  navigation : NativeStackNavigationProp<RootStackParamList,"login">
+}
+
+const LoginScreen = ({navigation}:LoginScreenProps) => {
+
+  const {t} = useAppTranslation();
+
+  const dispatch = useAppDispatch();
 
   const formik = useFormik({
       initialValues: {
@@ -38,19 +44,25 @@ const LoginScreen = ({navigation}) => {
           .matches(/^.{6,}$/, 'password must be 6 characters')
           .required('please enter password'),
       }),
+
       onSubmit: async (values) => {
-          console.log(values);
-    
           try {
-            await auth().signInWithEmailAndPassword(values.email,values.password);
-            console.log("user login successfully");
+            const auth = getAuth();
+            const user = await signInWithEmailAndPassword(auth,values.email,values.password)
+            console.log("login user -->",user);
+            if(user){
+              dispatch(loginUser(user.user));
+              navigation.replace("bottom");
+            }
             values.email = '';
             values.password = '';
-          } catch (error) {
+
+          } catch (error:any) {
             if(error.code === "auth/invalid-credential"){
               Alert.alert("Alert","email and password invalid")
+            }else{
+              console.log(error);
             }
-            console.log("error", error)
           }
 
       },
@@ -59,10 +71,10 @@ const LoginScreen = ({navigation}) => {
   return (
         <View style={styles.container}>
           <View style={styles.loginContainer}>
-            <Text style={styles.title}>Login</Text>
+            <Text style={styles.title}>{t('login_title')}</Text>
 
             <InputText 
-              placeHolder={"enter email"} 
+              placeHolder={t("enter_email")} 
               values={formik.values.email} 
               handleChange={formik.handleChange('email')} 
               label={'email'} 
@@ -71,7 +83,7 @@ const LoginScreen = ({navigation}) => {
             />
 
             <InputText 
-              placeHolder={"enter password"} 
+              placeHolder={t("enter_password")} 
               values={formik.values.password} 
               handleChange={formik.handleChange('password')} 
               label={'password'} 
@@ -80,12 +92,12 @@ const LoginScreen = ({navigation}) => {
             />
 
             <TouchableOpacity style={styles.loginBtn} onPress={formik.handleSubmit}>
-              <Text style={styles.btnText}>Login</Text>
+              <Text style={styles.btnText}>{t('login_btn')}</Text>
             </TouchableOpacity>
 
             <View style={styles.footer}>
-              <Text style={styles.textLine}>Dont any account.</Text>
-              <Text style={styles.textLogin} onPress={()=>navigation.replace("registration")}>Registration.!</Text>
+              <Text style={styles.textLine}>{t('dont_any_account')}</Text>
+              <Text style={styles.textLogin} onPress={()=>navigation.replace("registration")}>{t('registration_message')}</Text>
             </View>
 
           </View>
@@ -98,7 +110,7 @@ export default LoginScreen;
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    marginTop: 40,
+    // marginTop: 40,
     backgroundColor: colors.background,
   },
   loginContainer: {

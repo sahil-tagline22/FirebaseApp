@@ -4,10 +4,25 @@ import { colors } from '../../theme/Colors';
 import { useFormik } from 'formik';
 import * as yup from 'yup';
 import InputText from '../../components/textInputFild/InputText';
-import auth from '@react-native-firebase/auth'
-import fireStore from '@react-native-firebase/firestore'
+import { NativeStackNavigationProp } from '@react-navigation/native-stack';
+import { RootStackParamList } from '../../types/RootStackParamList';
+import { useAppDispatch } from '../../redux/Store';
+import { loginUser } from '../../redux/slice/AuthSlice';
+import {getAuth,createUserWithEmailAndPassword} from '@react-native-firebase/auth'
+import { getApp } from '@react-native-firebase/app';
+import {getFirestore,doc,setDoc} from '@react-native-firebase/firestore'
+import { useAppTranslation } from '../../hooks/useAppTranslation';
 
-const RegistrationScreen = ({navigation}) => {
+
+interface RegistrationScreenProps {
+  navigation : NativeStackNavigationProp<RootStackParamList,'registration'>
+}
+
+const RegistrationScreen = ({navigation}:RegistrationScreenProps) => {
+
+  const {t} = useAppTranslation();
+
+  const dispatch = useAppDispatch();
 
   const formik = useFormik({
     initialValues: {
@@ -37,21 +52,28 @@ const RegistrationScreen = ({navigation}) => {
         console.log(values);
         
         try{
-          const newUser =  await auth().createUserWithEmailAndPassword(values.email,values.password)
-          console.log("user create successfully", newUser);
-          console.log(values.name)
-          console.log(newUser.user.email)
-          console.log(newUser.user.uid)
-          await fireStore().collection('users').doc(newUser.user.uid).set({
+          const app = getApp();
+          const auth = getAuth(app);
+          const newUser =  await createUserWithEmailAndPassword(auth,values.email,values.password)
+          console.log("new user create successfully", newUser);
+          if(newUser){
+            dispatch(loginUser(newUser.user));
+            navigation.replace("bottom");
+          }
+
+          const db = getFirestore(app);
+          await setDoc(doc(db,'users',newUser.user.uid),{
             name : values.name,
             email : newUser.user.email,
             uid : newUser.user.uid
-          })
+          });
+
           values.name = '';
           values.email = '';
           values.password = '';
           values.conformPassword = '';
-        }catch(error){
+          
+        }catch(error:any){
           if(error.code === "auth/email-already-in-use"){
             Alert.alert("Alert","The email address is already in use by another account.")
           }
@@ -63,10 +85,10 @@ const RegistrationScreen = ({navigation}) => {
   return (
     <View style={styles.container}>
       <View style={styles.loginContainer}>
-        <Text style={styles.title}>Registration</Text>
+        <Text style={styles.title}>{t('registration_title')}</Text>
 
         <InputText
-          placeHolder={'Enter Username'}
+          placeHolder={t('enter_userName')}
           values={formik.values.name}
           handleChange={formik.handleChange('name')}
           label={'name'}
@@ -75,7 +97,7 @@ const RegistrationScreen = ({navigation}) => {
         />
         
         <InputText
-          placeHolder={'Enter email'}
+          placeHolder={t('enter_email')}
           values={formik.values.email}
           handleChange={formik.handleChange('email')}
           label={'email'}
@@ -84,7 +106,7 @@ const RegistrationScreen = ({navigation}) => {
         />
 
         <InputText
-          placeHolder={'Enter password'}
+          placeHolder={t('enter_password')}
           values={formik.values.password}
           handleChange={formik.handleChange('password')}
           label={'password'}
@@ -93,7 +115,7 @@ const RegistrationScreen = ({navigation}) => {
         />
 
         <InputText
-          placeHolder={'Re-enter password'}
+          placeHolder={t('re_enter_password')}
           values={formik.values.conformPassword}
           handleChange={formik.handleChange('conformPassword')}
           label={'conformPassword'}
@@ -102,12 +124,12 @@ const RegistrationScreen = ({navigation}) => {
         />
 
         <TouchableOpacity style={styles.loginBtn} onPress={formik.handleSubmit}>
-          <Text style={styles.btnText}>Registration</Text>
+          <Text style={styles.btnText}>{t('registration_btn')}</Text>
         </TouchableOpacity>
 
         <View style={styles.footer}>
-          <Text style={styles.textLine}>I have already account.</Text>
-          <Text style={styles.textLogin} onPress={()=>navigation.replace("login")}>Login.!</Text>
+          <Text style={styles.textLine}>{t('i_have_account')}</Text>
+          <Text style={styles.textLogin} onPress={()=>navigation.replace("login")}>{t('login_message')}</Text>
         </View>
         
       </View>
@@ -120,7 +142,7 @@ export default RegistrationScreen;
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    marginTop: 40,
+    // marginTop: 40,
     backgroundColor: colors.background,
   },
   loginContainer: {

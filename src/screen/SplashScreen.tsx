@@ -3,7 +3,7 @@ import React from 'react'
 import LinearGradient from 'react-native-linear-gradient'
 import { Images } from '../assets/Images'
 
-const SplashScreen = () => {
+const CustomScreen = () => {
   return (
    
         <LinearGradient colors={['#29f29b','#03a4f6']} style={styles.linearGradient}> 
@@ -16,7 +16,7 @@ const SplashScreen = () => {
   )
 }
 
-export default SplashScreen
+export default CustomScreen
 
 const styles = StyleSheet.create({
     container:{
