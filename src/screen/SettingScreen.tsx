@@ -1,4 +1,4 @@
-import { StyleSheet, Text, View } from 'react-native'
+import { StyleSheet, View } from 'react-native'
 import React, { useEffect, useState } from 'react'
 import {Dropdown} from 'react-native-element-dropdown'
 import i18next from 'i18next'
@@ -7,7 +7,6 @@ import { changeLanguage } from '../redux/slice/LanguageSlice'
 
 import { changeTheme } from '../redux/slice/ThemeSlice'
 import { useThemeColor } from '../hooks/useThemeColor'
-
 
 
 const languages = [

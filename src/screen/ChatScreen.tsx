@@ -6,6 +6,7 @@ import {
   StyleSheet,
   TouchableOpacity,
   TouchableWithoutFeedback,
+  useColorScheme,
   View,
 } from 'react-native';
 import { GiftedChat, IMessage } from 'react-native-gifted-chat';
@@ -123,7 +124,8 @@ export default ChatScreen;
 
 const useStyle = () =>{
   const color = useThemeColor();
-  const theme = useAppSelector(state=> state.theme.theme)
+  const theme = useAppSelector(state=> state.theme.theme);
+  const mobileTheme = useColorScheme();
 
   return StyleSheet.create({
 
@@ -131,7 +133,7 @@ const useStyle = () =>{
       height: 60,
       elevation: 4,
       // backgroundColor: 'rgb(255, 255, 255)',
-      borderBottomColor: theme === "light" ? 'rgb(216, 216, 216)' : "",
+      borderBottomColor: theme === "light" || mobileTheme === "light" ? 'rgb(216, 216, 216)' : "",
       backgroundColor:color.header,
       borderBottomWidth: 2,
       alignItems: 'center',
