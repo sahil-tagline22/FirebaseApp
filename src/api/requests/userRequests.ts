@@ -1,0 +1,82 @@
+import { endpoints } from '../endpoints';
+
+
+//get data
+export const getUserData = async () => {
+  try {
+    const response = await fetch(endpoints.getUserData);
+    const data = await response.json();
+    return data;
+  } catch (error) {
+    console.log('getUserData not working proper...!');
+  }
+};
+
+//post data
+export const postUserData = async () => {
+  try {
+    const users = await fetch(endpoints.postUserData, {
+      method: 'post',
+      body: JSON.stringify({
+        id: 21,
+        name: "hello",
+        email: "hello.kumar@example.com",
+        phone: "+91-9988774454",
+        address: "surat, India",
+        company: "dell"
+    },),
+      headers: { 'Content-type': 'application/json' },
+    });
+    const data = await users.json();
+    return data;
+  } catch (error) {
+    console.log('post data error ...!');
+  }
+};
+
+//put data 
+export const putUserData = async () => {
+  try {
+    const users = await fetch(endpoints.putUserData, {
+      method: 'put',
+      body: JSON.stringify({
+        "name": 'sahil',
+      }),
+      headers: { 'Content-type': 'application/json' },
+    });
+    const data = await users.json();
+    return data;
+  } catch (error) {
+    console.log('post data error ...!');
+  }
+};
+
+// patch data 
+export const patchUserData = async () => {
+  try {
+    const users = await fetch(endpoints.patchUserData, {
+      method: 'patch',
+      body: JSON.stringify({
+        body : "sahil"
+      }),
+      headers: { 'Content-type': 'application/json' },
+    });
+    const data = await users.json();
+    return data;
+  } catch (error) {
+    console.log('post data error ...!');
+  }
+};
+
+// patch data 
+export const deleteUserData = async () => {
+  try {
+    const users = await fetch(endpoints.deleteUserdata, {
+      method: 'delete',
+    });
+    const data = await users.json();
+    return data;
+  } catch (error) {
+    console.log('delete data error ...!');
+  }
+};
