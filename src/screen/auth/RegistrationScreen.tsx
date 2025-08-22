@@ -1,5 +1,5 @@
 import { Alert, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
-import React from 'react';
+import React, { useEffect } from 'react';
 import { colors } from '../../theme/Colors';
 import { useFormik } from 'formik';
 import * as yup from 'yup';
@@ -12,7 +12,7 @@ import {getAuth,createUserWithEmailAndPassword} from '@react-native-firebase/aut
 import { getApp } from '@react-native-firebase/app';
 import {getFirestore,doc,setDoc} from '@react-native-firebase/firestore'
 import { useAppTranslation } from '../../hooks/useAppTranslation';
-
+import { RegisterUser } from '../../api/requests/RegisterUserRequests';
 
 interface RegistrationScreenProps {
   navigation : NativeStackNavigationProp<RootStackParamList,'registration'>
@@ -49,24 +49,29 @@ const RegistrationScreen = ({navigation}:RegistrationScreenProps) => {
         .required('please enter conformpassword.!'),
     }),
     onSubmit: async (values) => {
-        console.log(values);
-        
         try{
-          const app = getApp();
-          const auth = getAuth(app);
-          const newUser =  await createUserWithEmailAndPassword(auth,values.email,values.password)
-          console.log("new user create successfully", newUser);
-          if(newUser){
-            dispatch(loginUser(newUser.user));
-            navigation.replace("bottom");
-          }
+          // const app = getApp();
+          // const auth = getAuth(app);
+          // const newUser =  await createUserWithEmailAndPassword(auth,values.email,values.password)
+          // console.log("new user create successfully", newUser);
+          // if(newUser){
+          //   dispatch(loginUser(newUser.user));
+          //   navigation.replace("bottom");
+          // }
 
-          const db = getFirestore(app);
-          await setDoc(doc(db,'users',newUser.user.uid),{
+          // const db = getFirestore(app);
+          // await setDoc(doc(db,'users',newUser.user.uid),{
+          //   name : values.name,
+          //   email : newUser.user.email,
+          //   uid : newUser.user.uid
+          // });
+
+          const data = {
             name : values.name,
-            email : newUser.user.email,
-            uid : newUser.user.uid
-          });
+            email : values.email,
+            password : values.password
+          }
+          await RegisterUser(data);
 
           values.name = '';
           values.email = '';

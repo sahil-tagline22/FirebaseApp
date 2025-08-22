@@ -18,7 +18,7 @@ export const postUserData = async () => {
     const users = await fetch(endpoints.postUserData, {
       method: 'post',
       body: JSON.stringify({
-        id: 21,
+        id: 20,
         name: "hello",
         email: "hello.kumar@example.com",
         phone: "+91-9988774454",

@@ -20,41 +20,41 @@ const HomeScreen = () => {
 
   
   const userDataGet = async () =>{
-    // const data = await getUserData();
-    const data = await userGetData();
+    const data = await getUserData();
+    // const data = await userGetData();
     console.log("🚀 ~ userDataGet ~ data:", data);
     setUser(data);
   }
   
   const userDataPost =  async () => {
-    // const data = await postUserData();
-    const data = await userPostData();
+    const data = await postUserData();
+    // const data = await userPostData();
     console.log("🚀 ~ userDataPost ~ data:", data)
   };
   
   const userDataPut = async () => {
-    // const data = await putUserData();
-    const data = await userPutData();
+    const data = await putUserData();
+    // const data = await userPutData();
     console.log("🚀 ~ userDataPut ~ data:", data);
   };
   
   const userDataPatch = async () => {
-    // const data = await patchUserData();
-    const data = await userPatchData();
+    const data = await patchUserData();
+    // const data = await userPatchData();
     console.log("🚀 ~ userDataPatch ~ data:", data);
   };
   
   const userDataDelete = async () =>{
-    // const data = await deleteUserData(20);
-    const data = await userDeleteData();
+    const data = await deleteUserData(20);
+    // const data = await userDeleteData();
     console.log("🚀 ~ userDataDelete ~ data:", data);
   }
 
   useEffect(() => {
-    userDataGet();
+    // userDataGet();
     // userDataPost();
     // userDataPut();
-    // userDataPatch();
+    userDataPatch();
     // userDataDelete();
   }, []);
 
