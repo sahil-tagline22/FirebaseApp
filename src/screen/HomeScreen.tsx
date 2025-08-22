@@ -1,6 +1,6 @@
 import { FlatList, StyleSheet, Text, View } from 'react-native';
 import { useThemeColor } from '../hooks/useThemeColor';
-import { useEffect, useState } from 'react';
+import {  useEffect, useState } from 'react';
 import { deleteUserData, getUserData, patchUserData, postUserData, putUserData } from '../api/requests/userRequests';
 
 export type ApiData = {
@@ -17,50 +17,50 @@ const HomeScreen = () => {
   const styles = useStyle();
   const color = useThemeColor();
 
+  
+  const userDataGet = async () =>{
+    const data = await getUserData();
+    console.log("🚀 ~ userDataGet ~ data:", data);
+    setUser(data);
+  }
+  
+  const userDataPost =  async () => {
+    const data = await postUserData();
+    console.log('post data print --> ', data);
+  };
+  
+  const userDataPut = async () => {
+    const data = await putUserData();
+    console.log("🚀 ~ userDataPut ~ data:", data);
+  };
+  
+  const userDataPatch = async () => {
+    const data = await patchUserData();
+    console.log("🚀 ~ userDataPatch ~ data:", data);
+  };
+  
+  const userDataDelete = async () =>{
+    const data = await deleteUserData(20);
+    console.log("🚀 ~ userDataDelete ~ data:", data);
+  }
+
   useEffect(() => {
-    userDataGet();
+    // userDataGet();
     // userDataPost();
     // userDataPut();
     // userDataPatch();
     userDataDelete();
   }, []);
 
-  const userDataGet = async () =>{
-    const data = await getUserData();
-    console.log("get data print -->",data);
-    setUser(data);
-  }
-
-  const userDataPost = async () => {
-    const data = await postUserData();
-    console.log('post data print --> ', data);
-  };
-
-  const userDataPut = async () => {
-    const data = await putUserData();
-    console.log('put data print --> ', data);
-  };
-
-  const userDataPatch = async () => {
-    const data = await patchUserData();
-    console.log('patch data print --> ', data);
-    setUser(data);
-  };
-
-  const userDataDelete = async () =>{
-    const data = await deleteUserData();
-    console.log("user data delete successfully...!",data)
-  }
-
   const renderItem = (item: ApiData) => {
     return (
       <View style={styles.itemContainer}>
-        <Text style={styles.textContainer}>User id :- {item.id}</Text>
-        <Text style={styles.textContainer}>User name :- {item.name}</Text>
-        <Text style={styles.textContainer}>User email :- {item.email}</Text>
-        <Text style={styles.textContainer}>User phone :- {item.phone}</Text>
-        <Text style={styles.textContainer}>User address :- {item.address}</Text>
-        <Text style={styles.textContainer}>User company :- {item.company}</Text>
+        <Text style={styles.textContainer}>id :- {item.id}</Text>
+        <Text style={styles.textContainer}>name :- {item.name}</Text>
+        <Text style={styles.textContainer}>email :- {item.email}</Text>
+        <Text style={styles.textContainer}>phone :- {item.phone}</Text>
+        <Text style={styles.textContainer}>address :- {item.address}</Text>
+        <Text style={styles.textContainer}>company :- {item.company}</Text>
       </View>
     );
   };

@@ -24,7 +24,7 @@ export const postUserData = async () => {
         phone: "+91-9988774454",
         address: "surat, India",
         company: "dell"
-    },),
+    }),
       headers: { 'Content-type': 'application/json' },
     });
     const data = await users.json();
@@ -39,15 +39,16 @@ export const putUserData = async () => {
   try {
     const users = await fetch(endpoints.putUserData, {
       method: 'put',
+      headers: { 'Content-type': 'application/json' },
       body: JSON.stringify({
         "name": 'sahil',
       }),
-      headers: { 'Content-type': 'application/json' },
     });
     const data = await users.json();
+    console.log("🚀 ~ putUserData ~ data:", data)
     return data;
   } catch (error) {
-    console.log('post data error ...!');
+    console.log("🚀 ~ putUserData ~ error:", error)
   }
 };
 
@@ -56,27 +57,31 @@ export const patchUserData = async () => {
   try {
     const users = await fetch(endpoints.patchUserData, {
       method: 'patch',
+      headers: { 'Content-type': 'application/json' },
       body: JSON.stringify({
         body : "sahil"
       }),
-      headers: { 'Content-type': 'application/json' },
     });
     const data = await users.json();
+    console.log("🚀 ~ patchUserData ~ data:", data);
     return data;
   } catch (error) {
-    console.log('post data error ...!');
+   console.log("🚀 ~ patchUserData ~ error:", error);
   }
 };
 
-// patch data 
-export const deleteUserData = async () => {
+// delete data 
+export const deleteUserData = async (id:number) => {
   try {
-    const users = await fetch(endpoints.deleteUserdata, {
+    const url = `${endpoints.deleteUserdata}${id}`
+    console.log("🚀 ~ deleteUserData ~ url:", url)
+    const users = await fetch(`${endpoints.deleteUserdata}${id}`, {
       method: 'delete',
     });
     const data = await users.json();
+    console.log("🚀 ~ deleteUserData ~ data:", data)
     return data;
   } catch (error) {
-    console.log('delete data error ...!');
+   console.log("🚀 ~ deleteUserData ~ error:", error)
   }
 };
