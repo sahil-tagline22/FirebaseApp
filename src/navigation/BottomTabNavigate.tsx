@@ -64,9 +64,11 @@ const BottomTabNavigate = ({ navigation }: BottomTabNavigateProps) => {
     <Bottom.Navigator
       screenOptions={{
         headerRight: headerRight,
-        tabBarActiveTintColor: 'blue',
+        tabBarActiveTintColor: color.activeIconColor,
+        tabBarInactiveTintColor:color.inActiveColor,
         headerStyle:{backgroundColor:color.header},
-        headerTitleStyle:{color:color.text}
+        headerTitleStyle:{color:color.headerText},
+        tabBarStyle : {backgroundColor:color.footer}
       }}
     >
       <Bottom.Screen

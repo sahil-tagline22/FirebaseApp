@@ -2,10 +2,11 @@ import { FlatList, StyleSheet, Text, View } from 'react-native';
 import { useThemeColor } from '../hooks/useThemeColor';
 import {  useEffect, useState } from 'react';
 import { deleteUserData, getUserData, patchUserData, postUserData, putUserData } from '../api/requests/userRequests';
+import { userDeleteData, userGetData, userPatchData, userPostData, userPutData } from '../api/requests/axiosRuests';
 
 export type ApiData = {
   id : string;
-  name : number;
+  name : string;
   email : string;
   phone: string;
   address : string;
@@ -19,37 +20,42 @@ const HomeScreen = () => {
 
   
   const userDataGet = async () =>{
-    const data = await getUserData();
+    // const data = await getUserData();
+    const data = await userGetData();
     console.log("🚀 ~ userDataGet ~ data:", data);
     setUser(data);
   }
   
   const userDataPost =  async () => {
-    const data = await postUserData();
-    console.log('post data print --> ', data);
+    // const data = await postUserData();
+    const data = await userPostData();
+    console.log("🚀 ~ userDataPost ~ data:", data)
   };
   
   const userDataPut = async () => {
-    const data = await putUserData();
+    // const data = await putUserData();
+    const data = await userPutData();
     console.log("🚀 ~ userDataPut ~ data:", data);
   };
   
   const userDataPatch = async () => {
-    const data = await patchUserData();
+    // const data = await patchUserData();
+    const data = await userPatchData();
     console.log("🚀 ~ userDataPatch ~ data:", data);
   };
   
   const userDataDelete = async () =>{
-    const data = await deleteUserData(20);
+    // const data = await deleteUserData(20);
+    const data = await userDeleteData();
     console.log("🚀 ~ userDataDelete ~ data:", data);
   }
 
   useEffect(() => {
-    // userDataGet();
+    userDataGet();
     // userDataPost();
     // userDataPut();
     // userDataPatch();
-    userDataDelete();
+    // userDataDelete();
   }, []);
 
   const renderItem = (item: ApiData) => {
@@ -98,6 +104,7 @@ const useStyle = () => {
       justifyContent: 'center',
       borderColor: color.borderColor,
       borderWidth: 1,
+      marginBottom:15
     },
     textContainer: {
       color: color.text,

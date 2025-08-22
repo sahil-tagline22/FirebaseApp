@@ -1,22 +1,22 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
+ 
+const supportedLanguages  = ['bn' , 'en' , 'gu' , 'hi' , 'pa'] as const;
 
-type Language = {
-    lan? : string
-}
+type supportedLanguage = typeof supportedLanguages[number];
 
 interface LanguageSliceType {
-    lan? : Language
+    lan : supportedLanguage
 }
 
 const initialState : LanguageSliceType = {
-    lan : undefined
+    lan : 'en'
 }
 
 export const LanguageSlice = createSlice({
     name:"language",
     initialState,
     reducers:{
-        changeLanguage : (state,action:PayloadAction<Language | undefined>) =>{
+        changeLanguage : (state,action:PayloadAction<supportedLanguage>) =>{
             state.lan = action.payload
         }
     }

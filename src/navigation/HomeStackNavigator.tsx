@@ -9,10 +9,14 @@ import HomeDrawer from './BottomTabNavigate';
 import ChatScreen from '../screen/ChatScreen';
 import { useAppSelector } from '../redux/Store';
 import i18next from 'i18next';
+import { StatusBar, useColorScheme } from 'react-native';
 
 const Stack = createNativeStackNavigator<RootStackParamList>();
 
 const HomeStackNavigator = () => {
+
+  const theme = useAppSelector(state=>state.theme.theme);
+  const mobileTheme = useColorScheme();
 
   const language = useAppSelector(state=>state.language.lan)
   console.log("language -->",language);
@@ -32,6 +36,11 @@ const HomeStackNavigator = () => {
 
   return (
     <NavigationContainer>
+      <StatusBar
+          translucent
+          hidden={false}
+          barStyle={theme === 'light' || mobileTheme === "light"  ? 'light-content' : 'dark-content'}
+        />
       <Stack.Navigator initialRouteName={initialRouteName}>
         <Stack.Screen
           name="login"

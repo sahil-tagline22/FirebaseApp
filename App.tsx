@@ -1,4 +1,4 @@
-import { persister, store } from './src/redux/Store';
+import { persister, store, useAppSelector } from './src/redux/Store';
 import { Provider } from 'react-redux';
 import { PersistGate } from 'redux-persist/integration/react';
 import HomeStackNavigator from './src/navigation/HomeStackNavigator';
@@ -17,12 +17,6 @@ const App = () => {
 
     <Provider store={store}>
       <PersistGate persistor={persister}>
-        <StatusBar
-          translucent
-          backgroundColor={'#000'}
-          hidden={false}
-          barStyle={'dark-content'}
-        />
         <HomeStackNavigator />
       </PersistGate>
     </Provider>
