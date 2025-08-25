@@ -13,6 +13,7 @@ import { getApp } from '@react-native-firebase/app';
 import {getFirestore,doc,setDoc} from '@react-native-firebase/firestore'
 import { useAppTranslation } from '../../hooks/useAppTranslation';
 import { RegisterUser } from '../../api/requests/RegisterUserRequests';
+import { handleAccessToken, handleRefreshToken } from '../../redux/slice/AccessAndRefreshSlice';
 
 interface RegistrationScreenProps {
   navigation : NativeStackNavigationProp<RootStackParamList,'registration'>
@@ -50,28 +51,34 @@ const RegistrationScreen = ({navigation}:RegistrationScreenProps) => {
     }),
     onSubmit: async (values) => {
         try{
-          // const app = getApp();
-          // const auth = getAuth(app);
-          // const newUser =  await createUserWithEmailAndPassword(auth,values.email,values.password)
-          // console.log("new user create successfully", newUser);
-          // if(newUser){
-          //   dispatch(loginUser(newUser.user));
-          //   navigation.replace("bottom");
-          // }
 
-          // const db = getFirestore(app);
-          // await setDoc(doc(db,'users',newUser.user.uid),{
-          //   name : values.name,
-          //   email : newUser.user.email,
-          //   uid : newUser.user.uid
-          // });
+          //create new user
+          const app = getApp();
+          const auth = getAuth(app);
+          const newUser =  await createUserWithEmailAndPassword(auth,values.email,values.password)
+          if(newUser){
+            dispatch(loginUser(newUser.user));
+            navigation.replace("bottom");
+          }
 
+          //store user in firebase
+          const db = getFirestore(app);
+          await setDoc(doc(db,'users',newUser.user.uid),{
+            name : values.name,
+            email : newUser.user.email,
+            uid : newUser.user.uid
+          });
+
+          //accessToken and refreshToken save in redux-persist
           const data = {
             name : values.name,
             email : values.email,
             password : values.password
           }
-          await RegisterUser(data);
+          const response = await RegisterUser(data);
+          console.log("🚀 ~ RegistrationScreen ~ response:", response)
+          dispatch(handleAccessToken(response?.data.data.accessToken))
+          dispatch(handleRefreshToken(response?.data.data.refreshToken))
 
           values.name = '';
           values.email = '';

@@ -1,8 +1,8 @@
-import { FlatList, StyleSheet, Text, View } from 'react-native';
+import { StyleSheet, Text, View } from 'react-native';
 import { useThemeColor } from '../hooks/useThemeColor';
-import {  useEffect, useState } from 'react';
-import { deleteUserData, getUserData, patchUserData, postUserData, putUserData } from '../api/requests/userRequests';
-import { userDeleteData, userGetData, userPatchData, userPostData, userPutData } from '../api/requests/axiosRuests';
+import { useEffect } from 'react';
+import { GetUser } from '../api/requests/RegisterUserRequests';
+import { PostTask } from '../api/requests/addTaskRequests';
 
 export type ApiData = {
   id : string;
@@ -14,70 +14,27 @@ export type ApiData = {
 };
 
 const HomeScreen = () => {
-  const [user, setUser] = useState<ApiData[]>([]);
+
   const styles = useStyle();
   const color = useThemeColor();
 
-  
-  const userDataGet = async () =>{
-    const data = await getUserData();
-    // const data = await userGetData();
-    console.log("🚀 ~ userDataGet ~ data:", data);
-    setUser(data);
-  }
-  
-  const userDataPost =  async () => {
-    const data = await postUserData();
-    // const data = await userPostData();
-    console.log("🚀 ~ userDataPost ~ data:", data)
-  };
-  
-  const userDataPut = async () => {
-    const data = await putUserData();
-    // const data = await userPutData();
-    console.log("🚀 ~ userDataPut ~ data:", data);
-  };
-  
-  const userDataPatch = async () => {
-    const data = await patchUserData();
-    // const data = await userPatchData();
-    console.log("🚀 ~ userDataPatch ~ data:", data);
-  };
-  
-  const userDataDelete = async () =>{
-    const data = await deleteUserData(20);
-    // const data = await userDeleteData();
-    console.log("🚀 ~ userDataDelete ~ data:", data);
-  }
+  useEffect(()=>{
+   getCourantUser();
+  },[])
 
-  useEffect(() => {
-    // userDataGet();
-    // userDataPost();
-    // userDataPut();
-    userDataPatch();
-    // userDataDelete();
-  }, []);
-
-  const renderItem = (item: ApiData) => {
-    return (
-      <View style={styles.itemContainer}>
-        <Text style={styles.textContainer}>id :- {item.id}</Text>
-        <Text style={styles.textContainer}>name :- {item.name}</Text>
-        <Text style={styles.textContainer}>email :- {item.email}</Text>
-        <Text style={styles.textContainer}>phone :- {item.phone}</Text>
-        <Text style={styles.textContainer}>address :- {item.address}</Text>
-        <Text style={styles.textContainer}>company :- {item.company}</Text>
-      </View>
-    );
-  };
+  const getCourantUser = async ()=>{
+    try{
+      const user = await GetUser();
+    }catch(error){
+      console.log("🚀 ~ getCourantUser ~ error:", error)
+    }
+    // console.log("🚀 ~ HomeScreen ~ getCourantUser:", user?.data.data.user.id)
+    // console.log("🚀 ~ HomeScreen ~ getCourantUser:", user?.data.data.user.name)
+  }
 
   return (
     <View style={styles.container}>
-      <FlatList
-        data={user}
-        keyExtractor={item => item.id}
-        renderItem={({ item }) => renderItem(item)}
-      />
+      <Text style={styles.textContainer}>hello</Text>
     </View>
   );
 };

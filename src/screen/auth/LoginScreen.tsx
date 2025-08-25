@@ -16,6 +16,8 @@ import { NativeStackNavigationProp } from '@react-navigation/native-stack';
 import { RootStackParamList } from '../../types/RootStackParamList';
 import {getAuth,signInWithEmailAndPassword} from '@react-native-firebase/auth'
 import { useAppTranslation } from '../../hooks/useAppTranslation';
+import { LoginUser } from '../../api/requests/RegisterUserRequests';
+import { handleAccessToken, handleRefreshToken } from '../../redux/slice/AccessAndRefreshSlice';
 
 
 
@@ -52,8 +54,20 @@ const LoginScreen = ({navigation}:LoginScreenProps) => {
             console.log("login user -->",user);
             if(user){
               dispatch(loginUser(user.user));
-              navigation.replace("bottom");
+              // navigation.replace("bottom");
             }
+
+            //login user, store token in redux-persist
+            const data = {
+              email : values.email,
+              password : values.password
+            }
+            const response = await LoginUser(data);
+            console.log("🚀 ~ LoginScreen ~ response:", response)
+            dispatch(handleAccessToken(response?.data.data.accessToken))
+            dispatch(handleRefreshToken(response?.data.data.refreshToken))
+            navigation.replace("bottom");
+            
             values.email = '';
             values.password = '';
 

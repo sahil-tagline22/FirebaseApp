@@ -5,7 +5,6 @@
         <!-- Customize your theme here. -->
         <item name="android:editTextBackground">@drawable/screen</item>
         <item name="android:windowDisablePreview">true</item>
-        <item name="android:windowDisablePreview">true</item>
     </style>
 
 </resources>
