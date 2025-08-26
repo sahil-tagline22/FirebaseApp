@@ -19,19 +19,19 @@ import {
 import Icon from 'react-native-vector-icons/MaterialIcons';
 
 export type ApiData = {
-  id?: string;
-  title?: string;
-  description?: string;
-  dueDate?: string;
-  createdAt?: string;
-  status?: string;
-  updatedAt?: string;
-};
-
-type Data = {
+  id: string;
   title: string;
   description: string;
-  status: string;
+  dueDate: string;
+  createdAt?: string;
+  updatedAt?: string;
+  status:'pending' | 'success' ;
+};
+
+type NewTaskData = {
+  title: string;
+  description: string;
+  status: 'pending' | 'success';
   dueDate: Date;
 };
 
@@ -41,9 +41,9 @@ const HomeScreen = () => {
   const [todo, setTodo] = useState<ApiData[]>([]);
   console.log('🚀 ~ HomeScreen ~ todo:', todo);
 
-  const [title, setTitle] = useState('');
-  const [discretion, setDiscretion] = useState('');
-  const [status, setStatus] = useState<string>('pending');
+  const [title, setTitle] = useState<string>('');
+  const [discretion, setDiscretion] = useState<string>('');
+  const [status, setStatus] = useState<'pending' | 'success'>('pending');
   const [selectedId, setSelectedId] = useState<string>('');
   const [editTodo, setEditTodo] = useState<boolean>(false);
 
@@ -78,7 +78,7 @@ const HomeScreen = () => {
   };
 
   //delete data
-  const DeleteData = async (id: string) => {
+  const DeleteData = async (id: string):Promise<void> => {
     try {
       const response: { success: boolean; message: string } = await DeleteTask(
         id,
@@ -93,9 +93,9 @@ const HomeScreen = () => {
   };
 
   //get particular data
-  const GetDataById = async (id: string) => {
+  const GetDataById = async (id: string):Promise<void> => {
     try {
-      const response = await GetTaskById(id);
+      const response:{task : ApiData} = await GetTaskById(id);
       console.log('🚀 ~ GetDataById ~ response:', response.task);
       setTitle(response.task.title);
       setDiscretion(response.task.description);
@@ -152,28 +152,28 @@ const HomeScreen = () => {
     GetData();
   }, [GetData]);
 
-  const handleClick = async item => {
-    const data: Data = {
+  const handleClick = async (item:ApiData):Promise<void> => {
+    const data: NewTaskData = {
       title: item.title,
-      description: item.discretion,
+      description: item.description,
       status: 'success',
       dueDate: new Date(),
     };
     try {
-      const response = await PutTask(item.id, data);
+      const response:{task : ApiData} = await PutTask(item.id, data);
       console.log("🚀 ~ handleClick ~ response:", response)
       if (response.task) {
-        const getTodo = todo.map(todo =>
+        const updatedTodo = todo.map<ApiData>(todo =>
           todo.id === item.id ? { ...todo, status: 'success' } : todo,
         );
-        setTodo(getTodo);
+        setTodo(updatedTodo);
       }
     } catch (error) {
       console.log('🚀 ~ GetDataById ~ error:', error);
     }
   };
 
-  const renderItemList = ({ item }) => (
+  const renderItemList = ({ item } : {item : ApiData}) => (
     <View style={styles.listContainer}>
       <View style={{ marginRight: 10 }}>
         {item.status === 'pending' ? (

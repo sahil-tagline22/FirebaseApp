@@ -1,4 +1,4 @@
-import axios from 'axios';
+import axios, { AxiosInstance } from 'axios';
 import { store } from '../redux/Store';
 import { getCurrentDateTime, getFullUrl } from '../utils/helperFunctions';
 import { endpoints } from './endpoints';
@@ -6,7 +6,7 @@ import { apiRefreshToken } from './requests/authRequests';
 
 export const baseUrl = 'http://192.168.0.59:3000';
 
-export const axiosClient = axios.create({
+export const axiosClient:AxiosInstance = axios.create({
   baseURL: baseUrl,
   // headers : {'Content-Type' : 'application/json'}
 });

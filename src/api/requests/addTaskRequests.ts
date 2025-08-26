@@ -1,7 +1,17 @@
 import { axiosClient } from "../api"
 import { endpoints } from "../endpoints"
 
-export const PostTask = async (task)=>{
+export interface Task {
+  id?: string;
+  title: string;
+  description: string;
+  status: 'pending' | 'success';
+  dueDate: string | Date;
+  createdAt?: string;
+  updatedAt?: string;
+}
+
+export const PostTask = async (task:Omit<Task, | 'id' | 'createdAt' | 'updatedAt'>)=>{
     try{
         console.log("🚀 ~ PostTask ~ task:", task)
         const response = await axiosClient.post(endpoints.postTask,task)
@@ -22,7 +32,7 @@ export const GetTask = async () =>{
     }
 }
 
-export const GetTaskById = async (id) =>{
+export const GetTaskById = async (id:string) =>{
     try{
         const response = await axiosClient.get(`${endpoints.getTaskById}${id}`)
         console.log("🚀 ~ GetTaskById ~ response:", response)
@@ -32,7 +42,7 @@ export const GetTaskById = async (id) =>{
     }
 }
 
-export const PutTask = async (id,data) =>{
+export const PutTask = async (id:string,data:Partial<Task>) =>{
     console.log("🚀 ~ PutTask ~ id:", id)
     console.log("🚀 ~ putTask ~ data:", data)
     try{
@@ -44,7 +54,7 @@ export const PutTask = async (id,data) =>{
     }
 }
 
-export const DeleteTask = async (id) =>{
+export const DeleteTask = async (id:string) =>{
     try{
         const response = await axiosClient.delete(`${endpoints.deleteTask}${id}`)
         console.log("🚀 ~ DeleteTask ~ response:", response)
