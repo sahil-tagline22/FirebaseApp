@@ -10,6 +10,7 @@ import ChatScreen from '../screen/ChatScreen';
 import { useAppSelector } from '../redux/Store';
 import i18next from 'i18next';
 import { StatusBar, useColorScheme } from 'react-native';
+import { appNavigationRef } from './appNavigationRef';
 
 const Stack = createNativeStackNavigator<RootStackParamList>();
 
@@ -35,7 +36,7 @@ const HomeStackNavigator = () => {
   },[language])
 
   return (
-    <NavigationContainer>
+    <NavigationContainer ref={appNavigationRef}>
       <StatusBar
           translucent
           hidden={false}

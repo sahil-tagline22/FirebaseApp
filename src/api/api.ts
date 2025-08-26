@@ -1,8 +1,12 @@
 import axios from 'axios';
 import { store } from '../redux/Store';
-import { handleAccessToken } from '../redux/slice/AccessAndRefreshSlice';
+import {
+  handleAccessToken,
+  handleCleanToken,
+} from '../redux/slice/AccessAndRefreshSlice';
 import { getCurrentDateTime, getFullUrl } from '../utils/helperFunctions';
 import { endpoints } from './endpoints';
+import { apiRefreshToken } from './requests/authRequests';
 
 export const baseUrl = 'http://192.168.0.59:3000';
 
@@ -17,24 +21,25 @@ axiosClient.defaults.headers.common['Content-Type'] = 'application/json';
 const isDebug = __DEV__; // fallback to __DEV__ for React Native
 
 axiosClient.interceptors.request.use(
-  requestConfig => {
-    const token = store.getState().token.accessToken;
-    // const refresh = store.getState().token.refreshToken;
-   if (requestConfig.url === endpoints.refresh_token) {
-    //   requestConfig.headers.Authorization = `Bearer ${refresh}`;
-    } else if (token) {
-      requestConfig.headers.Authorization = `Bearer ${token}`;
+  config => {
+    const accessToken = store.getState().token.accessToken;
+    const refreshToken = store.getState().token.refreshToken;
+
+    if (config.url === endpoints.refresh_token) {
+      config.headers.Authorization = `Bearer ${refreshToken}`;
+    } else if (accessToken) {
+      config.headers.Authorization = `Bearer ${accessToken}`;
     }
     if (isDebug) {
       console.log(
-        `📡 [API CALL] ${requestConfig.method?.toUpperCase()} ${getCurrentDateTime()} ${getFullUrl(
-          requestConfig,
+        `📡 [API CALL] ${config.method?.toUpperCase()} ${getCurrentDateTime()} ${getFullUrl(
+          config,
         )}`,
-        requestConfig.headers,
-        requestConfig.data || '',
+        config.headers,
+        config.data || '',
       );
     }
-    return requestConfig;
+    return config;
   },
   error => {
     if (isDebug) {
@@ -65,26 +70,17 @@ axiosClient.interceptors.response.use(
   async error => {
     const originalRequest = error.config;
 
-    if (error.response?.status === 401 && error.config.url !== endpoints.refresh_token) {
+    if (
+      error.response?.status === 401 &&
+      originalRequest.url !== endpoints.refresh_token
+    ) {
       originalRequest._retry = true;
-      const refreshToken = store.getState().token.refreshToken;
-      console.log('🚀 ~ refreshToken:', refreshToken);
-      if (refreshToken) {
-        try {
-          const response = await axiosClient.post('/api/auth/refresh', {
-            token: refreshToken,
-          });
-          console.log('🚀 ~ response:', response);
-          const newAccessToken = response.data.data.accessToken;
 
-          store.dispatch(handleAccessToken(newAccessToken));
+      const newAccessToken = await apiRefreshToken();
 
-          originalRequest.headers.Authorization = `Bearer ${newAccessToken}`;
-
-          return axiosClient(originalRequest);
-        } catch (tokenRefreshError) {
-          console.log('🚀 ~ error:', tokenRefreshError);
-        }
+      if (newAccessToken) {
+        originalRequest.headers.Authorization = `Bearer ${newAccessToken}`;
+        return axiosClient(originalRequest);
       }
     }
     if (isDebug) {
@@ -92,14 +88,14 @@ axiosClient.interceptors.response.use(
       const startTime = error.config?.metadata?.startTime;
       const duration = startTime
         ? `${endTime.getTime() - startTime.getTime()}ms`
-        : "N/A";
+        : 'N/A';
 
       if (error.response) {
         console.log(
           `🚫 [API ERROR RESPONSE] ${error.config.method?.toUpperCase()} ${getCurrentDateTime()} ${
             error.config.url
           } (${duration})`,
-          error.response.data
+          error.response.data,
         );
       } else if (error.request) {
         console.log(`⚠️ [NO RESPONSE RECEIVED]`, error.request);
@@ -110,7 +106,6 @@ axiosClient.interceptors.response.use(
     return Promise.reject(error);
   },
 );
-
 
 // import axios from "axios";
 // import * as config from "../config";
