@@ -1,8 +1,8 @@
-import { StyleSheet, Text, View } from 'react-native';
+import { StyleSheet, Text, View, FlatList } from 'react-native';
 import { useThemeColor } from '../hooks/useThemeColor';
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
 import { GetUser } from '../api/requests/RegisterUserRequests';
-import { PostTask } from '../api/requests/addTaskRequests';
+import { DeleteTask, GetTask, GetTaskById, PostTask, PutTask } from '../api/requests/addTaskRequests';
 
 export type ApiData = {
   id : string;
@@ -17,9 +17,17 @@ const HomeScreen = () => {
 
   const styles = useStyle();
   const color = useThemeColor();
-
+  const [todo,setTodo] = useState([]);
+  console.log("🚀 ~ HomeScreen ~ todo:", todo)
+  
+ 
   useEffect(()=>{
-   getCourantUser();
+  //  getCourantUser();
+  //  PostData();
+  GetData();
+  // GetDataById();
+  // PutData();
+  // DeleteData();
   },[])
 
   const getCourantUser = async ()=>{
@@ -28,13 +36,80 @@ const HomeScreen = () => {
     }catch(error){
       console.log("🚀 ~ getCourantUser ~ error:", error)
     }
-    // console.log("🚀 ~ HomeScreen ~ getCourantUser:", user?.data.data.user.id)
-    // console.log("🚀 ~ HomeScreen ~ getCourantUser:", user?.data.data.user.name)
+  }
+  
+  //create data and send to post request in api
+  const data = {
+    title : 'test1',
+    description : 'hello world..!',
+    status : 'pending',
+    dueDate : new Date() 
+  }
+  const PostData = async () => {
+    try{
+      const response = await PostTask(data);
+      console.log("🚀 ~ PostData ~ response:", response?.data.data.task)
+      setTodo([...todo,response?.data.data.task])
+    }catch(error){
+      console.log("🚀 ~ PostData ~ error:", error)
+    }
+  }
+
+  //get all todo 
+  const GetData =async ()=>{
+    try{
+      const response = await GetTask();
+      console.log("🚀 ~ GetData ~ response:", response);
+      setTodo(response?.data.data.tasks);
+    }catch(error){
+      console.log("🚀 ~ GetData ~ error:", error);
+    }
+  }
+
+  //get particular data 
+  const GetDataById = async () =>{
+    try{
+      const response = await GetTaskById('68ad43596c1f8a68c22bf162');
+    }catch(error){
+      console.log("🚀 ~ GetDataById ~ error:", error)
+    }
+  }
+
+  //change the value using put requests
+  const data1 = {
+    title : 'test123',
+    description : 'hello world..!',
+    status : 'pending',
+    dueDate : new Date() 
+  }
+  const PutData = async () =>{
+    try{
+      const response = await PutTask('68ad43596c1f8a68c22bf162',data1);
+    }catch(error){
+      console.log("🚀 ~ GetDataById ~ error:", error)
+    }
+  }
+
+  //delete data 
+  const DeleteData = async ()=>{
+    try{
+      const response = await DeleteTask('68ad43596c1f8a68c22bf162');
+    }catch(error){
+      console.log("🚀 ~ DeleteData ~ error:", error)
+    }
   }
 
   return (
     <View style={styles.container}>
-      <Text style={styles.textContainer}>hello</Text>
+      <FlatList
+      data = {todo}
+      keyExtractor = {(item)=>item.id}
+      renderItem={({item})=>
+        <View>
+          <Text>{item.title}</Text>
+        </View>
+      }
+      />
     </View>
   );
 };

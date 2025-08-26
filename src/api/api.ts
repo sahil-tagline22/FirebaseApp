@@ -1,9 +1,5 @@
 import axios from 'axios';
 import { store } from '../redux/Store';
-import {
-  handleAccessToken,
-  handleCleanToken,
-} from '../redux/slice/AccessAndRefreshSlice';
 import { getCurrentDateTime, getFullUrl } from '../utils/helperFunctions';
 import { endpoints } from './endpoints';
 import { apiRefreshToken } from './requests/authRequests';
@@ -23,9 +19,11 @@ const isDebug = __DEV__; // fallback to __DEV__ for React Native
 axiosClient.interceptors.request.use(
   config => {
     const accessToken = store.getState().token.accessToken;
+    console.log("🚀 ~ accessToken:", accessToken)
     const refreshToken = store.getState().token.refreshToken;
+    console.log("🚀 ~ refreshToken:", refreshToken)
 
-    if (config.url === endpoints.refresh_token) {
+    if (config.url == endpoints.refresh_token) {
       config.headers.Authorization = `Bearer ${refreshToken}`;
     } else if (accessToken) {
       config.headers.Authorization = `Bearer ${accessToken}`;
@@ -77,6 +75,7 @@ axiosClient.interceptors.response.use(
       originalRequest._retry = true;
 
       const newAccessToken = await apiRefreshToken();
+      console.log("🚀 ~ newAccessToken:", newAccessToken)
 
       if (newAccessToken) {
         originalRequest.headers.Authorization = `Bearer ${newAccessToken}`;

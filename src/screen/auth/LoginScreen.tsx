@@ -17,7 +17,7 @@ import { RootStackParamList } from '../../types/RootStackParamList';
 import {getAuth,signInWithEmailAndPassword} from '@react-native-firebase/auth'
 import { useAppTranslation } from '../../hooks/useAppTranslation';
 import { LoginUser } from '../../api/requests/RegisterUserRequests';
-import { handleAccessToken, handleRefreshToken } from '../../redux/slice/AccessAndRefreshSlice';
+import { setAccessToken, setRefreshToken } from '../../redux/slice/AccessAndRefreshSlice';
 
 
 
@@ -64,8 +64,8 @@ const LoginScreen = ({navigation}:LoginScreenProps) => {
             }
             const response = await LoginUser(data);
             console.log("🚀 ~ LoginScreen ~ response:", response)
-            dispatch(handleAccessToken(response?.data.data.accessToken))
-            dispatch(handleRefreshToken(response?.data.data.refreshToken))
+            dispatch(setAccessToken(response?.data.data.accessToken))            
+            dispatch(setRefreshToken(response?.data.data.refreshToken))            
             navigation.replace("bottom");
             
             values.email = '';

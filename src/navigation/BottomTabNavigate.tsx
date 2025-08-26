@@ -15,7 +15,7 @@ import { logoutUser } from '../redux/slice/AuthSlice';
 import { useAppTranslation } from '../hooks/useAppTranslation';
 import SettingScreen from '../screen/SettingScreen';
 import { useThemeColor } from '../hooks/useThemeColor';
-import { handleCleanToken } from '../redux/slice/AccessAndRefreshSlice';
+import { resetToInitialState } from '../redux/slice/AccessAndRefreshSlice';
 
 const Bottom = createBottomTabNavigator();
 
@@ -39,7 +39,7 @@ const BottomTabNavigate = ({ navigation }: BottomTabNavigateProps) => {
   const handleLogout = useCallback(() => {
     auth().signOut();
     dispatch(logoutUser());
-    dispatch(handleCleanToken());
+    dispatch(resetToInitialState());
     navigation.replace('login');
     console.log('user logout');
   }, [dispatch, navigation]);

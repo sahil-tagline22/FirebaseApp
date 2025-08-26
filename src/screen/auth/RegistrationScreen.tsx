@@ -13,7 +13,7 @@ import { getApp } from '@react-native-firebase/app';
 import {getFirestore,doc,setDoc} from '@react-native-firebase/firestore'
 import { useAppTranslation } from '../../hooks/useAppTranslation';
 import { RegisterUser } from '../../api/requests/RegisterUserRequests';
-import { handleAccessToken, handleRefreshToken } from '../../redux/slice/AccessAndRefreshSlice';
+import { setAccessToken, setRefreshToken } from '../../redux/slice/AccessAndRefreshSlice';
 
 interface RegistrationScreenProps {
   navigation : NativeStackNavigationProp<RootStackParamList,'registration'>
@@ -77,8 +77,8 @@ const RegistrationScreen = ({navigation}:RegistrationScreenProps) => {
           }
           const response = await RegisterUser(data);
           console.log("🚀 ~ RegistrationScreen ~ response:", response)
-          dispatch(handleAccessToken(response?.data.data.accessToken))
-          dispatch(handleRefreshToken(response?.data.data.refreshToken))
+          dispatch(setAccessToken(response?.data.data.accessToken))
+          dispatch(setRefreshToken(response?.data.data.refreshToken))
 
           values.name = '';
           values.email = '';
