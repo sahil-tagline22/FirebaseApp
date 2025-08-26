@@ -1,114 +1,250 @@
-import { StyleSheet, Text, View, FlatList } from 'react-native';
+import {
+  StyleSheet,
+  Text,
+  View,
+  FlatList,
+  TextInput,
+  TouchableOpacity,
+} from 'react-native';
 import { useThemeColor } from '../hooks/useThemeColor';
-import { useEffect, useState } from 'react';
+import { useCallback, useEffect, useState } from 'react';
 import { GetUser } from '../api/requests/RegisterUserRequests';
-import { DeleteTask, GetTask, GetTaskById, PostTask, PutTask } from '../api/requests/addTaskRequests';
+import {
+  DeleteTask,
+  GetTask,
+  GetTaskById,
+  PostTask,
+  PutTask,
+} from '../api/requests/addTaskRequests';
+import Icon from 'react-native-vector-icons/MaterialIcons';
 
 export type ApiData = {
-  id : string;
-  name : string;
-  email : string;
-  phone: string;
-  address : string;
-  company : string
+  id?: string;
+  title?: string;
+  description?: string;
+  dueDate?: string;
+  createdAt?: string;
+  status?: string;
+  updatedAt?: string;
+};
+
+type Data = {
+  title: string;
+  description: string;
+  status: string;
+  dueDate: Date;
 };
 
 const HomeScreen = () => {
-
   const styles = useStyle();
   const color = useThemeColor();
-  const [todo,setTodo] = useState([]);
-  console.log("🚀 ~ HomeScreen ~ todo:", todo)
-  
- 
-  useEffect(()=>{
-  //  getCourantUser();
-  //  PostData();
-  GetData();
-  // GetDataById();
-  // PutData();
-  // DeleteData();
-  },[])
+  const [todo, setTodo] = useState<ApiData[]>([]);
+  console.log('🚀 ~ HomeScreen ~ todo:', todo);
 
-  const getCourantUser = async ()=>{
-    try{
-      const user = await GetUser();
-    }catch(error){
-      console.log("🚀 ~ getCourantUser ~ error:", error)
+  const [title, setTitle] = useState('');
+  const [discretion, setDiscretion] = useState('');
+  const [status, setStatus] = useState<string>('pending');
+  const [selectedId, setSelectedId] = useState<string>('');
+  const [editTodo, setEditTodo] = useState<boolean>(false);
+
+  //get all todo
+  const GetData = useCallback(async () => {
+    try {
+      const response = await GetTask();
+      console.log('🚀 ~ GetData ~ response:', response);
+      setTodo(response?.data.data.tasks);
+    } catch (error) {
+      console.log('🚀 ~ GetData ~ error:', error);
     }
-  }
-  
+  }, []);
+
   //create data and send to post request in api
   const data = {
-    title : 'test1',
-    description : 'hello world..!',
-    status : 'pending',
-    dueDate : new Date() 
-  }
+    title: title,
+    description: discretion,
+    status: status,
+    dueDate: new Date(),
+  };
   const PostData = async () => {
-    try{
+    try {
       const response = await PostTask(data);
-      console.log("🚀 ~ PostData ~ response:", response?.data.data.task)
-      setTodo([...todo,response?.data.data.task])
-    }catch(error){
-      console.log("🚀 ~ PostData ~ error:", error)
+      console.log('🚀 ~ PostData ~ response:', response?.data.data.task);
+      setTodo([...todo, response?.data.data.task]);
+      setTitle('');
+      setDiscretion('');
+    } catch (error) {
+      console.log('🚀 ~ PostData ~ error:', error);
     }
-  }
+  };
 
-  //get all todo 
-  const GetData =async ()=>{
-    try{
-      const response = await GetTask();
-      console.log("🚀 ~ GetData ~ response:", response);
-      setTodo(response?.data.data.tasks);
-    }catch(error){
-      console.log("🚀 ~ GetData ~ error:", error);
+  //delete data
+  const DeleteData = async (id: string) => {
+    try {
+      const response: { success: boolean; message: string } = await DeleteTask(
+        id,
+      );
+      if (response.success === true) {
+        const todos = todo.filter(item => item.id !== id);
+        setTodo(todos);
+      }
+    } catch (error) {
+      console.log('🚀 ~ DeleteData ~ error:', error);
     }
-  }
+  };
 
-  //get particular data 
-  const GetDataById = async () =>{
-    try{
-      const response = await GetTaskById('68ad43596c1f8a68c22bf162');
-    }catch(error){
-      console.log("🚀 ~ GetDataById ~ error:", error)
+  //get particular data
+  const GetDataById = async (id: string) => {
+    try {
+      const response = await GetTaskById(id);
+      console.log('🚀 ~ GetDataById ~ response:', response.task);
+      setTitle(response.task.title);
+      setDiscretion(response.task.description);
+      setSelectedId(id);
+      setEditTodo(true);
+    } catch (error) {
+      console.log('🚀 ~ GetDataById ~ error:', error);
     }
-  }
+  };
 
   //change the value using put requests
   const data1 = {
-    title : 'test123',
-    description : 'hello world..!',
-    status : 'pending',
-    dueDate : new Date() 
-  }
-  const PutData = async () =>{
-    try{
-      const response = await PutTask('68ad43596c1f8a68c22bf162',data1);
-    }catch(error){
-      console.log("🚀 ~ GetDataById ~ error:", error)
+    title: title,
+    description: discretion,
+    status: status,
+    dueDate: new Date(),
+  };
+  const PutData = async () => {
+    try {
+      const response = await PutTask(selectedId, data1);
+      console.log('🚀 ~ PutData ~ response:', response.task.title);
+      if (response.task) {
+        const getTodo = todo.map(item =>
+          item.id === selectedId
+            ? {
+                ...item,
+                title: response.task.title,
+                description: response.task.description,
+              }
+            : item,
+        );
+        setTodo(getTodo);
+      }
+      setTitle('');
+      setDiscretion('');
+      setSelectedId('');
+      setEditTodo(false);
+    } catch (error) {
+      console.log('🚀 ~ GetDataById ~ error:', error);
     }
-  }
+  };
 
-  //delete data 
-  const DeleteData = async ()=>{
-    try{
-      const response = await DeleteTask('68ad43596c1f8a68c22bf162');
-    }catch(error){
-      console.log("🚀 ~ DeleteData ~ error:", error)
+  //get courant user
+  const getCourantUser = async () => {
+    try {
+      const user = await GetUser();
+      console.log('🚀 ~ getCourantUser ~ user:', user);
+    } catch (error) {
+      console.log('🚀 ~ getCourantUser ~ error:', error);
     }
-  }
+  };
+
+  useEffect(() => {
+    GetData();
+  }, [GetData]);
+
+  const handleClick = async item => {
+    const data: Data = {
+      title: item.title,
+      description: item.discretion,
+      status: 'success',
+      dueDate: new Date(),
+    };
+    try {
+      const response = await PutTask(item.id, data);
+      console.log("🚀 ~ handleClick ~ response:", response)
+      if (response.task) {
+        const getTodo = todo.map(todo =>
+          todo.id === item.id ? { ...todo, status: 'success' } : todo,
+        );
+        setTodo(getTodo);
+      }
+    } catch (error) {
+      console.log('🚀 ~ GetDataById ~ error:', error);
+    }
+  };
+
+  const renderItemList = ({ item }) => (
+    <View style={styles.listContainer}>
+      <View style={{ marginRight: 10 }}>
+        {item.status === 'pending' ? (
+          <TouchableOpacity onPress={() => handleClick(item)}>
+            <Icon
+              name="radio-button-unchecked"
+              size={30}
+              color={color.borderColor}
+            />
+          </TouchableOpacity>
+        ) : (
+          <TouchableOpacity disabled={true}>
+            <Icon name="check" size={30} color={color.borderColor} />
+          </TouchableOpacity>
+        )}
+      </View>
+      <View>
+        <Text style={styles.listText}>{item.title}</Text>
+        <Text style={styles.listText}>{item.description}</Text>
+      </View>
+      <View style={styles.deleteEditBtn}>
+        {item.status === 'pending' ? (
+          <TouchableOpacity
+            style={styles.deleteBtnContainer}
+            onPress={() => GetDataById(item.id)}
+          >
+            <Icon name="edit" size={30} color={color.text} />
+          </TouchableOpacity>
+        ) : null}
+        <TouchableOpacity
+          style={styles.deleteBtnContainer}
+          onPress={() => DeleteData(item.id)}
+        >
+          <Icon name="delete" size={30} color={color.text} />
+        </TouchableOpacity>
+      </View>
+    </View>
+  );
 
   return (
     <View style={styles.container}>
+      <View style={styles.inputContainer}>
+        <TextInput
+          style={styles.titleInputfield}
+          placeholder="Enter title"
+          placeholderTextColor={color.text}
+          onChangeText={setTitle}
+          value={title}
+        />
+        <TextInput
+          style={styles.desInputfield}
+          placeholder="Enter description"
+          placeholderTextColor={color.text}
+          onChangeText={setDiscretion}
+          value={discretion}
+        />
+        {editTodo ? (
+          <TouchableOpacity style={styles.btnContainer} onPress={PutData}>
+            <Text style={styles.btnText}>Edit</Text>
+          </TouchableOpacity>
+        ) : (
+          <TouchableOpacity style={styles.btnContainer} onPress={PostData}>
+            <Text style={styles.btnText}>Submit</Text>
+          </TouchableOpacity>
+        )}
+      </View>
+
       <FlatList
-      data = {todo}
-      keyExtractor = {(item)=>item.id}
-      renderItem={({item})=>
-        <View>
-          <Text>{item.title}</Text>
-        </View>
-      }
+        data={todo}
+        keyExtractor={item => item.id}
+        renderItem={renderItemList}
       />
     </View>
   );
@@ -124,22 +260,75 @@ const useStyle = () => {
       flex: 1,
       backgroundColor: color.backGroundColor,
     },
-    itemContainer: {
-      flex: 1,
+    inputContainer: {
+      // flex:1,
+      height: '26%',
       backgroundColor: color.backGroundColor,
+      alignItems: 'center',
+      borderBottomColor: color.borderColor,
+      borderBottomWidth: 1,
+      marginBottom: 20,
+    },
+    titleInputfield: {
+      borderWidth: 1,
+      borderColor: color.borderColor,
+      height: 40,
+      width: 370,
       marginHorizontal: 10,
-      paddingHorizontal: 10,
+      marginTop: 20,
+      paddingHorizontal: 20,
+      fontSize: 20,
+      color: color.text,
+    },
+    desInputfield: {
+      borderWidth: 1,
+      borderColor: color.borderColor,
+      height: 40,
+      width: 370,
       marginTop: 10,
-      height: 150,
-      borderRadius: 10,
-      gap: 2,
+      marginHorizontal: 10,
+      paddingHorizontal: 20,
+      fontSize: 20,
+      color: color.text,
+    },
+    btnContainer: {
+      backgroundColor: color.btnColor,
+      height: 40,
+      width: 100,
+      marginTop: 15,
+      alignItems: 'center',
       justifyContent: 'center',
+      borderRadius: 10,
+    },
+    btnText: {
+      fontSize: 20,
+      color: color.text,
+    },
+    listContainer: {
+      backgroundColor: color.backGroundColor,
+      height: 80,
+      marginTop: 10,
+      paddingLeft: 20,
+      borderRadius: 20,
       borderColor: color.borderColor,
       borderWidth: 1,
-      marginBottom:15
+      marginHorizontal: 3,
+      marginBottom: 10,
+      alignItems: 'center',
+      flexDirection: 'row',
     },
-    textContainer: {
+    listText: {
+      fontSize: 20,
       color: color.text,
+    },
+    deleteBtnContainer: {
+      // alignSelf: 'flex-end',
+      marginRight: 10,
+    },
+    deleteEditBtn: {
+      flex: 1,
+      flexDirection: 'row',
+      justifyContent: 'flex-end',
     },
   });
 };

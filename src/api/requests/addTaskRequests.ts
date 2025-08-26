@@ -26,16 +26,19 @@ export const GetTaskById = async (id) =>{
     try{
         const response = await axiosClient.get(`${endpoints.getTaskById}${id}`)
         console.log("🚀 ~ GetTaskById ~ response:", response)
+        return response.data.data;
     }catch(error){
         console.log("🚀 ~ GetTaskById ~ error:", error);
     }
 }
 
 export const PutTask = async (id,data) =>{
+    console.log("🚀 ~ PutTask ~ id:", id)
     console.log("🚀 ~ putTask ~ data:", data)
     try{
         const response = await axiosClient.put(`${endpoints.putTask}${id}`,data)
-        console.log("🚀 ~ PutTask ~ response:", response)
+        console.log("🚀 ~ PutTask ~ response:", response);
+        return response.data.data;
     }catch(error){
         console.log("🚀 ~ PutTask ~ error:", error);
     }
@@ -45,6 +48,7 @@ export const DeleteTask = async (id) =>{
     try{
         const response = await axiosClient.delete(`${endpoints.deleteTask}${id}`)
         console.log("🚀 ~ DeleteTask ~ response:", response)
+        return response.data;
     }catch(error){
         console.log("🚀 ~ DeleteTask ~ error:", error)
     }

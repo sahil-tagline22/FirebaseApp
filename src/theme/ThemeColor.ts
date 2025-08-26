@@ -8,7 +8,8 @@ export const ThemeColor = {
         headerText: "#fff",
         footer : "#000",
         activeIconColor : "#fff",
-        inActiveColor : "#36454f"
+        inActiveColor : "#36454f",
+        btnColor: "#24a0ed"
     },
     DarkTheme : {
         text : "#ffffff",
@@ -19,6 +20,7 @@ export const ThemeColor = {
         headerText: "#000",
         footer : "gray",
         activeIconColor : "#fff",
-        inActiveColor : "#000"
+        inActiveColor : "#000",
+        btnColor: "#24a0ed"
     }
 }
