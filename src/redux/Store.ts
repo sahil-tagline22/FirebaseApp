@@ -6,11 +6,13 @@ import { TypedUseSelectorHook, useDispatch, useSelector } from "react-redux";
 import authReducer from './slice/AuthSlice'
 import languageReducer from './slice/LanguageSlice'
 import themeReducer from './slice/ThemeSlice'
+import tokenReducer from './slice/AccessAndRefreshSlice'
 
 const rootReducer = combineReducers({
     auth : authReducer,
     language : languageReducer,
-    theme : themeReducer
+    theme : themeReducer,
+    token : tokenReducer
 });
 
 const persistConfig = {

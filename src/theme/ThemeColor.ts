@@ -4,13 +4,25 @@ export const ThemeColor = {
         backGroundColor : "#fff", 
         borderColor : "gray",
         switchColor : "gray",
-        header : "#fff"
+        header : "#000",
+        headerText: "#fff",
+        footer : "#000",
+        activeIconColor : "#fff",
+        inActiveColor : "#36454f",
+        btnColor: "#24a0ed",
+        loader : 'blue',
     },
     DarkTheme : {
         text : "#ffffff",
         backGroundColor : "#000", 
         borderColor : "#fff",
         switchColor : "#fff",
-        header : "gray"
+        header : "gray",
+        headerText: "#000",
+        footer : "gray",
+        activeIconColor : "#fff",
+        inActiveColor : "#000",
+        btnColor: "#24a0ed",
+        loader : 'white',
     }
 }
