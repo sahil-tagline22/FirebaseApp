@@ -21,22 +21,27 @@ const AboutScreen = () => {
   const [screenLoader, setScreenLoader] = useState<boolean>(true);
   const [data, setData] = useState<Item[]>([]);
   const [currentPage, setCurrentPage] = useState<number>(1);
-  console.log("🚀 ~ AboutScreen ~ currentPage:", currentPage)
+  console.log('🚀 ~ AboutScreen ~ currentPage:', currentPage);
   const [loader, setLoader] = useState(false);
-  console.log("🚀 ~ AboutScreen ~ loader:", loader)
+  console.log('🚀 ~ AboutScreen ~ loader:', loader);
   const [moreData, setMoreData] = useState(true);
-  console.log("🚀 ~ AboutScreen ~ moreData:", moreData)
+  console.log('🚀 ~ AboutScreen ~ moreData:', moreData);
   const [refreshing, setRefreshing] = useState(false);
 
   const color = useThemeColor();
   const styles = useStyle();
 
-  const initialApiCall = async (page:number) => {
+  const initialApiCall = async (page: number) => {
     try {
-      setScreenLoader(true);
-      setLoader(true);
+      if (!data && setScreenLoader(true)) setLoader(true);
       const response = await paginationApiCall(page);
-      setData(response?.data);
+      console.log('🚀 ~ initialApiCall ~ response:', response);
+      if (response?.data.length < 10) {
+        setMoreData(false);
+        setLoader(true);
+        return;
+      }
+      setData(page === 1 ? response?.data : [...data, ...response?.data]);
       setRefreshing(false);
       setScreenLoader(false);
       setLoader(false);
@@ -44,36 +49,23 @@ const AboutScreen = () => {
       console.log('🚀 ~ initialApiCall ~ error:', error);
     }
   };
+  
   useEffect(() => {
     initialApiCall(currentPage);
   }, []);
 
-  const reRenderApiCall = async () => {
-    try {
-      if (loader || !moreData) return;
-
-      setLoader(true);
-      const nextPage = currentPage + 1;
-      const response = await paginationApiCall(nextPage);
-      if (response?.data.length < 10) {
-        setMoreData(false);
-        setLoader(true);
-      }
-      setData([...data, ...response?.data]);
-      setCurrentPage(nextPage);
-      setRefreshing(false)
-      setLoader(false);
-    } catch (error) {
-      console.log('🚀 ~ reRenderApiCall ~ error:', error);
+  const reRenderApiCall = () => {
+    if (!loader || moreData) {
+      initialApiCall(currentPage + 1);
+      setCurrentPage(currentPage+1)
     }
   };
 
   const handleRefresh = () => {
     setRefreshing(true);
-    // setCurrentPage(1)
     initialApiCall(1);
     setCurrentPage(1);
-    setMoreData(true)
+    setMoreData(true);
   };
 
   const renderItem = ({ item }: { item: Item }) => (
@@ -99,7 +91,9 @@ const AboutScreen = () => {
           renderItem={renderItem}
           onEndReached={reRenderApiCall}
           onEndReachedThreshold={0.1}
-          refreshControl={<RefreshControl refreshing={refreshing} onRefresh={handleRefresh} />}
+          refreshControl={
+            <RefreshControl refreshing={refreshing} onRefresh={handleRefresh} />
+          }
           ListFooterComponent={
             <View style={styles.loadingContainer}>
               {moreData ? (
