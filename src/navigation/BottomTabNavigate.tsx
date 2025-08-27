@@ -16,6 +16,7 @@ import { useAppTranslation } from '../hooks/useAppTranslation';
 import SettingScreen from '../screen/SettingScreen';
 import { useThemeColor } from '../hooks/useThemeColor';
 import { resetToInitialState } from '../redux/slice/AccessAndRefreshSlice';
+import AboutScreen from '../screen/AboutScreen';
 
 const Bottom = createBottomTabNavigator();
 
@@ -55,7 +56,7 @@ const BottomTabNavigate = ({ navigation }: BottomTabNavigateProps) => {
 
   const tabBarIcon = useCallback(
     (
-      props: BottomTabBarIconProps & { name: 'home' | 'light-mode' | 'group' | 'settings' },
+      props: BottomTabBarIconProps & { name: 'home' | 'light-mode' | 'group' | 'settings' | 'info' },
     ) => (
       <IconDisplay name={props.name} color={props.color} size={props.size} />
     ),
@@ -82,6 +83,18 @@ const BottomTabNavigate = ({ navigation }: BottomTabNavigateProps) => {
           headerTitle: t('home'),
           headerTitleAlign: 'center',
           title: t('home'),
+        }}
+      />
+
+      <Bottom.Screen
+        name="drawerAbout"
+        component={AboutScreen}
+        options={{
+          tabBarIcon: (props: BottomTabBarIconProps) =>
+            tabBarIcon({ ...props, name: 'info' }),
+          headerTitle: t('about'),
+          headerTitleAlign: 'center',
+          title: t('about'),
         }}
       />
 

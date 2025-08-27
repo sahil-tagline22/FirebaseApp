@@ -9,7 +9,8 @@ export const ThemeColor = {
         footer : "#000",
         activeIconColor : "#fff",
         inActiveColor : "#36454f",
-        btnColor: "#24a0ed"
+        btnColor: "#24a0ed",
+        loader : 'blue',
     },
     DarkTheme : {
         text : "#ffffff",
@@ -21,6 +22,7 @@ export const ThemeColor = {
         footer : "gray",
         activeIconColor : "#fff",
         inActiveColor : "#000",
-        btnColor: "#24a0ed"
+        btnColor: "#24a0ed",
+        loader : 'white',
     }
 }

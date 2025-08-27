@@ -5,7 +5,7 @@ import Icon from 'react-native-vector-icons/MaterialIcons';
 type IconDisplayProps = {
   color: string;
   size: number;
-  name: 'home' | 'light-mode' | 'group' | 'chat' | 'settings';
+  name: 'home' | 'light-mode' | 'group' | 'chat' | 'settings' | 'info';
 };
 
 const IconDisplay = ({ color, size, name }: IconDisplayProps) => {

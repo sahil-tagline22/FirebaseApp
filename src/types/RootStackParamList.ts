@@ -7,6 +7,7 @@ export type RootStackParamList = {
         sentToUid : string,
     }
     drawerHome : undefined,
+    drawerAbout : undefined,
     drawerTheme: undefined,
     userScreen : undefined
 }

@@ -9,4 +9,5 @@ export const endpoints = {
     getTaskById : '/api/tasks/',
     putTask : '/api/tasks/',
     deleteTask : '/api/tasks/',
+
 }
