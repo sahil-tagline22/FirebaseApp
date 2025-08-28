@@ -5,13 +5,24 @@ import HomeStackNavigator from './src/navigation/HomeStackNavigator';
 import { useEffect } from 'react';
 import SplashScreen from 'react-native-splash-screen';
 import { FcmToken } from './src/hooks/useFcmTocken';
+import messaging from '@react-native-firebase/messaging';
+import { Alert } from 'react-native';
 
 
 const App = () => {
 
   useEffect(() => {
     SplashScreen.hide();
-    // FcmToken()
+  }, []);
+
+  FcmToken();
+  
+  useEffect(() => {
+    const unsubscribe = messaging().onMessage(async remoteMessage => {
+      Alert.alert('A new FCM message arrived!', JSON.stringify(remoteMessage));
+    });
+
+    return unsubscribe;
   }, []);
   
   return (
