@@ -15,8 +15,10 @@ const App = () => {
     SplashScreen.hide();
   }, []);
 
+  // FCM token get and user permission get
   FcmToken();
   
+  // Foreground massage send to user 
   useEffect(() => {
     const unsubscribe = messaging().onMessage(async remoteMessage => {
       Alert.alert('A new FCM message arrived!', JSON.stringify(remoteMessage));
