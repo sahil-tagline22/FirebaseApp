@@ -18,6 +18,7 @@ import {getAuth,signInWithEmailAndPassword} from '@react-native-firebase/auth'
 import { useAppTranslation } from '../../hooks/useAppTranslation';
 import { LoginUser } from '../../api/requests/RegisterUserRequests';
 import { setAccessToken, setRefreshToken } from '../../redux/slice/AccessAndRefreshSlice';
+import analytics from '@react-native-firebase/analytics'
 
 
 
@@ -56,6 +57,12 @@ const LoginScreen = ({navigation}:LoginScreenProps) => {
               dispatch(loginUser(user.user));
               // navigation.replace("bottom");
             }
+
+            //analytics
+            await analytics().logEvent('login',{
+              email : values.email,
+              password : values.password
+            })
 
             //login user, store token in redux-persist
             const data = {

@@ -29,6 +29,7 @@ import { Images } from '../assets/Images';
 import { useAppTranslation } from '../hooks/useAppTranslation';
 import { useThemeColor } from '../hooks/useThemeColor';
 import { useAppSelector } from '../redux/Store';
+import analytics from '@react-native-firebase/analytics';
 
 interface ChatScreenProps {
   navigation: NativeStackNavigationProp<RootStackParamList, 'chat'>;
@@ -47,6 +48,15 @@ const ChatScreen = ({ navigation }: ChatScreenProps) => {
   const {t} = useAppTranslation();
   const color = useThemeColor();
   const styles = useStyle();
+
+  //analytics
+  useEffect(() => {
+    analytics().logScreenView({
+      screen_name: 'ChatScreen',
+      screen_class: 'ChatScreen',
+    });
+    
+  }, []);
 
   useEffect(() => {
     const app = getApp();

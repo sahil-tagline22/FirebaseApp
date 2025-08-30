@@ -17,6 +17,7 @@ import {
   PutTask,
 } from '../api/requests/addTaskRequests';
 import Icon from 'react-native-vector-icons/MaterialIcons';
+import analytics from '@react-native-firebase/analytics';
 
 export type ApiData = {
   id: string;
@@ -46,6 +47,15 @@ const HomeScreen = () => {
   const [status, setStatus] = useState<'pending' | 'success'>('pending');
   const [selectedId, setSelectedId] = useState<string>('');
   const [editTodo, setEditTodo] = useState<boolean>(false);
+
+  //analytics
+  useEffect(() => {
+  analytics().logScreenView({
+    screen_name: 'HomeScreen',
+    screen_class: 'HomeScreen',
+  });
+  
+}, []);
 
   //get all todo
   const GetData = useCallback(async () => {

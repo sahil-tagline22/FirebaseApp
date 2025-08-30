@@ -9,6 +9,7 @@ import { getApp } from '@react-native-firebase/app'
 import {getFirestore,collection,query,where,getDocs} from '@react-native-firebase/firestore'
 import {getAuth} from '@react-native-firebase/auth'
 import { useThemeColor } from '../hooks/useThemeColor'
+import analytics from '@react-native-firebase/analytics';
 
 interface UserScreenProps {
     navigation : NativeStackNavigationProp<RootStackParamList,'userScreen'> 
@@ -21,6 +22,15 @@ const UserScreen = ({navigation}:UserScreenProps) => {
     const [id,setId] = useState<string>();
     const color = useThemeColor();
     const styles = useStyle();
+
+    //analytics
+    useEffect(() => {
+        analytics().logScreenView({
+        screen_name: 'UserScreen',
+        screen_class: 'UserScreen',
+        });
+        
+    }, []);
 
     useEffect(()=>{
         const fetchUser = async()=>{ 
