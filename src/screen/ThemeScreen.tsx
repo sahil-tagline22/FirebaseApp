@@ -3,6 +3,8 @@ import React, { useEffect, useState } from 'react';
 import { getApp } from '@react-native-firebase/app';
 import {getRemoteConfig,setDefaults,fetchAndActivate,getValue} from '@react-native-firebase/remote-config';
 import analytics from '@react-native-firebase/analytics';
+import crashlytics from '@react-native-firebase/crashlytics';
+
 
 const ThemeScreen = () => {
   const [theme, setTheme] = useState<string>();
@@ -13,7 +15,7 @@ const ThemeScreen = () => {
       screen_name: 'ThemeScreen',
       screen_class: 'ThemeScreen',
     });
-    
+    crashlytics().log('AboutScreen mounted');
   }, []);
 
   useEffect(() => {

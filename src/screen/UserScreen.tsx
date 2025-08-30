@@ -10,6 +10,7 @@ import {getFirestore,collection,query,where,getDocs} from '@react-native-firebas
 import {getAuth} from '@react-native-firebase/auth'
 import { useThemeColor } from '../hooks/useThemeColor'
 import analytics from '@react-native-firebase/analytics';
+import crashlytics from '@react-native-firebase/crashlytics';
 
 interface UserScreenProps {
     navigation : NativeStackNavigationProp<RootStackParamList,'userScreen'> 
@@ -29,7 +30,7 @@ const UserScreen = ({navigation}:UserScreenProps) => {
         screen_name: 'UserScreen',
         screen_class: 'UserScreen',
         });
-        
+        crashlytics().log('AboutScreen mounted');
     }, []);
 
     useEffect(()=>{

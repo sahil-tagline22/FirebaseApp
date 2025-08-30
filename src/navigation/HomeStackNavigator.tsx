@@ -1,6 +1,6 @@
 // import { StyleSheet } from 'react-native'
-import React, { useEffect, useMemo } from 'react';
-import { NavigationContainer } from '@react-navigation/native';
+import React, { useEffect, useMemo, useRef } from 'react';
+import { NavigationContainer,createNavigationContainerRef  } from '@react-navigation/native';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import { RootStackParamList } from '../types/RootStackParamList';
 import LoginScreen from '../screen/auth/LoginScreen';
@@ -11,10 +11,14 @@ import { useAppSelector } from '../redux/Store';
 import i18next from 'i18next';
 import { StatusBar, useColorScheme } from 'react-native';
 import { appNavigationRef } from './appNavigationRef';
+import analytics from '@react-native-firebase/analytics';
 
 const Stack = createNativeStackNavigator<RootStackParamList>();
+const navigationRef = createNavigationContainerRef<RootStackParamList>();
 
 const HomeStackNavigator = () => {
+
+  const routeNameRef = useRef<string | null>(null);
 
   const theme = useAppSelector(state=>state.theme.theme);
   const mobileTheme = useColorScheme();
@@ -36,7 +40,24 @@ const HomeStackNavigator = () => {
   },[language])
 
   return (
-    <NavigationContainer ref={appNavigationRef}>
+    <NavigationContainer 
+    ref={appNavigationRef}
+      onReady={() => {
+        routeNameRef.current = navigationRef.getCurrentRoute()?.name ?? null;
+      }}
+      onStateChange={async () => {
+        const previousRouteName = routeNameRef.current;
+        const currentRouteName = navigationRef.getCurrentRoute()?.name;
+
+        if (previousRouteName !== currentRouteName && currentRouteName) {
+          await analytics().logScreenView({
+            screen_name: currentRouteName,
+            screen_class: currentRouteName,
+          });
+        }
+        routeNameRef.current = currentRouteName ?? null;
+      }}
+    >
       <StatusBar
           translucent
           hidden={false}

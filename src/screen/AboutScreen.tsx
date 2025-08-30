@@ -10,6 +10,8 @@ import { useThemeColor } from '../hooks/useThemeColor';
 import { paginationApiCall } from '../api/requests/paginationRequests';
 import { Text } from 'react-native-gesture-handler';
 import analytics from '@react-native-firebase/analytics';
+import crashlytics from '@react-native-firebase/crashlytics';
+
 
 type Item = {
   body: string;
@@ -38,7 +40,7 @@ const AboutScreen = () => {
       screen_name: 'AboutScreen',
       screen_class: 'AboutScreen',
     });
-    
+    crashlytics().log('AboutScreen mounted');
   }, []);
 
   const initialApiCall = async (page: number) => {

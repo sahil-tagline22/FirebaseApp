@@ -30,6 +30,7 @@ import { useAppTranslation } from '../hooks/useAppTranslation';
 import { useThemeColor } from '../hooks/useThemeColor';
 import { useAppSelector } from '../redux/Store';
 import analytics from '@react-native-firebase/analytics';
+import crashlytics from '@react-native-firebase/crashlytics';
 
 interface ChatScreenProps {
   navigation: NativeStackNavigationProp<RootStackParamList, 'chat'>;
@@ -55,7 +56,7 @@ const ChatScreen = ({ navigation }: ChatScreenProps) => {
       screen_name: 'ChatScreen',
       screen_class: 'ChatScreen',
     });
-    
+    crashlytics().log('AboutScreen mounted');
   }, []);
 
   useEffect(() => {

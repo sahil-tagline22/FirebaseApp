@@ -18,6 +18,7 @@ import {
 } from '../api/requests/addTaskRequests';
 import Icon from 'react-native-vector-icons/MaterialIcons';
 import analytics from '@react-native-firebase/analytics';
+import crashlytics from '@react-native-firebase/crashlytics';
 
 export type ApiData = {
   id: string;
@@ -54,7 +55,7 @@ const HomeScreen = () => {
     screen_name: 'HomeScreen',
     screen_class: 'HomeScreen',
   });
-  
+  crashlytics().log('AboutScreen mounted');
 }, []);
 
   //get all todo
