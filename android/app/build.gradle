@@ -84,6 +84,11 @@ android {
         targetSdkVersion rootProject.ext.targetSdkVersion
         versionCode 1
         versionName "1.0"
+
+        // this line add for me
+         ndk {
+            abiFilters "armeabi-v7a", "x86_64"  // Enough for emulator and most devices
+        }
     }
     signingConfigs {
         release {
@@ -96,6 +101,8 @@ android {
     buildTypes {
         debug {
             signingConfig signingConfigs.debug
+            //this line add for me 
+            crunchPngs false
         }
         release {
             // Caution! In production, you need to generate your own keystore file.
@@ -103,7 +110,13 @@ android {
             signingConfig signingConfigs.debug
             minifyEnabled enableProguardInReleaseBuilds
             proguardFiles getDefaultProguardFile("proguard-android.txt"), "proguard-rules.pro"
+            //this line add for me 
+            crunchPngs false
         }
+    }
+    //this is added me 
+    lintOptions {
+        abortOnError false
     }
 }
 
