@@ -31,7 +31,6 @@ interface BottomTabBarIconProps {
 }
 
 const BottomTabNavigate = ({ navigation }: BottomTabNavigateProps) => {
-
   const dispatch = useAppDispatch();
 
   const { t } = useAppTranslation();
@@ -56,7 +55,9 @@ const BottomTabNavigate = ({ navigation }: BottomTabNavigateProps) => {
 
   const tabBarIcon = useCallback(
     (
-      props: BottomTabBarIconProps & { name: 'home' | 'light-mode' | 'group' | 'settings' | 'info' },
+      props: BottomTabBarIconProps & {
+        name: 'home' | 'light-mode' | 'group' | 'settings' | 'info';
+      },
     ) => (
       <IconDisplay name={props.name} color={props.color} size={props.size} />
     ),
@@ -68,10 +69,10 @@ const BottomTabNavigate = ({ navigation }: BottomTabNavigateProps) => {
       screenOptions={{
         headerRight: headerRight,
         tabBarActiveTintColor: color.activeIconColor,
-        tabBarInactiveTintColor:color.inActiveColor,
-        headerStyle:{backgroundColor:color.header},
-        headerTitleStyle:{color:color.headerText},
-        tabBarStyle : {backgroundColor:color.footer}
+        tabBarInactiveTintColor: color.inActiveColor,
+        headerStyle: { backgroundColor: color.header },
+        headerTitleStyle: { color: color.headerText },
+        tabBarStyle: { backgroundColor: color.footer },
       }}
     >
       <Bottom.Screen

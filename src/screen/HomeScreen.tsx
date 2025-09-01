@@ -8,7 +8,7 @@ import {
 } from 'react-native';
 import { useThemeColor } from '../hooks/useThemeColor';
 import { useCallback, useEffect, useState } from 'react';
-import { GetUser } from '../api/requests/RegisterUserRequests';
+// import { GetUser } from '../api/requests/RegisterUserRequests';
 import {
   DeleteTask,
   GetTask,
@@ -19,6 +19,7 @@ import {
 import Icon from 'react-native-vector-icons/MaterialIcons';
 import analytics from '@react-native-firebase/analytics';
 import crashlytics from '@react-native-firebase/crashlytics';
+// import Triangle from '../components/TestComponent';
 
 export type ApiData = {
   id: string;
@@ -45,7 +46,7 @@ const HomeScreen = () => {
 
   const [title, setTitle] = useState<string>('');
   const [discretion, setDiscretion] = useState<string>('');
-  const [status, setStatus] = useState<'pending' | 'success'>('pending');
+  // const [status, setStatus] = useState<'pending' | 'success'>('pending');
   const [selectedId, setSelectedId] = useState<string>('');
   const [editTodo, setEditTodo] = useState<boolean>(false);
 
@@ -73,7 +74,7 @@ const HomeScreen = () => {
   const data = {
     title: title,
     description: discretion,
-    status: status,
+    status: 'pending',
     dueDate: new Date(),
   };
   const PostData = async () => {
@@ -121,7 +122,7 @@ const HomeScreen = () => {
   const data1 = {
     title: title,
     description: discretion,
-    status: status,
+    status: 'pending',
     dueDate: new Date(),
   };
   const PutData = async () => {
@@ -150,32 +151,32 @@ const HomeScreen = () => {
   };
 
   //get courant user
-  const getCourantUser = async () => {
-    try {
-      const user = await GetUser();
-      console.log('🚀 ~ getCourantUser ~ user:', user);
-    } catch (error) {
-      console.log('🚀 ~ getCourantUser ~ error:', error);
-    }
-  };
+  // const getCourantUser = async () => {
+  //   try {
+  //     const user = await GetUser();
+  //     console.log('🚀 ~ getCourantUser ~ user:', user);
+  //   } catch (error) {
+  //     console.log('🚀 ~ getCourantUser ~ error:', error);
+  //   }
+  // };
 
   useEffect(() => {
     GetData();
   }, [GetData]);
 
   const handleClick = async (item:ApiData):Promise<void> => {
-    const data: NewTaskData = {
+    const updateData:NewTaskData = {
       title: item.title,
       description: item.description,
       status: 'success',
       dueDate: new Date(),
     };
     try {
-      const response:{task : ApiData} = await PutTask(item.id, data);
+      const response:{task : ApiData} = await PutTask(item.id, updateData);
       console.log("🚀 ~ handleClick ~ response:", response)
       if (response.task) {
-        const updatedTodo = todo.map<ApiData>(todo =>
-          todo.id === item.id ? { ...todo, status: 'success' } : todo,
+        const updatedTodo = todo.map<ApiData>(allTodo =>
+          allTodo.id === item.id ? { ...allTodo, status: 'success' } : allTodo,
         );
         setTodo(updatedTodo);
       }
@@ -186,7 +187,7 @@ const HomeScreen = () => {
 
   const renderItemList = ({ item } : {item : ApiData}) => (
     <View style={styles.listContainer}>
-      <View style={{ marginRight: 10 }}>
+      <View style={styles.checkOurUncheckContainer}>
         {item.status === 'pending' ? (
           <TouchableOpacity onPress={() => handleClick(item)}>
             <Icon
@@ -251,6 +252,8 @@ const HomeScreen = () => {
           </TouchableOpacity>
         )}
       </View>
+
+        {/* <Triangle /> */}
 
       <FlatList
         data={todo}
@@ -341,5 +344,8 @@ const useStyle = () => {
       flexDirection: 'row',
       justifyContent: 'flex-end',
     },
+    checkOurUncheckContainer:{
+      marginRight: 10
+    }
   });
 };

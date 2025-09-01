@@ -12,7 +12,6 @@ import { Text } from 'react-native-gesture-handler';
 import analytics from '@react-native-firebase/analytics';
 import crashlytics from '@react-native-firebase/crashlytics';
 
-
 type Item = {
   body: string;
   id: number;
@@ -61,15 +60,16 @@ const AboutScreen = () => {
       console.log('🚀 ~ initialApiCall ~ error:', error);
     }
   };
-  
+
   useEffect(() => {
     initialApiCall(currentPage);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   const reRenderApiCall = () => {
     if (!loader || moreData) {
       initialApiCall(currentPage + 1);
-      setCurrentPage(currentPage+1)
+      setCurrentPage(currentPage + 1);
     }
   };
 

@@ -1,4 +1,4 @@
-import { FlatList, Image, SafeAreaView, StatusBar, StyleSheet, Text, TouchableOpacity, View } from 'react-native'
+import { FlatList, Image, SafeAreaView, StyleSheet, Text, TouchableOpacity, View } from 'react-native'
 import React, { useEffect, useState } from 'react'
 import { Images } from '../assets/Images'
 import { colors } from '../theme/Colors'
@@ -21,7 +21,7 @@ const UserScreen = ({navigation}:UserScreenProps) => {
     const [users,setUsers] = useState<any[]>([]);
     console.log("users get from data base-->" ,users);
     const [id,setId] = useState<string>();
-    const color = useThemeColor();
+    // const color = useThemeColor();
     const styles = useStyle();
 
     //analytics
@@ -45,9 +45,9 @@ const UserScreen = ({navigation}:UserScreenProps) => {
             if(userid){
                 const usersRef = collection(fireStore,'users');
                 const q = query(usersRef,where('uid', '!=',userid ));
-                const users = await getDocs(q);
+                const getAllUsers = await getDocs(q);
                 
-                const allUsers = users.docs.map(item=>item.data());
+                const allUsers = getAllUsers.docs.map((item:any)=>item.data());
                 setUsers(allUsers);
             }
         }
