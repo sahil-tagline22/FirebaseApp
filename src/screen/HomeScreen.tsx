@@ -46,18 +46,18 @@ const HomeScreen = () => {
 
   const [title, setTitle] = useState<string>('');
   const [discretion, setDiscretion] = useState<string>('');
-  // const [status, setStatus] = useState<'pending' | 'success'>('pending');
   const [selectedId, setSelectedId] = useState<string>('');
   const [editTodo, setEditTodo] = useState<boolean>(false);
 
   //analytics
   useEffect(() => {
-  analytics().logScreenView({
-    screen_name: 'HomeScreen',
-    screen_class: 'HomeScreen',
-  });
-  crashlytics().log('AboutScreen mounted');
-}, []);
+    analytics().logScreenView({
+      screen_name: 'HomeScreen',
+      screen_class: 'HomeScreen',
+    });
+    crashlytics().log('AboutScreen mounted');
+    // crashlytics().crash();
+  }, []);
 
   //get all todo
   const GetData = useCallback(async () => {
