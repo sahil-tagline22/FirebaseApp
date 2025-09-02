@@ -14,6 +14,7 @@ import i18next from 'i18next';
 import { StatusBar, useColorScheme } from 'react-native';
 import { appNavigationRef } from './appNavigationRef';
 import analytics from '@react-native-firebase/analytics';
+import ProductScreen from '../screen/ProductScreen';
 
 const Stack = createNativeStackNavigator<RootStackParamList>();
 // const navigationRef = createNavigationContainerRef<RootStackParamList>();
@@ -84,6 +85,11 @@ const HomeStackNavigator = () => {
           name="chat"
           component={ChatScreen}
           options={{ headerShown: false }}
+        />
+        <Stack.Screen
+          name="product"
+          component={ProductScreen}
+          options={{ headerShown: true }}
         />
       </Stack.Navigator>
     </NavigationContainer>

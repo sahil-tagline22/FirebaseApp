@@ -4,7 +4,7 @@ import ThemeScreen from '../screen/ThemeScreen';
 import UserScreen from '../screen/UserScreen';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import IconDisplay from '../components/IconPrint/IconDisplay';
-import { StyleSheet, Text, TouchableOpacity } from 'react-native';
+import { Image, StyleSheet, Text, TouchableOpacity } from 'react-native';
 import { colors } from '../theme/Colors';
 import auth from '@react-native-firebase/auth';
 import { RootStackParamList } from '../types/RootStackParamList';
@@ -17,6 +17,7 @@ import SettingScreen from '../screen/SettingScreen';
 import { useThemeColor } from '../hooks/useThemeColor';
 import { resetToInitialState } from '../redux/slice/AccessAndRefreshSlice';
 import AboutScreen from '../screen/AboutScreen';
+import { Images } from '../assets/Images';
 
 const Bottom = createBottomTabNavigator();
 
@@ -32,7 +33,7 @@ interface BottomTabBarIconProps {
 
 const BottomTabNavigate = ({ navigation }: BottomTabNavigateProps) => {
   const dispatch = useAppDispatch();
-
+  const styles = useStyle();
   const { t } = useAppTranslation();
   const color = useThemeColor();
 
@@ -44,13 +45,24 @@ const BottomTabNavigate = ({ navigation }: BottomTabNavigateProps) => {
     console.log('user logout');
   }, [dispatch, navigation]);
 
+  //logoutBtn create Button
   const headerRight = useCallback(
     () => (
       <TouchableOpacity style={styles.btnContainer} onPress={handleLogout}>
         <Text style={styles.btnText}>{t('logout')}</Text>
       </TouchableOpacity>
     ),
-    [handleLogout, t],
+    [handleLogout, t,styles.btnContainer,styles.btnText],
+  );
+
+  //product list Button
+  const listProduct = useCallback(
+    () => (
+      <TouchableOpacity style={styles.btnListOfProduct} onPress={()=>navigation.navigate('product')}>
+        <Image source={Images.shopping} style={styles.imageCart} tintColor={color.activeIconColor} />
+      </TouchableOpacity>
+    ),
+    [navigation,color.activeIconColor,styles.btnListOfProduct,styles.imageCart],
   );
 
   const tabBarIcon = useCallback(
@@ -67,7 +79,8 @@ const BottomTabNavigate = ({ navigation }: BottomTabNavigateProps) => {
   return (
     <Bottom.Navigator
       screenOptions={{
-        headerRight: headerRight,
+        headerLeft: headerRight,
+        headerRight : listProduct,
         tabBarActiveTintColor: color.activeIconColor,
         tabBarInactiveTintColor: color.inActiveColor,
         headerStyle: { backgroundColor: color.header },
@@ -140,12 +153,14 @@ const BottomTabNavigate = ({ navigation }: BottomTabNavigateProps) => {
 
 export default BottomTabNavigate;
 
-const styles = StyleSheet.create({
+const useStyle = () =>{
+  const color = useThemeColor();
+ return StyleSheet.create({
   btnContainer: {
     backgroundColor: colors.button.button,
     height: 30,
     width: 70,
-    marginRight: 15,
+    marginLeft: 15,
     borderRadius: 20,
     alignItems: 'center',
     justifyContent: 'center',
@@ -154,4 +169,12 @@ const styles = StyleSheet.create({
     fontSize: 15,
     color: colors.text.inverted,
   },
+  btnListOfProduct:{
+    marginRight:15
+  },
+  imageCart:{
+    height:35,
+    width: 35,
+  }
 });
+}
