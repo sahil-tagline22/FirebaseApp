@@ -1,4 +1,4 @@
-import { Button, Image, StyleSheet, Text, TouchableOpacity, View } from 'react-native'
+import { Image, StyleSheet, Text, TouchableOpacity, View } from 'react-native'
 import React, { useEffect, useState } from 'react'
 import {Dropdown} from 'react-native-element-dropdown'
 import i18next from 'i18next'
@@ -77,7 +77,7 @@ const SettingScreen = () => {
       <TouchableOpacity onPress={onPress}>
         {
           filePath ? 
-          <Image source={{uri : filePath}} style={styles.selectedImage} resizeMode='center' />
+          <Image source={{uri : filePath}} style={styles.selectedImage} />
           :
           <View style={styles.imageContainer}>
             <Image source={Images.ImagePlaceHolder} style={styles.imagePlaceholder} />

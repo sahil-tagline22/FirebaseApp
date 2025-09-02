@@ -2,7 +2,6 @@
 import React, { useEffect, useMemo, useRef } from 'react';
 import {
   NavigationContainer,
-  createNavigationContainerRef,
 } from '@react-navigation/native';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import { RootStackParamList } from '../types/RootStackParamList';
@@ -17,7 +16,7 @@ import { appNavigationRef } from './appNavigationRef';
 import analytics from '@react-native-firebase/analytics';
 
 const Stack = createNativeStackNavigator<RootStackParamList>();
-const navigationRef = createNavigationContainerRef<RootStackParamList>();
+// const navigationRef = createNavigationContainerRef<RootStackParamList>();
 
 const HomeStackNavigator = () => {
   const routeNameRef = useRef<string | null>(null);
@@ -45,11 +44,11 @@ const HomeStackNavigator = () => {
     <NavigationContainer
       ref={appNavigationRef}
       onReady={() => {
-        routeNameRef.current = navigationRef.getCurrentRoute()?.name ?? null;
+        routeNameRef.current = appNavigationRef.getCurrentRoute()?.name ?? null;
       }}
       onStateChange={async () => {
         const previousRouteName = routeNameRef.current;
-        const currentRouteName = navigationRef.getCurrentRoute()?.name;
+        const currentRouteName = appNavigationRef.getCurrentRoute()?.name;
 
         if (previousRouteName !== currentRouteName && currentRouteName) {
           await analytics().logScreenView({

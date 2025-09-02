@@ -13,6 +13,10 @@ import {getFirestore,doc,setDoc} from '@react-native-firebase/firestore'
 import { useAppTranslation } from '../../hooks/useAppTranslation';
 import { RegisterUser } from '../../api/requests/RegisterUserRequests';
 import { setAccessToken, setRefreshToken } from '../../redux/slice/AccessAndRefreshSlice';
+import {widthPercentageToDP as w, heightPercentageToDP as h} from 'react-native-responsive-screen';
+import { useThemeColor } from '../../hooks/useThemeColor';
+import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view'
+import { RFPercentage } from "react-native-responsive-fontsize";
 
 interface RegistrationScreenProps {
   navigation : NativeStackNavigationProp<RootStackParamList,'registration'>
@@ -21,6 +25,7 @@ interface RegistrationScreenProps {
 const RegistrationScreen = ({navigation}:RegistrationScreenProps) => {
 
   const {t} = useAppTranslation();
+  const styles = useStyle();
 
   const dispatch = useAppDispatch();
 
@@ -94,6 +99,7 @@ const RegistrationScreen = ({navigation}:RegistrationScreenProps) => {
   });
 
   return (
+    <KeyboardAwareScrollView>
     <View style={styles.container}>
       <View style={styles.loginContainer}>
         <Text style={styles.title}>{t('registration_title')}</Text>
@@ -145,59 +151,65 @@ const RegistrationScreen = ({navigation}:RegistrationScreenProps) => {
         
       </View>
     </View>
+    </KeyboardAwareScrollView>
   );
 };
 
 export default RegistrationScreen;
 
-const styles = StyleSheet.create({
+const useStyle = ()=>{
+    const color = useThemeColor();
+  return  StyleSheet.create({
   container: {
-    flex: 1,
-    // marginTop: 40,
-    backgroundColor: colors.background,
+    width: w('100%'),
+    height: h('100%'),
+    backgroundColor: colors.screen,
   },
   loginContainer: {
-    backgroundColor: colors.screen,
-    flex: 1,
-    marginHorizontal: 10,
-    marginVertical: 170,
-    borderRadius: 10,
+    backgroundColor: color.backGroundColor,
+    width: w('90%'),
+    height: h('70%'),
+    borderRadius: w('10%'),
+    marginTop:h('20%'),
+    alignSelf:"center"
   },
   title: {
     textAlign: 'center',
-    fontSize: 30,
-    marginTop: 20,
+    fontSize: RFPercentage(5),
+    marginTop: h('1%'),
     fontWeight: '700',
+    // marginBottom:w('5%')
   },
   loginBtn: {
     backgroundColor: colors.button.button,
-    height: 40,
-    width: 200,
-    alignSelf: 'center',
-    marginTop: 20,
-    borderRadius: 10,
-    justifyContent: 'center',
-    alignItems: 'center',
+    height:h('5%'),
+    width:w('40%'),
+    alignSelf:"center",
+    marginTop:h('3%'),
+    borderRadius:w('10%'),
+    justifyContent:"center",
+    alignItems:"center"
   },
   btnText: {
-    fontSize: 20,
+    fontSize: RFPercentage(2.5),
     color: colors.text.inverted,
   },
   footer:{
     flexDirection:"row",
-    gap:10,
+    gap:h('0.5%'),
     justifyContent:"center",
-    marginTop:10
+    marginTop:h('2%')
   },
   textLine:{
-    fontSize:15,
+    fontSize:RFPercentage(1.9),
     fontWeight:"500"
   },
   textLogin:{
-    fontSize:15,
+    fontSize:RFPercentage(1.9),
     fontWeight:"500",
     color:colors.text.blue,
     borderBottomWidth:1,
     borderBottomColor:colors.text.blue
   }
 });
+}

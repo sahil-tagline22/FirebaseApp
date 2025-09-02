@@ -19,7 +19,10 @@ import { useAppTranslation } from '../../hooks/useAppTranslation';
 import { LoginUser } from '../../api/requests/RegisterUserRequests';
 import { setAccessToken, setRefreshToken } from '../../redux/slice/AccessAndRefreshSlice';
 import analytics from '@react-native-firebase/analytics'
-
+import {widthPercentageToDP as w, heightPercentageToDP as h} from 'react-native-responsive-screen';
+import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view'
+import { useThemeColor } from '../../hooks/useThemeColor';
+import { RFPercentage, RFValue } from "react-native-responsive-fontsize";
 
 
 interface LoginScreenProps {
@@ -29,6 +32,7 @@ interface LoginScreenProps {
 const LoginScreen = ({navigation}:LoginScreenProps) => {
 
   const {t} = useAppTranslation();
+  const styles = useStyle();
 
   const dispatch = useAppDispatch();
 
@@ -90,6 +94,7 @@ const LoginScreen = ({navigation}:LoginScreenProps) => {
     });
 
   return (
+      <KeyboardAwareScrollView>
         <View style={styles.container}>
           <View style={styles.loginContainer}>
             <Text style={styles.title}>{t('login_title')}</Text>
@@ -123,59 +128,66 @@ const LoginScreen = ({navigation}:LoginScreenProps) => {
 
           </View>
         </View>
+      </KeyboardAwareScrollView>
   );
 };
 
 export default LoginScreen;
 
-const styles = StyleSheet.create({
+const useStyle =()=>{ 
+  const color = useThemeColor();
+  return StyleSheet.create({
   container: {
-    flex: 1,
-    // marginTop: 40,
-    backgroundColor: colors.background,
+    width: w('100%'),
+    height: h('100%'),
+    backgroundColor: colors.screen,
   },
   loginContainer: {
-    backgroundColor: colors.screen,
-    flex: 1,
-    marginHorizontal: 10,
-    marginVertical: 250,
-    borderRadius: 10,
+    backgroundColor: color.backGroundColor,
+    width: w('90%'),
+    height: h('50%'),
+    borderRadius: w('10%'),
+    marginVertical:h('25%'),
+    alignSelf:"center"
   },
   title: {
     textAlign: 'center',
-    fontSize: 30,
-    marginTop: 20,
+    fontSize: RFPercentage(5),
+    marginTop: h('1%'),
     fontWeight: '700',
+    marginBottom:w('5%')
   },
   loginBtn: {
     backgroundColor: colors.button.button,
-    height:40,
-    width:200,
+    height:h('5%'),
+    width:w('35%'),
     alignSelf:"center",
-    marginTop:35,
-    borderRadius:10,
+    marginTop:h('3%'),
+    borderRadius:w('10%'),
     justifyContent:"center",
     alignItems:"center"
   },
   btnText:{
-    fontSize:20,
+    fontSize:RFPercentage(2.5),
     color : colors.text.inverted
   },
   footer:{
     flexDirection:"row",
-    gap:10,
+    gap:h('0.5%'),
     justifyContent:"center",
-    marginTop:10
+    marginTop:h('2%')
   },
   textLine:{
-    fontSize:15,
+    fontSize:RFPercentage(1.9),
     fontWeight:"500"
   },
   textLogin:{
-    fontSize:15,
+    fontSize:RFPercentage(1.9),
     fontWeight:"500",
     color:colors.text.blue,
     borderBottomWidth:1,
     borderBottomColor:colors.text.blue
   }
+
 });
+}
