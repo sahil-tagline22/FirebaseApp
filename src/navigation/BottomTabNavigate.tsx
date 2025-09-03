@@ -154,7 +154,7 @@ const BottomTabNavigate = ({ navigation }: BottomTabNavigateProps) => {
 export default BottomTabNavigate;
 
 const useStyle = () =>{
-  const color = useThemeColor();
+  // const color = useThemeColor();
  return StyleSheet.create({
   btnContainer: {
     backgroundColor: colors.button.button,

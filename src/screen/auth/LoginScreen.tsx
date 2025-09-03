@@ -22,7 +22,7 @@ import analytics from '@react-native-firebase/analytics'
 import {widthPercentageToDP as w, heightPercentageToDP as h} from 'react-native-responsive-screen';
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view'
 import { useThemeColor } from '../../hooks/useThemeColor';
-import { RFPercentage, RFValue } from "react-native-responsive-fontsize";
+import { RFPercentage } from "react-native-responsive-fontsize";
 
 
 interface LoginScreenProps {

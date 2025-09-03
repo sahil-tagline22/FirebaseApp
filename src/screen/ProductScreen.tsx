@@ -1,5 +1,5 @@
 import { FlatList, Image, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
-import React, { useCallback, useEffect, useState } from 'react';
+import React, { useCallback, useEffect, useLayoutEffect, useState } from 'react';
 import axios from 'axios';
 import {
   widthPercentageToDP as w,
@@ -8,7 +8,10 @@ import {
 import { useThemeColor } from '../hooks/useThemeColor';
 import { colors } from '../theme/Colors';
 import { useProductCart } from '../hooks/useProductCart';
+import { SafeAreaView } from 'react-native-safe-area-context';
 // import Icon from 'react-native-vector-icons/MaterialIcons';
+import { NativeStackNavigationProp } from '@react-navigation/native-stack';
+import { RootStackParamList } from '../types/RootStackParamList';
 
 type Product = {
   category: string;
@@ -20,15 +23,23 @@ type Product = {
   title: string;
 };
 
-const ProductScreen = ({navigation}) => {
+interface ProductScreenProps {
+  navigation : NativeStackNavigationProp<RootStackParamList,'product'>
+}
+
+const ProductScreen = ({navigation}:ProductScreenProps) => {
   const styles = useStyle();
   const color = useThemeColor();
   const [products, SetProducts] = useState<Product[]>([]);
-  console.log('🚀 ~ ProductScreen ~ product:', products);
 
   const addToCart = useProductCart((state) => state.addToCart);
+  const removeFromCart = useProductCart((state) => state.removeFromCart);
   const totalProduct = useProductCart((state) => state.totalCartProduct);
-  console.log("🚀 ~ ProductScreen ~ totalProduct:", totalProduct)
+
+  //check in cart product in exist or not
+  const isInCart = (id:number) => {
+    return totalProduct.some(item => item.id === id);
+  }
 
   // All Product Fetch
   const ProductFetch = async () => {
@@ -44,16 +55,24 @@ const ProductScreen = ({navigation}) => {
     <View style={styles.cartCount}>
      <Text style={styles.cartCountText}>{totalProduct.length}</Text>
     </View>
-  ),[totalProduct.length,styles.cartCount])
+  ),[totalProduct.length,styles.cartCount,styles.cartCountText])
 
   //header 
+  useLayoutEffect(() => {
   navigation.setOptions({
-      headerRight:headerRight
+    title: 'Products',
+    headerRight: headerRight,
+    headerTitleAlign: 'center',
+    headerStyle: { backgroundColor: color.header},
+    headerTitleStyle: { color: color.headerText}
   });
+}, [navigation,headerRight,color.header,color.headerText]);
 
 
   //Product Item Render
-  const renderItem = ({ item }:{item:Product}) => (
+  const renderItem = ({ item }:{item:Product}) => {
+     const inCart = isInCart(item.id);
+    return(
     <View style={styles.renderItemContainer}>
       <Image source={{ uri: item.image }} style={styles.imageContainer} />
       <View>
@@ -65,8 +84,10 @@ const ProductScreen = ({navigation}) => {
           <Text style={styles.containerCategory}>$ :- {item.price}</Text>
           <Text style={styles.containerDis}>title :- {item.title.length > 20 ? item.title.substring(0, 20) + '...' : item.title}</Text>
           <Text style={styles.containerCategory}>⭐ {item.rating.rate}</Text>
-          <TouchableOpacity style={styles.addToCartBtn} onPress={()=>addToCart(item)}>
-            <Text style={styles.addToCartBtnText}>Add To Cart</Text>
+          <TouchableOpacity 
+          style={styles.addToCartBtn} 
+          onPress={()=> isInCart(item.id) ? removeFromCart(item.id) : addToCart(item)}>
+            <Text style={styles.addToCartBtnText}>{isInCart(item.id) ? 'remove to cart' : 'Add To Cart'}</Text>
           </TouchableOpacity>
         </View>
         {/* <View style={styles.addRemoveBtnContainer}>
@@ -79,16 +100,18 @@ const ProductScreen = ({navigation}) => {
         </View> */}
       </View>
     </View>
-  );
+    )
+  };
 
   return (
-    <View style={styles.container}>
+    <SafeAreaView style={styles.container}>
       <FlatList
         data={products}
         keyExtractor={item => item.id.toString()}
         renderItem={renderItem}
+        contentContainerStyle={{ paddingTop: 10 }}
       />
-    </View>
+    </SafeAreaView>
   );
 };
 
@@ -99,9 +122,10 @@ const useStyle = () => {
   return StyleSheet.create({
     container: {
       backgroundColor: colors.screen,
-      width: w('100%'),
-      height: h('100%'),
-      paddingBottom : h('14%')
+      // width: w('100%'),
+      // height: h('100%'),
+      flex: 1,
+      paddingBottom : h('2%'),
     },
     renderItemContainer: {
       width: w('100%'),
@@ -120,10 +144,12 @@ const useStyle = () => {
       marginLeft:10,
     },
     containerCategory:{
-      fontSize : h('2%')
+      fontSize : h('2%'),
+      color : color.text
     },
     containerDis:{
-      fontSize : h('1.5%')
+      fontSize : h('1.5%'),
+      color : color.text
     },
     addRemoveBtnContainer:{
       flexDirection:"row",
@@ -143,15 +169,15 @@ const useStyle = () => {
       color : color.text
     },
     cartCount : {
-      backgroundColor : color.header,
+      backgroundColor : colors.destructive,
       height:h('4%'),
       width : w('8%'),
       justifyContent:"center",
       alignItems:"center",
-      borderRadius:w('4'),
+      borderRadius:w('4%'),
     },
     cartCountText : {
-      fontSize : h('2.5'),
+      fontSize : h('2.5%'),
       color : color.headerText
     }
   });

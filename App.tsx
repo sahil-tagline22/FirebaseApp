@@ -7,6 +7,7 @@ import SplashScreen from 'react-native-splash-screen';
 import { FcmToken } from './src/hooks/useFcmTocken';
 import messaging from '@react-native-firebase/messaging';
 import { Alert } from 'react-native';
+import { SafeAreaProvider } from 'react-native-safe-area-context';
 
 
 const App = () => {
@@ -30,7 +31,9 @@ const App = () => {
   return (
     <Provider store={store}>
       <PersistGate persistor={persister}>
-        <HomeStackNavigator />
+        <SafeAreaProvider>
+          <HomeStackNavigator />
+        </SafeAreaProvider>
       </PersistGate>
     </Provider>
   );

@@ -15,12 +15,14 @@ import { StatusBar, useColorScheme } from 'react-native';
 import { appNavigationRef } from './appNavigationRef';
 import analytics from '@react-native-firebase/analytics';
 import ProductScreen from '../screen/ProductScreen';
+import { useThemeColor } from '../hooks/useThemeColor';
 
 const Stack = createNativeStackNavigator<RootStackParamList>();
 // const navigationRef = createNavigationContainerRef<RootStackParamList>();
 
 const HomeStackNavigator = () => {
   const routeNameRef = useRef<string | null>(null);
+   const color = useThemeColor();
 
   const theme = useAppSelector(state => state.theme.theme);
   const mobileTheme = useColorScheme();
@@ -61,8 +63,7 @@ const HomeStackNavigator = () => {
       }}
     >
       <StatusBar
-        translucent
-        hidden={false}
+        backgroundColor={color.header}
         barStyle={theme === 'light' || mobileTheme === "light"  ? 'light-content' : 'dark-content'}
       />
       <Stack.Navigator initialRouteName={initialRouteName}>
