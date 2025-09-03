@@ -1,4 +1,5 @@
 import {
+  ActivityIndicator,
   FlatList,
   Image,
   StyleSheet,
@@ -20,7 +21,7 @@ import {
 import { useThemeColor } from '../hooks/useThemeColor';
 import { colors } from '../theme/Colors';
 import { SafeAreaView } from 'react-native-safe-area-context';
-// import Icon from 'react-native-vector-icons/MaterialIcons';
+import Icon from 'react-native-vector-icons/MaterialIcons';
 import { NativeStackNavigationProp } from '@react-navigation/native-stack';
 import { RootStackParamList } from '../types/RootStackParamList';
 import { useProductCart } from '../store/useProductCart';
@@ -49,15 +50,17 @@ const ProductScreen = ({ navigation }: ProductScreenProps) => {
   const removeFromCart = useProductCart(state => state.removeFromCart);
   const totalProduct = useProductCart(state => state.totalCartProduct);
 
-  //check in cart product in exist or not
+  //check if cart product in exist or not
   const isInCart = (id: number) => {
     return totalProduct.some(item => item.id === id);
   };
 
   // All Product Fetch
   const ProductFetch = async () => {
+    setLoader(true);
     const getAllProduct = await axios.get('https://fakestoreapi.com/products');
     SetProducts(getAllProduct.data);
+    setLoader(false);
   };
   useEffect(() => {
     ProductFetch();
@@ -66,11 +69,12 @@ const ProductScreen = ({ navigation }: ProductScreenProps) => {
   // header count change
   const headerRight = useCallback(
     () => (
-      <View style={styles.cartCount}>
+      <TouchableOpacity style={styles.cartCount} onPress={()=>navigation.navigate('cart')}>
         <Text style={styles.cartCountText}>{totalProduct.length}</Text>
-      </View>
+        <Icon name="shopping-cart" size={25} color={color.headerText} />
+      </TouchableOpacity>
     ),
-    [totalProduct.length, styles.cartCount, styles.cartCountText],
+    [styles.cartCount,color.headerText,styles.cartCountText,totalProduct.length,navigation],
   );
 
   //header
@@ -81,6 +85,7 @@ const ProductScreen = ({ navigation }: ProductScreenProps) => {
       headerTitleAlign: 'center',
       headerStyle: { backgroundColor: color.header },
       headerTitleStyle: { color: color.headerText },
+      headerTintColor: color.headerText ,
     });
   }, [navigation, headerRight, color.header, color.headerText]);
 
@@ -120,14 +125,6 @@ const ProductScreen = ({ navigation }: ProductScreenProps) => {
               </Text>
             </TouchableOpacity>
           </View>
-          {/* <View style={styles.addRemoveBtnContainer}>
-          <TouchableOpacity>
-            <Icon name="add" size={30} color={color.borderColor} />
-          </TouchableOpacity>
-          <TouchableOpacity>
-            <Icon name="remove" size={30} color={color.borderColor} />
-          </TouchableOpacity>
-        </View> */}
         </View>
       </View>
     );
@@ -135,12 +132,18 @@ const ProductScreen = ({ navigation }: ProductScreenProps) => {
 
   return (
     <SafeAreaView style={styles.container}>
-      <FlatList
-        data={products}
-        keyExtractor={item => item.id.toString()}
-        renderItem={renderItem}
-        contentContainerStyle={{ paddingTop: 10 }}
-      />
+      {!loader ? 
+        (<FlatList
+          data={products}
+          keyExtractor={item => item.id.toString()}
+          renderItem={renderItem}
+          contentContainerStyle={styles.flatListTopMargin}
+        />)
+        :
+        (<View style={styles.loaderContainer}>
+          <ActivityIndicator size={'large'} color={"blue"} />
+        </View>)
+      }
     </SafeAreaView>
   );
 };
@@ -199,7 +202,7 @@ const useStyle = () => {
       color: color.text,
     },
     cartCount: {
-      backgroundColor: colors.destructive,
+      // backgroundColor: colors.destructive,
       height: h('4%'),
       width: w('8%'),
       justifyContent: 'center',
@@ -207,8 +210,17 @@ const useStyle = () => {
       borderRadius: w('4%'),
     },
     cartCountText: {
-      fontSize: h('2.5%'),
+      fontSize: h('2%'),
       color: color.headerText,
+      marginBottom : h('-0.8%')
     },
+    loaderContainer : {
+      flex:1,
+      justifyContent:"center",
+      alignItems:"center"
+    },
+    flatListTopMargin : {
+      paddingTop: 10
+    }
   });
 };

@@ -11,12 +11,14 @@ type Product = {
   rating: { rate: number; count: number };
   title: string;
   quantity?: number;
+  newPrice : number;
 };
 
 type CartStyle = {
   totalCartProduct: Product[];
   addToCart: (data: Product) => void;
   removeFromCart: (id: number) => void;
+  increaseItemQuantity : (id:number,type : 'increment' | 'decrement') => void
 };
 
 export const useProductCart = create<CartStyle>()(
@@ -27,7 +29,7 @@ export const useProductCart = create<CartStyle>()(
         set(state => ({
           totalCartProduct: [
             ...state.totalCartProduct,
-            { ...data, quantity: 1 },
+            { ...data, quantity: 1, newPrice : data.price},
           ],
         }));
       },
@@ -37,6 +39,21 @@ export const useProductCart = create<CartStyle>()(
             item => item.id !== id,
           ),
         }));
+      },
+      increaseItemQuantity : (id:number,type : 'increment' | 'decrement') => {
+        set(state =>({
+          totalCartProduct : state.totalCartProduct.map((item)=>{
+            if(item.id === id){
+              const newQuantity = type === 'increment' ? (item.quantity || 1) + 1 : (item.quantity || 1) - 1;
+              const updatePrice = newQuantity > 1 ? item.price * newQuantity : item.price;
+              return {...item, newPrice : updatePrice ,quantity : newQuantity > 0 ? newQuantity : 1};
+            }
+            return item;
+          })
+        }))
+      },
+      emptyCart : ()=>{
+        set({totalCartProduct : []});
       },
     }),
     {

@@ -11,4 +11,5 @@ export type RootStackParamList = {
     drawerTheme: undefined,
     userScreen : undefined,
     product : undefined,
+    cart : undefined,
 }

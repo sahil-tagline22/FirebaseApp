@@ -16,6 +16,7 @@ import { appNavigationRef } from './appNavigationRef';
 import analytics from '@react-native-firebase/analytics';
 import ProductScreen from '../screen/ProductScreen';
 import { useThemeColor } from '../hooks/useThemeColor';
+import CartScreen from '../screen/CartScreen';
 
 const Stack = createNativeStackNavigator<RootStackParamList>();
 // const navigationRef = createNavigationContainerRef<RootStackParamList>();
@@ -90,6 +91,11 @@ const HomeStackNavigator = () => {
         <Stack.Screen
           name="product"
           component={ProductScreen}
+          options={{ headerShown: true }}
+        />
+        <Stack.Screen
+          name="cart"
+          component={CartScreen}
           options={{ headerShown: true }}
         />
       </Stack.Navigator>

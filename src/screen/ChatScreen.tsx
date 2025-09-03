@@ -120,7 +120,7 @@ const ChatScreen = ({ navigation }: ChatScreenProps) => {
           <GiftedChat
             placeholder={t('enter_value')}
             messages={messages}
-            onSend={messages => onSend(messages)}
+            onSend={sendMessages => onSend(sendMessages)}
             user={{
               _id: userId,
               avatar: Images.user,
