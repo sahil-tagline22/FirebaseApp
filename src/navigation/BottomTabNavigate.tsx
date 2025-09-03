@@ -18,6 +18,7 @@ import { useThemeColor } from '../hooks/useThemeColor';
 import { resetToInitialState } from '../redux/slice/AccessAndRefreshSlice';
 import AboutScreen from '../screen/AboutScreen';
 import { Images } from '../assets/Images';
+import { useProductCart } from '../store/useProductCart';
 
 const Bottom = createBottomTabNavigator();
 
@@ -36,14 +37,16 @@ const BottomTabNavigate = ({ navigation }: BottomTabNavigateProps) => {
   const styles = useStyle();
   const { t } = useAppTranslation();
   const color = useThemeColor();
+  const clearCart = useProductCart(state => state.clearCart); 
 
   const handleLogout = useCallback(() => {
     auth().signOut();
     dispatch(logoutUser());
     dispatch(resetToInitialState());
+    clearCart();
     navigation.replace('login');
     console.log('user logout');
-  }, [dispatch, navigation]);
+  }, [dispatch, navigation,clearCart]);
 
   //logoutBtn create Button
   const headerRight = useCallback(

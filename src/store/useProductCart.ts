@@ -11,14 +11,15 @@ type Product = {
   rating: { rate: number; count: number };
   title: string;
   quantity?: number;
-  newPrice : number;
+  newPrice? : number;
 };
 
 type CartStyle = {
   totalCartProduct: Product[];
   addToCart: (data: Product) => void;
   removeFromCart: (id: number) => void;
-  increaseItemQuantity : (id:number,type : 'increment' | 'decrement') => void
+  increaseItemQuantity : (id:number,type : 'increment' | 'decrement') => void;
+  clearCart : () => void;
 };
 
 export const useProductCart = create<CartStyle>()(
@@ -52,7 +53,7 @@ export const useProductCart = create<CartStyle>()(
           })
         }))
       },
-      emptyCart : ()=>{
+      clearCart : ()=>{
         set({totalCartProduct : []});
       },
     }),
