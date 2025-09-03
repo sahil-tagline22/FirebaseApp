@@ -1,8 +1,6 @@
 import { create } from 'zustand';
-import { MMKV } from 'react-native-mmkv';
 import { persist, createJSONStorage } from 'zustand/middleware';
-
-const mmkv = new MMKV();
+import { zustandStorage } from './storage/zustendStorage';
 
 type Product = {
   category: string;
@@ -23,26 +21,27 @@ type CartStyle = {
 
 export const useProductCart = create<CartStyle>()(
   persist(
-    (set) => ({
+    set => ({
       totalCartProduct: [],
       addToCart: (data: Product) => {
-        set((state) => ({
-          totalCartProduct: [...state.totalCartProduct, { ...data, quantity: 1 }],
+        set(state => ({
+          totalCartProduct: [
+            ...state.totalCartProduct,
+            { ...data, quantity: 1 },
+          ],
         }));
       },
-      removeFromCart : (id: number) => {
-        set((state) => ({
-          totalCartProduct: state.totalCartProduct.filter(item => item.id !== id)
-        }))
+      removeFromCart: (id: number) => {
+        set(state => ({
+          totalCartProduct: state.totalCartProduct.filter(
+            item => item.id !== id,
+          ),
+        }));
       },
     }),
     {
       name: 'cart-storage',
-      storage: createJSONStorage(() => ({
-        setItem: (name, value) => mmkv.set(name, value),
-        getItem: name => mmkv.getString(name) || null,
-        removeItem: name => mmkv.delete(name),
-      })),
+      storage: createJSONStorage(() => zustandStorage),
     },
   ),
 );
