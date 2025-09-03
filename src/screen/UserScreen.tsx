@@ -1,4 +1,4 @@
-import { FlatList, Image, SafeAreaView, StatusBar, StyleSheet, Text, TouchableOpacity, View } from 'react-native'
+import { FlatList, Image, SafeAreaView, StyleSheet, Text, TouchableOpacity, View } from 'react-native'
 import React, { useEffect, useState } from 'react'
 import { Images } from '../assets/Images'
 import { colors } from '../theme/Colors'
@@ -9,6 +9,8 @@ import { getApp } from '@react-native-firebase/app'
 import {getFirestore,collection,query,where,getDocs} from '@react-native-firebase/firestore'
 import {getAuth} from '@react-native-firebase/auth'
 import { useThemeColor } from '../hooks/useThemeColor'
+import analytics from '@react-native-firebase/analytics';
+import crashlytics from '@react-native-firebase/crashlytics';
 
 interface UserScreenProps {
     navigation : NativeStackNavigationProp<RootStackParamList,'userScreen'> 
@@ -19,8 +21,17 @@ const UserScreen = ({navigation}:UserScreenProps) => {
     const [users,setUsers] = useState<any[]>([]);
     console.log("users get from data base-->" ,users);
     const [id,setId] = useState<string>();
-    const color = useThemeColor();
+    // const color = useThemeColor();
     const styles = useStyle();
+
+    //analytics
+    useEffect(() => {
+        analytics().logScreenView({
+        screen_name: 'UserScreen',
+        screen_class: 'UserScreen',
+        });
+        crashlytics().log('AboutScreen mounted');
+    }, []);
 
     useEffect(()=>{
         const fetchUser = async()=>{ 
@@ -34,9 +45,9 @@ const UserScreen = ({navigation}:UserScreenProps) => {
             if(userid){
                 const usersRef = collection(fireStore,'users');
                 const q = query(usersRef,where('uid', '!=',userid ));
-                const users = await getDocs(q);
+                const getAllUsers = await getDocs(q);
                 
-                const allUsers = users.docs.map(item=>item.data());
+                const allUsers = getAllUsers.docs.map((item:any)=>item.data());
                 setUsers(allUsers);
             }
         }

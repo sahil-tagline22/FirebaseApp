@@ -9,5 +9,7 @@ export type RootStackParamList = {
     drawerHome : undefined,
     drawerAbout : undefined,
     drawerTheme: undefined,
-    userScreen : undefined
+    userScreen : undefined,
+    product : undefined,
+    cart : undefined,
 }

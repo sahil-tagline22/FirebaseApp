@@ -12,7 +12,7 @@ import {
 import { GiftedChat, IMessage } from 'react-native-gifted-chat';
 import Icon from 'react-native-vector-icons/MaterialIcons';
 import { Text } from 'react-native-gesture-handler';
-import { colors } from '../theme/Colors';
+// import { colors } from '../theme/Colors';
 import { NativeStackNavigationProp } from '@react-navigation/native-stack';
 import { RootStackParamList } from '../types/RootStackParamList';
 import { getApp } from '@react-native-firebase/app';
@@ -29,6 +29,8 @@ import { Images } from '../assets/Images';
 import { useAppTranslation } from '../hooks/useAppTranslation';
 import { useThemeColor } from '../hooks/useThemeColor';
 import { useAppSelector } from '../redux/Store';
+import analytics from '@react-native-firebase/analytics';
+import crashlytics from '@react-native-firebase/crashlytics';
 
 interface ChatScreenProps {
   navigation: NativeStackNavigationProp<RootStackParamList, 'chat'>;
@@ -48,6 +50,15 @@ const ChatScreen = ({ navigation }: ChatScreenProps) => {
   const color = useThemeColor();
   const styles = useStyle();
 
+  //analytics
+  useEffect(() => {
+    analytics().logScreenView({
+      screen_name: 'ChatScreen',
+      screen_class: 'ChatScreen',
+    });
+    crashlytics().log('AboutScreen mounted');
+  }, []);
+
   useEffect(() => {
     const app = getApp();
     const fireStore = getFirestore(app);
@@ -60,7 +71,8 @@ const ChatScreen = ({ navigation }: ChatScreenProps) => {
     const q = query(massage, orderBy('createdAt', 'desc'));
 
     const getAllMsg = onSnapshot(q, data => {
-      const allMsg = data.docs.map(item => ({
+      console.log("🚀 ~ ChatScreen ~ data:", data)
+      const allMsg = data.docs.map((item:any) => ({
         ...item.data(),
         createdAt: item.data().createdAt.toDate(),
       }));
@@ -93,7 +105,7 @@ const ChatScreen = ({ navigation }: ChatScreenProps) => {
   };
 
   return (
-    <KeyboardAvoidingView style={{ flex: 1 }}>
+    <KeyboardAvoidingView style={styles.KeyboardAvoidingView}>
       <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
         <View style={styles.container}>
           <View style={styles.header}>
@@ -108,7 +120,7 @@ const ChatScreen = ({ navigation }: ChatScreenProps) => {
           <GiftedChat
             placeholder={t('enter_value')}
             messages={messages}
-            onSend={messages => onSend(messages)}
+            onSend={sendMessages => onSend(sendMessages)}
             user={{
               _id: userId,
               avatar: Images.user,
@@ -151,5 +163,8 @@ const useStyle = () =>{
       fontSize: 20,
       color:color.text
     },
+    KeyboardAvoidingView : {
+      flex: 1
+    }
   });
 }
