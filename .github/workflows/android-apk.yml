@@ -1,0 +1,38 @@
+name: React Native Android APK Build
+
+on:
+  push:
+    branches: [ "main" ]
+
+jobs:
+  android-apk:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: 18
+
+      - name: Install dependencies
+        run: yarn install
+
+      - name: Setup JDK
+        uses: actions/setup-java@v3
+        with:
+          distribution: temurin
+          java-version: 17
+
+      - name: Install Fastlane
+        run: sudo gem install fastlane -NV
+
+      - name: Build APK with Fastlane
+        run: cd android && fastlane release
+
+      - name: Upload APK Artifact
+        uses: actions/upload-artifact@v3
+        with:
+          name: android-apk
+          path: android/app/build/outputs/apk/release/app-release.apk
