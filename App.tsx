@@ -8,6 +8,7 @@ import { FcmToken } from './src/hooks/useFcmTocken';
 import messaging from '@react-native-firebase/messaging';
 import { Alert } from 'react-native';
 import { SafeAreaProvider } from 'react-native-safe-area-context';
+import MapScreen from './src/screen/MapScreen';
 
 
 const App = () => {
@@ -36,6 +37,9 @@ const App = () => {
         </SafeAreaProvider>
       </PersistGate>
     </Provider>
+    // <>
+    // <MapScreen />
+    // </>
   );
 };
 

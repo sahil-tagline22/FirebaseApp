@@ -41,6 +41,7 @@
     "react-native-keyboard-controller": "^1.18.4",
     "react-native-linear-gradient": "^2.8.3",
     "react-native-localize": "^3.5.2",
+    "react-native-maps": "^1.26.1",
     "react-native-mmkv": "^3.3.0",
     "react-native-nitro-modules": "^0.29.2",
     "react-native-reanimated": "^4.0.2",

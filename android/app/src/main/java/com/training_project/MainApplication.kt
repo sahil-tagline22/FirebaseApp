@@ -1,4 +1,4 @@
-package com.firebaseapp
+package com.training_project
 
 import com.oblador.vectoricons.VectorIconsPackage;
 import android.app.Application
