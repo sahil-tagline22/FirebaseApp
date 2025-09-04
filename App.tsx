@@ -30,16 +30,16 @@ const App = () => {
   }, []);
   
   return (
-    <Provider store={store}>
-      <PersistGate persistor={persister}>
-        <SafeAreaProvider>
-          <HomeStackNavigator />
-        </SafeAreaProvider>
-      </PersistGate>
-    </Provider>
-    // <>
-    // <MapScreen />
-    // </>
+    // <Provider store={store}>
+    //   <PersistGate persistor={persister}>
+    //     <SafeAreaProvider>
+    //       <HomeStackNavigator />
+    //     </SafeAreaProvider>
+    //   </PersistGate>
+    // </Provider>
+    <>
+    <MapScreen />
+    </>
   );
 };
 

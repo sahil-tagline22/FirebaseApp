@@ -12,14 +12,15 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
   var reactNativeDelegate: ReactNativeDelegate?
   var reactNativeFactory: RCTReactNativeFactory?
 
-  GMSServices.provideAPIKey("AIzaSyBP_MjNi6Sj-LYMYcuHtPKcZA747rFEJhk")
+  GMSServices.provideAPIKey("AIzaSyDV7i75OJX6fv8m2TCa2q3JsFw-lSCSgNg")
 
   func application(
     _ application: UIApplication,
     didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]? = nil
   ) -> Bool {
   // AIzaSyBP_MjNi6Sj-LYMYcuHtPKcZA747rFEJhk
-  // ios AIzaSyAoLnTtBjqjJ7OMlqWof5RLu52aM46G_ns
+  // AIzaSyAoLnTtBjqjJ7OMlqWof5RLu52aM46G_ns    --> for ios
+  // AIzaSyDV7i75OJX6fv8m2TCa2q3JsFw-lSCSgNg    --> new key genrate
     FirebaseApp.configure()
     let delegate = ReactNativeDelegate()
     let factory = RCTReactNativeFactory(delegate: delegate)

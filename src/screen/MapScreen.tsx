@@ -9,8 +9,8 @@ const MapScreen = () => {
         style={styles.container}
         provider={PROVIDER_GOOGLE}
         region={{
-            latitude : 37.78825,
-            longitude : -122.4324,
+            latitude : 21.16993143181012, 
+            longitude : 72.82031991015907,
             latitudeDelta : 0.0922,
             longitudeDelta : 0.0421,
         }}
