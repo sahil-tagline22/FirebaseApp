@@ -119,7 +119,7 @@ android {
             minifyEnabled enableProguardInReleaseBuilds
             proguardFiles getDefaultProguardFile("proguard-android.txt"), "proguard-rules.pro"
             //this line add for me 
-            crunchPngs false
+            crunchPngs falseh
         }
     }
     //this is added me 

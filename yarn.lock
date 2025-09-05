@@ -2075,6 +2075,11 @@
   resolved "https://registry.npmjs.org/@react-native-firebase/remote-config/-/remote-config-23.2.0.tgz"
   integrity sha512-9fYMdeuecVRInAeQFLRW52huqNcyUXycCOfV6nYn0eWF8mozBXc282AVbrusLZ1cgug1N3pDiiN6wfcQwY6kHg==
 
+"@react-native-google-signin/google-signin@^15.0.0":
+  version "15.0.0"
+  resolved "https://registry.npmjs.org/@react-native-google-signin/google-signin/-/google-signin-15.0.0.tgz"
+  integrity sha512-oU49nE+Z9TT/WaO1K7BH/QL2Nx3d2T3I5PGcYdD8swKNtfhMt8qCX/3mOnNEzthTBPrR0CWFGo3LXpkYspalog==
+
 "@react-native/assets-registry@0.80.2":
   version "0.80.2"
   resolved "https://registry.npmjs.org/@react-native/assets-registry/-/assets-registry-0.80.2.tgz"

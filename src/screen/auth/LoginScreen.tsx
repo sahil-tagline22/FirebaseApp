@@ -5,7 +5,7 @@ import {
   TouchableOpacity,
   View,
 } from 'react-native';
-import React from 'react';
+import React, { useEffect } from 'react';
 import { colors } from '../../theme/Colors';
 import { useFormik } from 'formik';
 import * as yup from 'yup';
@@ -23,6 +23,10 @@ import {widthPercentageToDP as w, heightPercentageToDP as h} from 'react-native-
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view'
 import { useThemeColor } from '../../hooks/useThemeColor';
 import { RFPercentage } from "react-native-responsive-fontsize";
+import { GoogleSignin } from '@react-native-google-signin/google-signin';
+import { GoogleAuthProvider, signInWithCredential } from '@react-native-firebase/auth';
+import { FacebookAuthProvider } from '@react-native-firebase/auth';
+import { LoginManager, AccessToken } from 'react-native-fbsdk-next';
 
 
 interface LoginScreenProps {
@@ -73,6 +77,7 @@ const LoginScreen = ({navigation}:LoginScreenProps) => {
               email : values.email,
               password : values.password
             }
+            //backAnd side user store 
             const response = await LoginUser(data);
             console.log("🚀 ~ LoginScreen ~ response:", response)
             dispatch(setAccessToken(response?.data.data.accessToken))            
@@ -92,6 +97,74 @@ const LoginScreen = ({navigation}:LoginScreenProps) => {
 
       },
     });
+
+    //useLogin with google authentication-------------->
+    useEffect(()=>{
+      GoogleSignin.configure({
+        webClientId: '742734159624-k1vf8d1j883lb09kijmpmmcdcok4jje8.apps.googleusercontent.com',
+      });
+    },[])
+
+  const  onGoogleButtonPress =async () => {
+    // Check if your device supports Google Play
+    await GoogleSignin.hasPlayServices({ showPlayServicesUpdateDialog: true });
+    // Get the users ID token
+    const signInResult = await GoogleSignin.signIn();
+    console.log("🚀 ~ onGoogleButtonPress ~ signInResult:", signInResult)
+
+    // Try the new style of google-sign in result, from v13+ of that module
+    const idToken = signInResult.data?.idToken;
+    if (!idToken) {
+      // if you are using older versions of google-signin, try old style result
+      idToken = signInResult.idToken;
+      console.log("🚀 ~ onGoogleButtonPress ~ idToken:", idToken)
+    }
+    if (!idToken) {
+      throw new Error('No ID token found');
+    }
+
+    // Create a Google credential with the token
+    const googleCredential = GoogleAuthProvider.credential(signInResult.data.idToken);
+    console.log("🚀 ~ onGoogleButtonPress ~ googleCredential:", googleCredential)
+
+    // Sign-in the user with the credential
+    return signInWithCredential(getAuth(), googleCredential);
+  }
+
+
+
+  //user login with faceBook---------------->
+  const onFacebookButtonPress = async () => {
+    try{
+      // Attempt login with permissions
+      const result = await LoginManager.logInWithPermissions(['public_profile', 'email']);
+      console.log("🚀 ~ onFacebookButtonPress ~ result:", result)
+
+      if (result.isCancelled) {
+        throw 'User cancelled the login process';
+      }
+
+      // Once signed in, get the users AccessToken
+      const data = await AccessToken.getCurrentAccessToken();
+      console.log("🚀 ~ onFacebookButtonPress ~ data:", data)
+
+      if (!data) {
+        throw 'Something went wrong obtaining access token';
+      }
+
+      // Create a Firebase credential with the AccessToken
+      const facebookCredential = FacebookAuthProvider.credential(data.accessToken);
+      console.log("🚀 ~ onFacebookButtonPress ~ facebookCredential:", facebookCredential)
+
+      const user = await signInWithCredential(getAuth(), facebookCredential);
+      console.log("🚀 ~ onFacebookButtonPress ~ user:", user)
+
+      // Sign-in the user with the credential
+      return user.user
+    }catch(error){
+      console.log("🚀 ~ onFacebookButtonPress ~ error:", error)
+    }
+  }
 
   return (
       <KeyboardAwareScrollView>
@@ -126,6 +199,14 @@ const LoginScreen = ({navigation}:LoginScreenProps) => {
               <Text style={styles.textLogin} onPress={()=>navigation.replace("registration")}>{t('registration_message')}</Text>
             </View>
 
+            <View style={styles.socialContainer}>
+              <TouchableOpacity style={styles.googleBtnContainer} onPress={onGoogleButtonPress}>
+                <Text style={styles.googleLoginBtnText}>Google Login</Text>
+              </TouchableOpacity>
+              <TouchableOpacity style={styles.googleBtnContainer} onPress={onFacebookButtonPress}>
+                <Text style={styles.googleLoginBtnText}>FaceBook Login</Text>
+              </TouchableOpacity>
+            </View>
           </View>
         </View>
       </KeyboardAwareScrollView>
@@ -187,6 +268,23 @@ const useStyle =()=>{
     color:colors.text.blue,
     borderBottomWidth:1,
     borderBottomColor:colors.text.blue
+  },
+  googleBtnContainer:{
+    backgroundColor : colors.button.button,
+    height : h('4%'),
+    width : w('30%'),
+    borderRadius : w('1%'),
+    marginLeft : 50,
+    marginTop : 10,
+    justifyContent:'center',
+    alignItems : 'center'
+  },
+  googleLoginBtnText:{
+    fontSize : h('1.8%'),
+    color : colors.text.inverted
+  },
+  socialContainer:{
+    flexDirection:"row"
   }
 
 });
