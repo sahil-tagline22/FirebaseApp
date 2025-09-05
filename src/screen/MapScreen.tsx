@@ -1,6 +1,6 @@
 import { StyleSheet, View } from 'react-native'
 import React from 'react'
-import MapView, { PROVIDER_GOOGLE } from 'react-native-maps'
+import MapView, { Marker, PROVIDER_GOOGLE } from 'react-native-maps'
 
 const MapScreen = () => {
   return (
@@ -15,6 +15,14 @@ const MapScreen = () => {
             longitudeDelta : 0.0421,
         }}
       >
+        <Marker
+        coordinate={{
+          latitude : 21.255400, 
+          longitude :72.858739
+        }}
+        title='Location'
+        description='graham circle'
+        />
 
       </MapView>
     </View>
