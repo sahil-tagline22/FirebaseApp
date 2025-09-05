@@ -6471,6 +6471,11 @@ react-native-element-dropdown@^2.12.4:
   dependencies:
     lodash "^4.17.21"
 
+react-native-fbsdk-next@^13.4.1:
+  version "13.4.1"
+  resolved "https://registry.npmjs.org/react-native-fbsdk-next/-/react-native-fbsdk-next-13.4.1.tgz"
+  integrity sha512-Cto+oF0FJyvxKDjKyLKI5DgnLCeeRlXvVQb8qw0XesT1Xune1ijDWAnvt9fy6wXJ4G7K510xKkcSUsbK/KyPhg==
+
 react-native-gesture-handler@^2.28.0, "react-native-gesture-handler@>= 2.0.0":
   version "2.28.0"
   resolved "https://registry.npmjs.org/react-native-gesture-handler/-/react-native-gesture-handler-2.28.0.tgz"
@@ -6638,7 +6643,7 @@ react-native-worklets@^0.4.1, react-native-worklets@>=0.4.0:
     "@babel/preset-typescript" "^7.16.7"
     convert-source-map "^2.0.0"
 
-react-native@*, "react-native@^0.0.0-0 || >=0.60 <1.0", "react-native@>= 0.64.3", "react-native@>= 0.76.0", react-native@>=0.35, react-native@>=0.42.0, react-native@>=0.47.1, react-native@>=0.48.4, react-native@>=0.57.0, react-native@>=0.61.0, react-native@0.80.2:
+react-native@*, "react-native@^0.0.0-0 || >=0.60 <1.0", "react-native@>= 0.64.3", "react-native@>= 0.76.0", react-native@>=0.35, react-native@>=0.42.0, react-native@>=0.47.1, react-native@>=0.48.4, react-native@>=0.57.0, react-native@>=0.61.0, react-native@>=0.63.3, react-native@0.80.2:
   version "0.80.2"
   resolved "https://registry.npmjs.org/react-native/-/react-native-0.80.2.tgz"
   integrity sha512-6ySV4qTJo/To3lgpG/9Mcg/ZtvExqOVZuT7JVGcO5rS2Bjvl/yUAkQF0hTnbRb2Ch6T5MlKghrM4OeHX+KA9Pg==
