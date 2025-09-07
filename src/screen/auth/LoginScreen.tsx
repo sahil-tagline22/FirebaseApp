@@ -6,7 +6,7 @@ import {
   TouchableOpacity,
   View,
 } from 'react-native';
-import React, { useEffect, useState } from 'react';
+import React, { useCallback, useState } from 'react';
 import { colors } from '../../theme/Colors';
 import { useFormik } from 'formik';
 import * as yup from 'yup';
@@ -34,12 +34,10 @@ import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view
 import { useThemeColor } from '../../hooks/useThemeColor';
 import { RFPercentage } from 'react-native-responsive-fontsize';
 import { GoogleSignin } from '@react-native-google-signin/google-signin';
-import {
-  GoogleAuthProvider,
-  signInWithCredential,
-} from '@react-native-firebase/auth';
+import { signInWithCredential } from '@react-native-firebase/auth';
 import { FacebookAuthProvider } from '@react-native-firebase/auth';
 import { LoginManager, AccessToken } from 'react-native-fbsdk-next';
+import { OnGoogleButtonPress } from '../../api/requests/socials/GoogleAuthentication';
 
 interface LoginScreenProps {
   navigation: NativeStackNavigationProp<RootStackParamList, 'login'>;
@@ -120,44 +118,22 @@ const LoginScreen = ({ navigation }: LoginScreenProps) => {
     },
   });
 
-  //configure google sign in
-  // useEffect(() => {}, []);
-
   //google login
   const onGoogleButtonPress = async () => {
-    try {
-      GoogleSignin.configure({
-        webClientId:
-          '742734159624-k1vf8d1j883lb09kijmpmmcdcok4jje8.apps.googleusercontent.com',
-        offlineAccess: false,
-        scopes: ['profile', 'email'],
-      });
-
-      await GoogleSignin.hasPlayServices();
-      const signInResult = await GoogleSignin.signIn();
-      console.log('🚀 ~ onGoogleButtonPress ~ signInResult:', signInResult);
-
-      const { idToken } = await GoogleSignin.getTokens();
-
-      if (!idToken) {
-        throw new Error('No ID token found');
-      }
-
-      // Create a Google credential with the token
-      const googleCredential = GoogleAuthProvider.credential(idToken);
-
-      const user = await signInWithCredential(getAuth(), googleCredential);
-      console.log('🚀 ~ onGoogleButtonPress ~ user:', user.user);
-
-      // dispatch(loginUser(user.user));
-      // navigation.reset({
-      //   index: 0,
-      //   routes: [{ name: 'bottom' }],
-      // });
-    } catch (error) {
-      console.log('🚀 ~ onGoogleButtonPress ~ error:', error);
-      Alert.alert('Google Login Failed', 'Please try again.');
-    }
+    setLoading(true);
+    const googleLogin = await OnGoogleButtonPress();
+    setLoading(false);
+    console.log(
+      '🚀 ~ onGoogleButtonPress ~ googleLogin:',
+      googleLogin?.user.email,
+    );
+    // if (googleLogin) {
+    //   dispatch(loginUser(googleLogin.user));
+    //   navigation.reset({
+    //     index: 0,
+    //     routes: [{ name: 'bottom' }],
+    //   });
+    // }
   };
 
   //Facebook Login
@@ -174,7 +150,6 @@ const LoginScreen = ({ navigation }: LoginScreenProps) => {
 
       // Once signed in, get the users AccessToken
       const data = await AccessToken.getCurrentAccessToken();
-      console.log('🚀 ~ onFacebookButtonPress ~ data:', data);
 
       if (!data) {
         throw 'Something went wrong obtaining access token';
@@ -186,8 +161,14 @@ const LoginScreen = ({ navigation }: LoginScreenProps) => {
       );
 
       // Sign-in the user with the credential
-      const us̥er = await signInWithCredential(getAuth(), facebookCredential);
-      console.log('🚀 ~ onFacebookButtonPress ~ us̥er:', us̥er);
+      const user = await signInWithCredential(getAuth(), facebookCredential);
+
+      console.log(
+        '🚀 ~ onFacebookButtonPress ~ user:',
+        user.user.email,
+        user.user.uid,
+      );
+      //save user in redux
 
       // dispatch(loginUser(user.user));
       // navigation.reset({
@@ -251,17 +232,40 @@ const LoginScreen = ({ navigation }: LoginScreenProps) => {
               style={styles.googleBtnContainer}
               onPress={onGoogleButtonPress}
             >
-              <Text style={styles.googleLoginBtnText}>Google Login</Text>
+              <Text style={styles.googleLoginBtnText}>G</Text>
             </TouchableOpacity>
 
             <TouchableOpacity
               style={styles.googleBtnContainer}
               onPress={onFacebookButtonPress}
             >
-              <Text style={styles.googleLoginBtnText}>FaceBook Login</Text>
+              <Text style={styles.googleLoginBtnText}>F</Text>
+            </TouchableOpacity>
+
+            <TouchableOpacity
+              style={styles.googleBtnContainer}
+            >
+              <Text style={styles.googleLoginBtnText}>M</Text>
+            </TouchableOpacity>
+
+            <TouchableOpacity
+              style={styles.googleBtnContainer}
+            >
+              <Text style={styles.googleLoginBtnText}>G</Text>
+            </TouchableOpacity>
+
+            <TouchableOpacity
+              style={styles.googleBtnContainer}
+            >
+              <Text style={styles.googleLoginBtnText}>A</Text>
             </TouchableOpacity>
           </View>
         </View>
+        {loading && (
+          <View style={styles.loaderOverlay}>
+            <ActivityIndicator size="large" color={colors.button.button} />
+          </View>
+        )}
       </View>
     </KeyboardAwareScrollView>
   );
@@ -323,13 +327,17 @@ const useStyle = () => {
       borderBottomWidth: 1,
       borderBottomColor: colors.text.blue,
     },
+    socialContainer: {
+      flexDirection: 'row',
+      justifyContent: 'space-around',
+    },
     googleBtnContainer: {
       backgroundColor: colors.button.button,
       height: h('4%'),
-      width: w('30%'),
+      width: w('10%'),
       borderRadius: w('1%'),
-      marginLeft: 50,
-      marginTop: 10,
+      // marginLeft: w('7%'),
+      marginTop: h('2%'),
       justifyContent: 'center',
       alignItems: 'center',
     },
@@ -337,8 +345,16 @@ const useStyle = () => {
       fontSize: h('1.8%'),
       color: colors.text.inverted,
     },
-    socialContainer: {
-      flexDirection: 'row',
+    loaderOverlay: {
+      position: 'absolute',
+      top: 0,
+      left: 0,
+      right: 0,
+      bottom: 0,
+      backgroundColor: 'rgba(0,0,0,0.4)', // semi-transparent background
+      justifyContent: 'center',
+      alignItems: 'center',
+      zIndex: 999,
     },
   });
 };
