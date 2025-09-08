@@ -19,6 +19,7 @@ import {
 import Icon from 'react-native-vector-icons/MaterialIcons';
 import analytics from '@react-native-firebase/analytics';
 import crashlytics from '@react-native-firebase/crashlytics';
+import { useAppSelector } from '../redux/Store';
 // import Triangle from '../components/TestComponent';
 
 export type ApiData = {
@@ -48,6 +49,9 @@ const HomeScreen = () => {
   const [discretion, setDiscretion] = useState<string>('');
   const [selectedId, setSelectedId] = useState<string>('');
   const [editTodo, setEditTodo] = useState<boolean>(false);
+
+    const user = useAppSelector(state => state.auth.user)
+    console.log("🚀 ~ HomeScreen ~ user:", user)
 
   //analytics
   useEffect(() => {

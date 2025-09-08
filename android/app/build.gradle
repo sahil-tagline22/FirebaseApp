@@ -86,7 +86,7 @@ android {
         versionName "1.0"
 
         manifestPlaceholders = [
-            appAuthRedirectScheme: "com.trainingproject"
+            appAuthRedirectScheme: "com.training_project"
         ]
         // this line add for me
          ndk {

@@ -11,15 +11,13 @@ import { colors } from '../../theme/Colors';
 import { useFormik } from 'formik';
 import * as yup from 'yup';
 import InputText from '../../components/textInputFild/InputText';
-import { useAppDispatch } from '../../redux/Store';
+import { useAppDispatch, useAppSelector } from '../../redux/Store';
 import { loginUser } from '../../redux/slice/AuthSlice';
 import { NativeStackNavigationProp } from '@react-navigation/native-stack';
 import { RootStackParamList } from '../../types/RootStackParamList';
 import {
   getAuth,
-
   signInWithEmailAndPassword,
-
 } from '@react-native-firebase/auth';
 import { useAppTranslation } from '../../hooks/useAppTranslation';
 import { LoginUser } from '../../api/requests/RegisterUserRequests';
@@ -37,8 +35,9 @@ import { useThemeColor } from '../../hooks/useThemeColor';
 import { RFPercentage } from 'react-native-responsive-fontsize';
 import { OnGoogleButtonPress } from '../../api/requests/socials/GoogleAuthentication';
 import { onFacebookButtonPress } from '../../api/requests/socials/FacebookAuthentication';
-import auth from '@react-native-firebase/auth';
 import { onMicrosoftButtonPress } from '../../api/requests/socials/MicrosiftAuthentication';
+import { authorize } from 'react-native-app-auth';
+import auth from '@react-native-firebase/auth';
 
 interface LoginScreenProps {
   navigation: NativeStackNavigationProp<RootStackParamList, 'login'>;
@@ -50,6 +49,9 @@ const LoginScreen = ({ navigation }: LoginScreenProps) => {
   const dispatch = useAppDispatch();
 
   const [loading, setLoading] = useState(false);
+
+  const user = useAppSelector(state => state.auth.user);
+  console.log('🚀 ~ LoginScreen ~ user:', user);
 
   const formik = useFormik({
     initialValues: {
@@ -128,13 +130,13 @@ const LoginScreen = ({ navigation }: LoginScreenProps) => {
       '🚀 ~ onGoogleButtonPress ~ googleLogin:',
       googleLogin?.user.email,
     );
-    // if (googleLogin) {
-    //   dispatch(loginUser(googleLogin.user));
-    //   navigation.reset({
-    //     index: 0,
-    //     routes: [{ name: 'bottom' }],
-    //   });
-    // }
+    if (googleLogin) {
+      dispatch(loginUser(googleLogin.user));
+      navigation.reset({
+        index: 0,
+        routes: [{ name: 'bottom' }],
+      });
+    }
   };
 
   //Facebook Login
@@ -146,13 +148,13 @@ const LoginScreen = ({ navigation }: LoginScreenProps) => {
       '🚀 ~ onFacebookButton ~ facebookLogin:',
       facebookLogin?.user.email,
     );
-    // if(facebookLogin){
-    //   dispatch(loginUser(facebookLogin.user));
-    //   navigation.reset({
-    //     index : 0,
-    //     routes : [{name : 'bottom'}],
-    //   })
-    // }
+    if (facebookLogin) {
+      dispatch(loginUser(facebookLogin.user));
+      navigation.reset({
+        index: 0,
+        routes: [{ name: 'bottom' }],
+      });
+    }
   };
 
   //Microsoft Login
@@ -160,15 +162,48 @@ const LoginScreen = ({ navigation }: LoginScreenProps) => {
     setLoading(true);
     const microsoftLogin = await onMicrosoftButtonPress();
     setLoading(false);
-    console.log("🚀 ~ onMicrosoftButton ~ microsoftLogin:", microsoftLogin?.user.email);
-    // if(microsoftLogin){
-    //   dispatch(loginUser(microsoftLogin.user));
-    //   navigation.reset({
-    //     index : 0,
-    //     routes : [{name : 'bottom'}],
-    //   })
-    // }
+    console.log(
+      '🚀 ~ onMicrosoftButton ~ microsoftLogin:',
+      microsoftLogin?.user.email,
+    );
+    if (microsoftLogin) {
+      dispatch(loginUser(microsoftLogin.user));
+      navigation.reset({
+        index: 0,
+        routes: [{ name: 'bottom' }],
+      });
+    }
   };
+
+  //Github login
+  const githubAuthConfig = {
+    clientId: 'Ov23li3l99p34vtETHAa',
+    clientSecret: 'e8629929d2346f436d4deae6cba85a9b39d91f2c',
+    redirectUrl: 'com.training_project://oauth', //'com.training_project://oauth', // custom scheme (set in Android & iOS)
+    scopes: ['identity', 'user:email'],
+    serviceConfiguration: {
+      authorizationEndpoint: 'https://github.com/login/oauth/authorize',
+      tokenEndpoint: 'https://github.com/login/oauth/access_token',
+    },
+  };
+
+  async function githubLogin() {
+    try {
+      // 1. Get GitHub OAuth token
+      const authResult = await authorize(githubAuthConfig);
+
+      // 2. Create Firebase credential with GitHub token
+      const githubCredential = auth.GithubAuthProvider.credential(
+        authResult.accessToken,
+      );
+
+      // 3. Sign in to Firebase
+      const user = await auth().signInWithCredential(githubCredential);
+      console.log('Firebase user:', user.user);
+    } catch (error) {
+      console.error('GitHub login error:', error);
+    }
+  }
 
   return (
     <KeyboardAwareScrollView>
@@ -238,7 +273,10 @@ const LoginScreen = ({ navigation }: LoginScreenProps) => {
               <Text style={styles.googleLoginBtnText}>M</Text>
             </TouchableOpacity>
 
-            <TouchableOpacity style={styles.googleBtnContainer}>
+            <TouchableOpacity
+              style={styles.googleBtnContainer}
+              onPress={githubLogin}
+            >
               <Text style={styles.googleLoginBtnText}>G</Text>
             </TouchableOpacity>
 
