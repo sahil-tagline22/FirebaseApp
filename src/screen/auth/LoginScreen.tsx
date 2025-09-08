@@ -6,7 +6,7 @@ import {
   TouchableOpacity,
   View,
 } from 'react-native';
-import React, { useCallback, useState } from 'react';
+import React, { useState } from 'react';
 import { colors } from '../../theme/Colors';
 import { useFormik } from 'formik';
 import * as yup from 'yup';
@@ -33,11 +33,11 @@ import {
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
 import { useThemeColor } from '../../hooks/useThemeColor';
 import { RFPercentage } from 'react-native-responsive-fontsize';
-import { GoogleSignin } from '@react-native-google-signin/google-signin';
-import { signInWithCredential } from '@react-native-firebase/auth';
-import { FacebookAuthProvider } from '@react-native-firebase/auth';
-import { LoginManager, AccessToken } from 'react-native-fbsdk-next';
+// import { signInWithCredential } from '@react-native-firebase/auth';
+// import { FacebookAuthProvider } from '@react-native-firebase/auth';
+// import { LoginManager, AccessToken } from 'react-native-fbsdk-next';
 import { OnGoogleButtonPress } from '../../api/requests/socials/GoogleAuthentication';
+import { onFacebookButtonPress } from '../../api/requests/socials/FacebookAuthentication';
 
 interface LoginScreenProps {
   navigation: NativeStackNavigationProp<RootStackParamList, 'login'>;
@@ -137,48 +137,21 @@ const LoginScreen = ({ navigation }: LoginScreenProps) => {
   };
 
   //Facebook Login
-  const onFacebookButtonPress = async () => {
-    try {
-      const result = await LoginManager.logInWithPermissions([
-        'public_profile',
-        'email',
-      ]);
-
-      if (result.isCancelled) {
-        throw 'User cancelled the login process';
-      }
-
-      // Once signed in, get the users AccessToken
-      const data = await AccessToken.getCurrentAccessToken();
-
-      if (!data) {
-        throw 'Something went wrong obtaining access token';
-      }
-
-      // Create a Firebase credential with the AccessToken
-      const facebookCredential = FacebookAuthProvider.credential(
-        data.accessToken,
-      );
-
-      // Sign-in the user with the credential
-      const user = await signInWithCredential(getAuth(), facebookCredential);
-
-      console.log(
-        '🚀 ~ onFacebookButtonPress ~ user:',
-        user.user.email,
-        user.user.uid,
-      );
-      //save user in redux
-
-      // dispatch(loginUser(user.user));
-      // navigation.reset({
-      //   index: 0,
-      //   routes: [{ name: 'bottom' }],
-      // });
-    } catch (error) {
-      console.log('🚀 ~ onFacebookButtonPress ~ error:', error);
-      Alert.alert('Facebook Login Failed', 'Please try again.');
-    }
+  const onFacebookButton = async () => {
+    setLoading(true);
+    const facebookLogin = await onFacebookButtonPress();
+    setLoading(false);
+    console.log(
+      '🚀 ~ onFacebookButton ~ facebookLogin:',
+      facebookLogin?.user.email,
+    );
+    // if(facebookLogin){
+    //   dispatch(loginUser(facebookLogin.user));
+    //   navigation.reset({
+    //     index : 0,
+    //     routes : [{name : 'bottom'}],
+    //   })
+    // }
   };
 
   return (
@@ -237,26 +210,20 @@ const LoginScreen = ({ navigation }: LoginScreenProps) => {
 
             <TouchableOpacity
               style={styles.googleBtnContainer}
-              onPress={onFacebookButtonPress}
+              onPress={onFacebookButton}
             >
               <Text style={styles.googleLoginBtnText}>F</Text>
             </TouchableOpacity>
 
-            <TouchableOpacity
-              style={styles.googleBtnContainer}
-            >
+            <TouchableOpacity style={styles.googleBtnContainer}>
               <Text style={styles.googleLoginBtnText}>M</Text>
             </TouchableOpacity>
 
-            <TouchableOpacity
-              style={styles.googleBtnContainer}
-            >
+            <TouchableOpacity style={styles.googleBtnContainer}>
               <Text style={styles.googleLoginBtnText}>G</Text>
             </TouchableOpacity>
 
-            <TouchableOpacity
-              style={styles.googleBtnContainer}
-            >
+            <TouchableOpacity style={styles.googleBtnContainer}>
               <Text style={styles.googleLoginBtnText}>A</Text>
             </TouchableOpacity>
           </View>
