@@ -85,6 +85,9 @@ android {
         versionCode 1
         versionName "1.0"
 
+        manifestPlaceholders = [
+            appAuthRedirectScheme: "com.trainingproject"
+        ]
         // this line add for me
          ndk {
             abiFilters "armeabi-v7a", "x86_64"  // Enough for emulator and most devices

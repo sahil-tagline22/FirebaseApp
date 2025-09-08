@@ -17,7 +17,9 @@ import { NativeStackNavigationProp } from '@react-navigation/native-stack';
 import { RootStackParamList } from '../../types/RootStackParamList';
 import {
   getAuth,
+
   signInWithEmailAndPassword,
+
 } from '@react-native-firebase/auth';
 import { useAppTranslation } from '../../hooks/useAppTranslation';
 import { LoginUser } from '../../api/requests/RegisterUserRequests';
@@ -33,11 +35,10 @@ import {
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
 import { useThemeColor } from '../../hooks/useThemeColor';
 import { RFPercentage } from 'react-native-responsive-fontsize';
-// import { signInWithCredential } from '@react-native-firebase/auth';
-// import { FacebookAuthProvider } from '@react-native-firebase/auth';
-// import { LoginManager, AccessToken } from 'react-native-fbsdk-next';
 import { OnGoogleButtonPress } from '../../api/requests/socials/GoogleAuthentication';
 import { onFacebookButtonPress } from '../../api/requests/socials/FacebookAuthentication';
+import auth from '@react-native-firebase/auth';
+import { onMicrosoftButtonPress } from '../../api/requests/socials/MicrosiftAuthentication';
 
 interface LoginScreenProps {
   navigation: NativeStackNavigationProp<RootStackParamList, 'login'>;
@@ -154,6 +155,21 @@ const LoginScreen = ({ navigation }: LoginScreenProps) => {
     // }
   };
 
+  //Microsoft Login
+  const onMicrosoftButton = async () => {
+    setLoading(true);
+    const microsoftLogin = await onMicrosoftButtonPress();
+    setLoading(false);
+    console.log("🚀 ~ onMicrosoftButton ~ microsoftLogin:", microsoftLogin?.user.email);
+    // if(microsoftLogin){
+    //   dispatch(loginUser(microsoftLogin.user));
+    //   navigation.reset({
+    //     index : 0,
+    //     routes : [{name : 'bottom'}],
+    //   })
+    // }
+  };
+
   return (
     <KeyboardAwareScrollView>
       <View style={styles.container}>
@@ -215,7 +231,10 @@ const LoginScreen = ({ navigation }: LoginScreenProps) => {
               <Text style={styles.googleLoginBtnText}>F</Text>
             </TouchableOpacity>
 
-            <TouchableOpacity style={styles.googleBtnContainer}>
+            <TouchableOpacity
+              style={styles.googleBtnContainer}
+              onPress={onMicrosoftButton}
+            >
               <Text style={styles.googleLoginBtnText}>M</Text>
             </TouchableOpacity>
 

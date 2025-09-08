@@ -33,6 +33,7 @@
     "react": "19.1.0",
     "react-i18next": "^15.6.1",
     "react-native": "0.80.2",
+    "react-native-app-auth": "^8.0.3",
     "react-native-date-picker": "^5.0.13",
     "react-native-element-dropdown": "^2.12.4",
     "react-native-fbsdk-next": "^13.4.1",
