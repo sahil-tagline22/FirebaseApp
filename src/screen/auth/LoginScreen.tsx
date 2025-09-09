@@ -179,7 +179,7 @@ const LoginScreen = ({ navigation }: LoginScreenProps) => {
   const githubAuthConfig = {
     clientId: 'Ov23li3l99p34vtETHAa',
     clientSecret: 'e8629929d2346f436d4deae6cba85a9b39d91f2c',
-    redirectUrl: 'com.training_project://oauth', //'com.training_project://oauth', // custom scheme (set in Android & iOS)
+    redirectUrl: 'https://fir-app-5a12b.firebaseapp.com/__/auth/handler', //'com.training_project://oauth', // custom scheme (set in Android & iOS)
     scopes: ['identity', 'user:email'],
     serviceConfiguration: {
       authorizationEndpoint: 'https://github.com/login/oauth/authorize',
@@ -200,6 +200,8 @@ const LoginScreen = ({ navigation }: LoginScreenProps) => {
       // 3. Sign in to Firebase
       const user = await auth().signInWithCredential(githubCredential);
       console.log('Firebase user:', user.user);
+
+      return user;
     } catch (error) {
       console.error('GitHub login error:', error);
     }
