@@ -20,6 +20,7 @@ export const OnGoogleButtonPress = async () => {
       console.log('🚀 ~ onGoogleButtonPress ~ signInResult:', signInResult);
 
       const { idToken } = await GoogleSignin.getTokens();
+      console.log("🚀 ~ OnGoogleButtonPress ~ idToken:", idToken)
 
       if (!idToken) {
         throw new Error('No ID token found');
@@ -29,12 +30,9 @@ export const OnGoogleButtonPress = async () => {
       const googleCredential = GoogleAuthProvider.credential(idToken);
 
       const user = await signInWithCredential(getAuth(), googleCredential);
-      console.log(
-        '🚀 ~ onGoogleButtonPress ~ user:',
-        user.user.uid,
-        user.user.email,
-      );
-    return user;
+
+      return user;
+
     } catch (error) {
       console.log('🚀 ~ onGoogleButtonPress ~ error:', error);
       Alert.alert('Google Login Failed', 'Please try again.');

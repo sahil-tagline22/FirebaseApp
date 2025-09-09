@@ -191,15 +191,18 @@ const LoginScreen = ({ navigation }: LoginScreenProps) => {
     try {
       // 1. Get GitHub OAuth token
       const authResult = await authorize(githubAuthConfig);
+      console.log("🚀 ~ githubLogin ~ authResult:", authResult)
 
       // 2. Create Firebase credential with GitHub token
       const githubCredential = auth.GithubAuthProvider.credential(
         authResult.accessToken,
       );
+      console.log("🚀 ~ githubLogin ~ githubCredential:", githubCredential)
 
       // 3. Sign in to Firebase
       const user = await auth().signInWithCredential(githubCredential);
-      console.log('Firebase user:', user.user);
+      console.log("🚀 ~ githubLogin ~ user:", user.user)
+
 
       return user;
     } catch (error) {
