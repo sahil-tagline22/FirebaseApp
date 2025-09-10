@@ -12,6 +12,7 @@ import { launchImageLibrary } from "react-native-image-picker";
 import DatePicker from 'react-native-date-picker'
 import FastImage from "@d11/react-native-fast-image";
 import { Blurhash } from "react-native-blurhash";
+import LottieView from 'lottie-react-native'
 
 const languages = [
   {label: 'English', value : 'en'},
@@ -78,10 +79,18 @@ const SettingScreen = () => {
   return (
     <View style={styles.container}>
 
+      {/* lottie implement */}
+      <View style={{flexDirection:"row"}}>
+        <LottieView source={Images.locationMap} autoPlay loop style={{height:50,width:50}}/>
+        <LottieView source={Images.location} autoPlay loop style={{height:50,width:50}}/> 
+      </View>
+
+      {/* date implement */}
       <View>
          <DatePicker date={date} onDateChange={setDate} />
       </View>
 
+      {/* image picker */}
       <TouchableOpacity onPress={onPress}>
         {
           filePath ? 
@@ -99,6 +108,7 @@ const SettingScreen = () => {
         }
       </TouchableOpacity>
 
+      {/* theme dropdown  */}
       <View style={styles.ToggleContainer}>
         <Dropdown
           style={styles.dropdownContainer}
@@ -113,6 +123,7 @@ const SettingScreen = () => {
         />
       </View>
 
+      {/* Language dropdown  */}
       <Dropdown
         style={styles.dropdownContainer}
         data={languages}
@@ -125,8 +136,7 @@ const SettingScreen = () => {
         valueField={'value'}
         selectedTextStyle={{color:color.text}}
       />
-      {/* <Text style={styles.text}>{value}</Text> */}
-
+      
     </View>
   )
 }

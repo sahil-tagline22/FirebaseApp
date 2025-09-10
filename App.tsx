@@ -8,8 +8,8 @@ import { FcmToken } from './src/hooks/useFcmTocken';
 import messaging from '@react-native-firebase/messaging';
 import { Alert } from 'react-native';
 import { SafeAreaProvider } from 'react-native-safe-area-context';
-import MapScreen from './src/screen/MapScreen';
-import MapBoxScreen from './src/screen/MapBoxScreen';
+// import MapScreen from './src/screen/MapScreen';
+// import MapBoxScreen from './src/screen/MapBoxScreen';
 
 
 const App = () => {
@@ -31,17 +31,17 @@ const App = () => {
   }, []);
   
   return (
-    // <Provider store={store}>
-    //   <PersistGate persistor={persister}>
-    //     <SafeAreaProvider>
-    //       <HomeStackNavigator />
-    //     </SafeAreaProvider>
-    //   </PersistGate>
-    // </Provider>
-    <>
-    {/* <MapScreen /> */}
-    <MapBoxScreen />
-    </>
+    <Provider store={store}>
+      <PersistGate persistor={persister}>
+        <SafeAreaProvider>
+          <HomeStackNavigator />
+        </SafeAreaProvider>
+      </PersistGate>
+    </Provider>
+    // <>
+    // {/* <MapScreen /> */}
+    // <MapBoxScreen />
+    // </>
   );
 };
 
