@@ -1,8 +1,6 @@
 // import { StyleSheet } from 'react-native'
 import React, { useEffect, useMemo, useRef } from 'react';
-import {
-  NavigationContainer,
-} from '@react-navigation/native';
+import { NavigationContainer } from '@react-navigation/native';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import { RootStackParamList } from '../types/RootStackParamList';
 import LoginScreen from '../screen/auth/LoginScreen';
@@ -23,7 +21,7 @@ const Stack = createNativeStackNavigator<RootStackParamList>();
 
 const HomeStackNavigator = () => {
   const routeNameRef = useRef<string | null>(null);
-   const color = useThemeColor();
+  const color = useThemeColor();
 
   const theme = useAppSelector(state => state.theme.theme);
   const mobileTheme = useColorScheme();
@@ -65,7 +63,11 @@ const HomeStackNavigator = () => {
     >
       <StatusBar
         backgroundColor={color.header}
-        barStyle={theme === 'light' || mobileTheme === "light"  ? 'light-content' : 'dark-content'}
+        barStyle={
+          theme === 'light' || mobileTheme === 'light'
+            ? 'light-content'
+            : 'dark-content'
+        }
       />
       <Stack.Navigator initialRouteName={initialRouteName}>
         <Stack.Screen
