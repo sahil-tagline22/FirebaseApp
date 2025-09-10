@@ -1,4 +1,4 @@
-package com.firebaseapp
+package com.training_project
 
 import android.os.Bundle;
 import com.facebook.react.ReactActivity

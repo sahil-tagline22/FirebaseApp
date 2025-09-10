@@ -137,7 +137,7 @@ const ProductScreen = ({ navigation }: ProductScreenProps) => {
           data={products}
           keyExtractor={item => item.id.toString()}
           renderItem={renderItem}
-          contentContainerStyle={styles.flatListTopMargin}
+          // contentContainerStyle={styles.flatListTopMargin}
         />)
         :
         (<View style={styles.loaderContainer}>
@@ -158,7 +158,7 @@ const useStyle = () => {
       // width: w('100%'),
       // height: h('100%'),
       flex: 1,
-      paddingBottom: h('2%'),
+      paddingBottom: h('0.5%'),
     },
     renderItemContainer: {
       width: w('100%'),

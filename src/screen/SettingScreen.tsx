@@ -10,7 +10,8 @@ import { useThemeColor } from '../hooks/useThemeColor'
 import { Images } from '../assets/Images'
 import { launchImageLibrary } from "react-native-image-picker";
 import DatePicker from 'react-native-date-picker'
-
+import FastImage from "@d11/react-native-fast-image";
+import { Blurhash } from "react-native-blurhash";
 
 const languages = [
   {label: 'English', value : 'en'},
@@ -31,12 +32,14 @@ const SettingScreen = () => {
   
   const color = useThemeColor();
   const styles = useStyle();
-  
+
   const dispatch = useAppDispatch();
   const language = useAppSelector(state=>state.language.lan)
   console.log("language -->",language);
   const theme = useAppSelector(state=>state.theme.theme)
   console.log("theme -->",theme);
+
+  
   
   const [value,setValue] = useState<string | null>(language);
   useEffect(()=>{
@@ -67,6 +70,11 @@ const SettingScreen = () => {
    const [date, setDate] = useState(new Date())
   // const [open, setOpen] = useState(false)
 
+  //blurhash image 
+  const [loaded, setLoaded] = useState<boolean>(false);
+  console.log("🚀 ~ SettingScreen ~ loaded:", loaded)
+  const blurhash = "LEHV6nWB2yk8pyo0adR*.7kCMdnj";
+
   return (
     <View style={styles.container}>
 
@@ -77,10 +85,15 @@ const SettingScreen = () => {
       <TouchableOpacity onPress={onPress}>
         {
           filePath ? 
-          <Image source={{uri : filePath}} style={styles.selectedImage} />
+          <View>
+            {
+              !loaded && (<Blurhash blurhash={blurhash} style={styles.selectedImage}/> )
+            }
+            <FastImage source={{uri : filePath}} style={styles.selectedImage} onLoadEnd={()=>setLoaded(true)} />
+          </View>
           :
           <View style={styles.imageContainer}>
-            <Image source={Images.ImagePlaceHolder} style={styles.imagePlaceholder} />
+            <FastImage source={Images.ImagePlaceHolder} style={styles.imagePlaceholder} />
             <Text style={styles.imageText}>Select you Image</Text>
           </View>
         }
