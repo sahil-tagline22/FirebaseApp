@@ -20,5 +20,7 @@
   "user_chat": "User-Chat",
   "enter_value": "Type your message",
   "setting": "Setting",
-  "about": "About"
+  "about": "About",
+  "product": "Product",
+  "cart": "Cart"
 }

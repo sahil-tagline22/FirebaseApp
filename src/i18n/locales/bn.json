@@ -8,7 +8,7 @@
   "enter_password": "পাসওয়ার্ড লিখুন",
   "login_btn": "লগইন করুন",
   "dont_any_account": "আমার কোনো অ্যাকাউন্ট নেই",
-  "registration_message": "নিবন্ধন..!",
+  "registration_message": "রেজিস্ট্রেশন..!",
   "registration_title": "সাইন আপ করুন",
   "enter_userName": "নাম লিখুন",
   "re_enter_password": "পাসওয়ার্ড পুনরায় লিখুন",
@@ -20,5 +20,7 @@
   "user_chat": "ব্যবহারকারী-চ্যাট",
   "enter_value": "আপনার বার্তা টাইপ করুন",
   "setting": "সেটিং",
-  "about": "সম্পর্কে"
+  "about": "সম্পর্কে",
+  "product": "পণ্য",
+  "cart": "কার্ট"
 }

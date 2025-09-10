@@ -25,6 +25,7 @@ import Icon from 'react-native-vector-icons/MaterialIcons';
 import { NativeStackNavigationProp } from '@react-navigation/native-stack';
 import { RootStackParamList } from '../types/RootStackParamList';
 import { useProductCart } from '../store/useProductCart';
+import { useAppTranslation } from '../hooks/useAppTranslation';
 
 type Product = {
   category: string;
@@ -45,6 +46,7 @@ const ProductScreen = ({ navigation }: ProductScreenProps) => {
   const color = useThemeColor();
   const [products, SetProducts] = useState<Product[]>([]);
   const [loader, setLoader] = useState<boolean>(false);
+  const { t } = useAppTranslation();
 
   const addToCart = useProductCart(state => state.addToCart);
   const removeFromCart = useProductCart(state => state.removeFromCart);
@@ -80,14 +82,14 @@ const ProductScreen = ({ navigation }: ProductScreenProps) => {
   //header
   useLayoutEffect(() => {
     navigation.setOptions({
-      title: 'Products',
+      title: t('product'),
       headerRight: headerRight,
       headerTitleAlign: 'center',
       headerStyle: { backgroundColor: color.header },
       headerTitleStyle: { color: color.headerText },
       headerTintColor: color.headerText ,
     });
-  }, [navigation, headerRight, color.header, color.headerText]);
+  }, [navigation, headerRight, color.header, color.headerText,t]);
 
   //Product Item Render
   const renderItem = ({ item }: { item: Product }) => {

@@ -17,6 +17,7 @@ import {
   heightPercentageToDP as h,
 } from 'react-native-responsive-screen';
 import Icon from 'react-native-vector-icons/MaterialIcons';
+import { useAppTranslation } from '../hooks/useAppTranslation';
 
 interface CartNavigationProps {
   navigation: NativeStackNavigationProp<RootStackParamList, 'cart'>;
@@ -39,11 +40,12 @@ const CartScreen = ({ navigation }: CartNavigationProps) => {
   const styles = useStyle();
   const totalProduct = useProductCart(state => state.totalCartProduct);
   const increaseItemQuantity = useProductCart(state => state.increaseItemQuantity);
+  const { t } = useAppTranslation();
 
   // Header style create
   useLayoutEffect(() => {
     navigation.setOptions({
-      title: 'Cart',
+      title: t('cart'),
       headerTitleAlign: 'center',
       headerStyle: { backgroundColor: color.header },
       headerTitleStyle: { color: color.headerText },

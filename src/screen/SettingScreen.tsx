@@ -12,6 +12,7 @@ import { launchImageLibrary } from "react-native-image-picker";
 import DatePicker from 'react-native-date-picker'
 import FastImage from "@d11/react-native-fast-image";
 import { Blurhash } from "react-native-blurhash";
+import LottieView from 'lottie-react-native'
 
 const languages = [
   {label: 'English', value : 'en'},
@@ -29,7 +30,7 @@ const themes = [
 
 const SettingScreen = () => {
 
-  
+
   const color = useThemeColor();
   const styles = useStyle();
 
@@ -38,8 +39,6 @@ const SettingScreen = () => {
   console.log("language -->",language);
   const theme = useAppSelector(state=>state.theme.theme)
   console.log("theme -->",theme);
-
-  
   
   const [value,setValue] = useState<string | null>(language);
   useEffect(()=>{
@@ -49,10 +48,10 @@ const SettingScreen = () => {
       i18next.changeLanguage(language);
     }
   },[language])
-
-  //permission to user to access camera
+  
+  //permission to user to access photo-gallery
   const [filePath, setFilePath] = useState<string>();
-
+  
   const onPress = () => {
     const options = {
       mediaType: 'image',
@@ -65,40 +64,29 @@ const SettingScreen = () => {
       setFilePath(item.assets?.[0]?.uri)
     });
   };
-
+  
   //date picker 
-   const [date, setDate] = useState(new Date())
-  // const [open, setOpen] = useState(false)
-
+  const [date, setDate] = useState(new Date())
+  
   //blurhash image 
-  const [loaded, setLoaded] = useState<boolean>(false);
-  console.log("🚀 ~ SettingScreen ~ loaded:", loaded)
-  const blurhash = "LEHV6nWB2yk8pyo0adR*.7kCMdnj";
-
+  const [loaded, setLoaded] = useState<boolean>(false);  const blurhash = "LEHV6nWB2yk8pyo0adR*.7kCMdnj";
+  const image = "https://i.pinimg.com/736x/fb/fd/c3/fbfdc3c9726bb72ddd547779e3aa2fa7.jpg";
+  
   return (
     <View style={styles.container}>
 
+      {/* lottie implement */}
+      <View style={{flexDirection:"row"}}>
+        <LottieView source={Images.locationMap} autoPlay loop style={{height:50,width:50}}/>
+        <LottieView source={Images.location} autoPlay loop style={{height:50,width:50}}/> 
+      </View>
+
+      {/* date implement */}
       <View>
          <DatePicker date={date} onDateChange={setDate} />
       </View>
 
-      <TouchableOpacity onPress={onPress}>
-        {
-          filePath ? 
-          <View>
-            {
-              !loaded && (<Blurhash blurhash={blurhash} style={styles.selectedImage}/> )
-            }
-            <FastImage source={{uri : filePath}} style={styles.selectedImage} onLoadEnd={()=>setLoaded(true)} />
-          </View>
-          :
-          <View style={styles.imageContainer}>
-            <FastImage source={Images.ImagePlaceHolder} style={styles.imagePlaceholder} />
-            <Text style={styles.imageText}>Select you Image</Text>
-          </View>
-        }
-      </TouchableOpacity>
-
+      {/* theme dropdown  */}
       <View style={styles.ToggleContainer}>
         <Dropdown
           style={styles.dropdownContainer}
@@ -113,6 +101,7 @@ const SettingScreen = () => {
         />
       </View>
 
+      {/* Language dropdown  */}
       <Dropdown
         style={styles.dropdownContainer}
         data={languages}
@@ -125,7 +114,29 @@ const SettingScreen = () => {
         valueField={'value'}
         selectedTextStyle={{color:color.text}}
       />
-      {/* <Text style={styles.text}>{value}</Text> */}
+
+      {/* image picker */}
+      <TouchableOpacity onPress={onPress}>
+        {
+          filePath ? 
+          <View>
+            <FastImage source={{uri : filePath}} style={styles.selectedImage} />
+          </View>
+          :
+          <View style={styles.imageContainer}>
+            <FastImage source={Images.ImagePlaceHolder} style={styles.imagePlaceholder} />
+            <Text style={styles.imageText}>Select you Image</Text>
+          </View>
+        }
+      </TouchableOpacity>
+
+      {/* blurhash image loader */}
+      <View style={styles.selectedImage}>
+        {
+          !loaded && (<Blurhash blurhash={blurhash} style={styles.selectedImage}/> )
+        }
+        <Image source={{uri:image}} style={styles.selectedImage} onLoadEnd={()=>setLoaded(true)}/>
+      </View>
 
     </View>
   )
@@ -149,7 +160,8 @@ const useStyle = () => {
       borderWidth:1,
       paddingHorizontal:8,
       borderRadius:8,
-      backgroundColor:color.backGroundColor
+      backgroundColor:color.backGroundColor,
+      marginBottom : 10
     },
     ToggleContainer:{
       marginBottom:30
