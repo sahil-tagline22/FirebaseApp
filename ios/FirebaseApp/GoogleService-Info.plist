@@ -3,9 +3,9 @@
 <plist version="1.0">
 <dict>
 	<key>CLIENT_ID</key>
-	<string>742734159624-l1su627sbrs7q7qm5ubj9a4kuc4q5qgm.apps.googleusercontent.com</string>
+	<string>742734159624-1k9atc4vdjrv4g670q1kgr44slu6oc9m.apps.googleusercontent.com</string>
 	<key>REVERSED_CLIENT_ID</key>
-	<string>com.googleusercontent.apps.742734159624-l1su627sbrs7q7qm5ubj9a4kuc4q5qgm</string>
+	<string>com.googleusercontent.apps.742734159624-1k9atc4vdjrv4g670q1kgr44slu6oc9m</string>
 	<key>ANDROID_CLIENT_ID</key>
 	<string>742734159624-5go4jio72qt7m1mtne8mhhl46gsvns23.apps.googleusercontent.com</string>
 	<key>API_KEY</key>
@@ -15,7 +15,7 @@
 	<key>PLIST_VERSION</key>
 	<string>1</string>
 	<key>BUNDLE_ID</key>
-	<string>com.firebaseapp</string>
+	<string>com.training-project</string>
 	<key>PROJECT_ID</key>
 	<string>fir-app-5a12b</string>
 	<key>STORAGE_BUCKET</key>
@@ -31,6 +31,6 @@
 	<key>IS_SIGNIN_ENABLED</key>
 	<true></true>
 	<key>GOOGLE_APP_ID</key>
-	<string>1:742734159624:ios:7ffc7b8a44d0dfeff616bd</string>
+	<string>1:742734159624:ios:f52b13006da8dc5df616bd</string>
 </dict>
 </plist>
