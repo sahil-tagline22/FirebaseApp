@@ -39,6 +39,9 @@ import { onMicrosoftButtonPress } from '../../api/requests/socials/MicrosiftAuth
 import { authorize } from 'react-native-app-auth';
 import auth from '@react-native-firebase/auth';
 
+import { AppleAuthProvider, signInWithCredential } from '@react-native-firebase/auth';
+import  { appleAuth } from '@invertase/react-native-apple-authentication';
+
 interface LoginScreenProps {
   navigation: NativeStackNavigationProp<RootStackParamList, 'login'>;
 }
@@ -187,6 +190,41 @@ const LoginScreen = ({ navigation }: LoginScreenProps) => {
     },
   };
 
+  //Apple login
+  const onAppleButtonPress = async()=> {
+    const isSupported = appleAuth.isSupported;
+    if(!isSupported) {
+      Alert.alert("Apple Sign-In is not supported on this device");
+      return;
+    }
+  // Start the sign-in request
+  try {
+    
+    const appleAuthRequestResponse = await appleAuth.performRequest({
+      requestedOperation: appleAuth.Operation.LOGIN,
+      requestedScopes: [appleAuth.Scope.FULL_NAME, appleAuth.Scope.EMAIL],
+    });
+    console.log("🚀 ~ onAppleButtonPress ~ appleAuthRequestResponse:", appleAuthRequestResponse)
+
+    // Ensure Apple returned a user identityToken
+    if (!appleAuthRequestResponse.identityToken) {
+      throw new Error('Apple Sign-In failed - no identify token returned');
+    }
+
+    // Create a Firebase credential from the response
+    const { identityToken, nonce } = appleAuthRequestResponse;
+    const appleCredential = AppleAuthProvider.credential(identityToken, nonce);
+    console.log("🚀 ~ onAppleButtonPress ~ appleCredential:", appleCredential)
+
+    // Sign the user in with the credential
+    const user = await signInWithCredential(getAuth(), appleCredential);
+    console.log("🚀 ~ onAppleButtonPress ~ user:", user.user);
+    } catch (error) {
+      console.log("🚀 ~ onAppleButtonPress ~ error:", error)
+    }
+    
+  }
+
   async function githubLogin() {
     try {
       // 1. Get GitHub OAuth token
@@ -285,7 +323,10 @@ const LoginScreen = ({ navigation }: LoginScreenProps) => {
               <Text style={styles.googleLoginBtnText}>G</Text>
             </TouchableOpacity>
 
-            <TouchableOpacity style={styles.googleBtnContainer}>
+            <TouchableOpacity 
+            style={styles.googleBtnContainer}
+            onPress={onAppleButtonPress}
+            >
               <Text style={styles.googleLoginBtnText}>A</Text>
             </TouchableOpacity>
           </View>

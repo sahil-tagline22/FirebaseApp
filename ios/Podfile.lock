@@ -4088,6 +4088,8 @@ PODS:
     - React-utils (= 0.80.2)
     - SocketRocket
   - RecaptchaInterop (101.0.0)
+  - RNAppleAuthentication (2.4.1):
+    - React-Core
   - RNCAsyncStorage (1.24.0):
     - boost
     - DoubleConversion
@@ -4676,6 +4678,7 @@ DEPENDENCIES:
   - ReactAppDependencyProvider (from `build/generated/ios`)
   - ReactCodegen (from `build/generated/ios`)
   - ReactCommon/turbomodule/core (from `../node_modules/react-native/ReactCommon`)
+  - "RNAppleAuthentication (from `../node_modules/@invertase/react-native-apple-authentication`)"
   - "RNCAsyncStorage (from `../node_modules/@react-native-async-storage/async-storage`)"
   - "RNFastImage (from `../node_modules/@d11/react-native-fast-image`)"
   - "RNFBAnalytics (from `../node_modules/@react-native-firebase/analytics`)"
@@ -4927,6 +4930,8 @@ EXTERNAL SOURCES:
     :path: build/generated/ios
   ReactCommon:
     :path: "../node_modules/react-native/ReactCommon"
+  RNAppleAuthentication:
+    :path: "../node_modules/@invertase/react-native-apple-authentication"
   RNCAsyncStorage:
     :path: "../node_modules/@react-native-async-storage/async-storage"
   RNFastImage:
@@ -5101,6 +5106,7 @@ SPEC CHECKSUMS:
   ReactCodegen: 4928682e20747464165effacc170019a18da953c
   ReactCommon: ec1cdf708729338070f8c4ad746768a782fd9eb1
   RecaptchaInterop: 11e0b637842dfb48308d242afc3f448062325aba
+  RNAppleAuthentication: c3dddf5918126c9aae85dc2e2ce9fb87835e9e04
   RNCAsyncStorage: b386ecff869f4a7f6d7d7f24fccb621274da7bb3
   RNFastImage: e37c58efcfdf93af8ef3bdd69a41078a04a71e2d
   RNFBAnalytics: 1a27f05d7ead3197733dd507f2c6629fcf6ba9b5

@@ -1,6 +1,7 @@
 import {
   FlatList,
   Image,
+  SafeAreaView,
   StyleSheet,
   Text,
   TouchableOpacity,
@@ -18,6 +19,7 @@ import {
 } from 'react-native-responsive-screen';
 import Icon from 'react-native-vector-icons/MaterialIcons';
 import { useAppTranslation } from '../hooks/useAppTranslation';
+import { SafeAreaProvider } from 'react-native-safe-area-context';
 
 interface CartNavigationProps {
   navigation: NativeStackNavigationProp<RootStackParamList, 'cart'>;
@@ -51,7 +53,7 @@ const CartScreen = ({ navigation }: CartNavigationProps) => {
       headerTitleStyle: { color: color.headerText },
       headerTintColor: color.headerText,
     });
-  }, [color.header, color.headerText, navigation]);
+  }, [color.header, color.headerText, navigation,t]);
 
   // render item list
   const renderItem = ({ item }: { item: Product }) => {

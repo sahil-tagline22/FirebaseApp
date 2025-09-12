@@ -1,50 +1,39 @@
-import {
-  FacebookAuthProvider,
-  getAuth,
-  signInWithCredential,
-} from '@react-native-firebase/auth';
+import auth, { FacebookAuthProvider } from '@react-native-firebase/auth';
+import { LoginManager, AccessToken } from 'react-native-fbsdk-next';
 import { Alert } from 'react-native';
-import { AccessToken, LoginManager } from 'react-native-fbsdk-next';
 
 export const onFacebookButtonPress = async () => {
   try {
-    // 🔑 This will remove any cached account
+    // 🔑 Ensure any cached FB session is cleared
     await LoginManager.logOut();
 
+    // 🔑 Start Facebook Login
     const result = await LoginManager.logInWithPermissions([
       'public_profile',
       'email',
     ]);
-    console.log('🚀 ~ onFacebookButtonPress ~ result:', result);
 
     if (result.isCancelled) {
       throw 'User cancelled the login process';
     }
 
-    // Once signed in, get the users AccessToken
+    // 🔑 Get the Access Token
     const data = await AccessToken.getCurrentAccessToken();
-    console.log('🚀 ~ onFacebookButtonPress ~ data:', data);
-
     if (!data) {
-      throw 'Something went wrong obtaining access token';
+      throw 'Something went wrong obtaining the access token';
     }
 
-    // Create a Firebase credential with the AccessToken
-    const facebookCredential = FacebookAuthProvider.credential(
-      data.accessToken,
-    );
-    console.log(
-      '🚀 ~ onFacebookButtonPress ~ facebookCredential:',
-      facebookCredential,
-    );
+    // 🔑 Create a Firebase credential with the token
+    const facebookCredential = FacebookAuthProvider.credential(data.accessToken);
 
-    // Sign-in the user with the credential
-    const user = await signInWithCredential(getAuth(), facebookCredential);
-    console.log("🚀 ~ onFacebookButtonPress ~ user:", user)
+    // 🔑 Sign-in the user with Firebase
+    const userCredential = await auth().signInWithCredential(facebookCredential);
 
-    return user;
+    console.log('✅ Facebook login success:', userCredential.user);
+
+    return userCredential;
   } catch (error) {
-    console.log('🚀 ~ onFacebookButtonPress ~ error:', error);
+    console.log('❌ Facebook login error:', error);
     Alert.alert('Facebook Login Failed', 'Please try again.');
   }
 };

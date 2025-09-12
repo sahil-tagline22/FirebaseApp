@@ -3,6 +3,7 @@ import React, { useState, useEffect } from 'react';
 import {
   Keyboard,
   KeyboardAvoidingView,
+  SafeAreaView,
   StyleSheet,
   TouchableOpacity,
   TouchableWithoutFeedback,
@@ -31,6 +32,7 @@ import { useThemeColor } from '../hooks/useThemeColor';
 import { useAppSelector } from '../redux/Store';
 import analytics from '@react-native-firebase/analytics';
 import crashlytics from '@react-native-firebase/crashlytics';
+import { SafeAreaProvider } from 'react-native-safe-area-context';
 
 interface ChatScreenProps {
   navigation: NativeStackNavigationProp<RootStackParamList, 'chat'>;
@@ -105,9 +107,11 @@ const ChatScreen = ({ navigation }: ChatScreenProps) => {
   };
 
   return (
+
     <KeyboardAvoidingView style={styles.KeyboardAvoidingView}>
       <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
         <View style={styles.container}>
+          <SafeAreaView>
           <View style={styles.header}>
             <TouchableOpacity
               style={styles.backIcon}
@@ -117,6 +121,7 @@ const ChatScreen = ({ navigation }: ChatScreenProps) => {
             </TouchableOpacity>
             <Text style={styles.textTitle}>Chat</Text>
           </View>
+          </SafeAreaView>
           <GiftedChat
             placeholder={t('enter_value')}
             messages={messages}
@@ -129,6 +134,7 @@ const ChatScreen = ({ navigation }: ChatScreenProps) => {
         </View>
       </TouchableWithoutFeedback>
     </KeyboardAvoidingView>
+
   );
 };
 

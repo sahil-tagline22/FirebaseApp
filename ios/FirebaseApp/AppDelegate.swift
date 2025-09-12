@@ -19,7 +19,6 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]? = nil
   ) -> Bool {
 
-    
     ApplicationDelegate.shared.application(
       application,
       didFinishLaunchingWithOptions: launchOptions
@@ -27,10 +26,8 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 
     FirebaseApp.configure()
 
-   
     GMSServices.provideAPIKey("AIzaSyDV7i75OJX6fv8m2TCa2q3JsFw-lSCSgNg")
 
-    
     let delegate = ReactNativeDelegate()
     let factory = RCTReactNativeFactory(delegate: delegate)
     delegate.dependencyProvider = RCTAppDependencyProvider()
@@ -50,10 +47,18 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
   }
 
   @available(iOS 9.0, *)
-  func application(_ app: UIApplication, open url: URL,
-                   options: [UIApplication.OpenURLOptionsKey : Any] = [:]) -> Bool {
+  func application(
+    _ app: UIApplication,
+    open url: URL,
+    options: [UIApplication.OpenURLOptionsKey : Any] = [:]
+  ) -> Bool {
 
-    let handledByFB = ApplicationDelegate.shared.application(app, open: url, options: options)
+    let handledByFB = ApplicationDelegate.shared.application(
+      app,
+      open: url,
+      options: options
+    )
+
     let handledByGoogle = GIDSignIn.sharedInstance.handle(url)
 
     return handledByFB || handledByGoogle
