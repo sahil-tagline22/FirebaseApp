@@ -11,6 +11,7 @@ import { paginationApiCall } from '../api/requests/paginationRequests';
 import { Text } from 'react-native-gesture-handler';
 import analytics from '@react-native-firebase/analytics';
 import crashlytics from '@react-native-firebase/crashlytics';
+import { heightScale, moderateScale, widthScale } from '../hooks/useDimensions';
 
 type Item = {
   body: string;
@@ -135,15 +136,15 @@ const useStyle = () => {
     },
     itemContainer: {
       backgroundColor: color.backGroundColor,
-      marginHorizontal: 10,
-      marginVertical: 10,
+      marginHorizontal: widthScale(10),
+      marginVertical: heightScale(10),
       borderColor: color.borderColor,
-      borderWidth: 1,
-      paddingVertical: 10,
-      paddingHorizontal: 10,
+      borderWidth: moderateScale(2),
+      paddingVertical: heightScale(10),
+      paddingHorizontal: widthScale(10),
     },
     itemText: {
-      fontSize: 20,
+      fontSize: moderateScale(25),
       color: color.text,
       textAlign: 'center',
     },
@@ -154,7 +155,7 @@ const useStyle = () => {
     loadingContainer: {
       justifyContent: 'center',
       alignItems: 'center',
-      marginHorizontal: 10,
+      marginHorizontal: widthScale(10),
     },
   });
 };

@@ -1,4 +1,4 @@
-import { Image, StyleSheet, Text, TouchableOpacity, View } from 'react-native'
+import { Image, ScrollView, StyleSheet, Text, TouchableOpacity, View } from 'react-native'
 import React, { useEffect, useState } from 'react'
 import {Dropdown} from 'react-native-element-dropdown'
 import i18next from 'i18next'
@@ -13,6 +13,7 @@ import DatePicker from 'react-native-date-picker'
 import FastImage from "@d11/react-native-fast-image";
 import { Blurhash } from "react-native-blurhash";
 import LottieView from 'lottie-react-native'
+import { heightScale, moderateScale, widthScale } from '../hooks/useDimensions'
 
 const languages = [
   {label: 'English', value : 'en'},
@@ -73,12 +74,13 @@ const SettingScreen = () => {
   const image = "https://i.pinimg.com/736x/fb/fd/c3/fbfdc3c9726bb72ddd547779e3aa2fa7.jpg";
   
   return (
+    <ScrollView>
     <View style={styles.container}>
 
       {/* lottie implement */}
-      <View style={{flexDirection:"row"}}>
-        <LottieView source={Images.locationMap} autoPlay loop style={{height:50,width:50}}/>
-        <LottieView source={Images.location} autoPlay loop style={{height:50,width:50}}/> 
+      <View style={styles.lottieContainer}>
+        <LottieView source={Images.locationMap} autoPlay loop style={styles.lottieItem}/>
+        <LottieView source={Images.location} autoPlay loop style={styles.lottieItem}/> 
       </View>
 
       {/* date implement */}
@@ -103,7 +105,7 @@ const SettingScreen = () => {
 
       {/* Language dropdown  */}
       <Dropdown
-        style={styles.dropdownContainer}
+        style={[styles.dropdownContainer,{marginBottom:heightScale(30)}]}
         data={languages}
         value={value}
         onChange={item => {
@@ -139,6 +141,7 @@ const SettingScreen = () => {
       </View>
 
     </View>
+    </ScrollView>
   )
 }
 
@@ -154,48 +157,52 @@ const useStyle = () => {
         backgroundColor:color.backGroundColor
     },
     dropdownContainer:{
-      height:30,
-      width:300,
+      height:heightScale(40),
+      width:widthScale(300),
       borderColor:color.borderColor,
-      borderWidth:1,
-      paddingHorizontal:8,
-      borderRadius:8,
+      borderWidth:moderateScale(1),
+      paddingHorizontal:widthScale(10),
+      borderRadius:moderateScale(8),
       backgroundColor:color.backGroundColor,
-      marginBottom : 10
+      // marginBottom : 10
     },
     ToggleContainer:{
-      marginBottom:30
+      marginBottom:20
     },
     text : {
       color : color.text
     },
     imageContainer:{
       backgroundColor:"white",
-      height:150,
-      width:250,
-      marginBottom:30,
+      height:heightScale(200),
+      width:widthScale(300),
+      marginBottom:heightScale(30),
       justifyContent:"center",
       alignItems:"center",
-      borderRadius:10,
-      // borderWidth:1,
+      borderRadius:moderateScale(10),
       elevation:10,
-      shadowColor:"blue"
     },
     imagePlaceholder : {
-      height:50,
-      width:50
+      height:heightScale(50),
+      width:widthScale(50),
     },
     imageText : {
-      fontSize:15,
+      fontSize:moderateScale(15),
       fontWeight:'700'
     },
     selectedImage:{
-      height:150,
-      width:250,
-      marginBottom:30,
-      borderRadius:10,
+      height:heightScale(200),
+      width:widthScale(300),
+      marginBottom:heightScale(30),
+      borderRadius:moderateScale(10),
       elevation:10,
-      shadowColor:"blue",
+    },
+    lottieContainer : {
+      flexDirection:"row",
+    },
+    lottieItem:{
+      height:50,
+      width:50
     }
   })
 }

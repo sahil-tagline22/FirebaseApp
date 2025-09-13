@@ -1,7 +1,7 @@
 import { StyleSheet, Text, TextInput, View } from 'react-native'
 import React from 'react'
 import { colors } from '../../theme/Colors'
-import {widthPercentageToDP as w, heightPercentageToDP as h} from 'react-native-responsive-screen';
+import { heightScale, moderateScale, widthScale } from '../../hooks/useDimensions';
 
 interface inputTextProps {
   placeHolder : string,
@@ -31,19 +31,17 @@ export default InputText
 const styles = StyleSheet.create({
   textInput: {
     backgroundColor: '#fff',
-    marginHorizontal: w('4%'),
-    fontSize: h('2.3%'),
-    paddingLeft: w('2%'),
-    borderRadius: w('3%'),
-    marginTop: w('6%'),
-    // marginBottom: 5,
-    height:h('6%'),
-    borderWidth:w('0.2%')
+    fontSize: moderateScale(18),
+    paddingLeft: widthScale(10),
+    borderRadius: moderateScale(10),
+    marginTop: widthScale(15),
+    height:heightScale(50),
+    borderWidth:moderateScale(1)
   },
-  errorText:{
-    fontSize:h('2%'),
-    color:colors.text.danger,
-    // marginBottom:-5,
-    marginLeft:w('6%')
-  }
+  errorText: {
+    fontSize: heightScale(15),
+    color: colors.text.danger,
+    marginTop: heightScale(5), 
+    marginLeft: widthScale(8),
+  },
 })

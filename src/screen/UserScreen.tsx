@@ -11,6 +11,7 @@ import {getAuth} from '@react-native-firebase/auth'
 import { useThemeColor } from '../hooks/useThemeColor'
 import analytics from '@react-native-firebase/analytics';
 import crashlytics from '@react-native-firebase/crashlytics';
+import { heightScale, moderateScale, widthScale } from '../hooks/useDimensions'
 
 interface UserScreenProps {
     navigation : NativeStackNavigationProp<RootStackParamList,'userScreen'> 
@@ -96,38 +97,38 @@ const useStyle = ()=>{
         },
         userListContainer:{
             backgroundColor:colors.screen,
-            height: 70,
-            borderRadius:5,
-            marginHorizontal:10,
-            marginTop:20,
+            height: heightScale(80),
+            borderRadius:moderateScale(10),
+            marginHorizontal:widthScale(10),
+            marginVertical:heightScale(12),
             flexDirection:"row",
-            gap:20,
+            gap:widthScale(20),
+            elevation:moderateScale(5),
             shadowColor:"#000",
-            elevation:10,
+            alignItems:"center",
         },
         imageContainer:{
             backgroundColor:colors.background,
-            height:60,
-            width:60,
-            borderRadius:30,
+            height:heightScale(70),
+            width:widthScale(70),
+            borderRadius:moderateScale(30),
             alignItems:"center",
             justifyContent:"center",
-            marginTop:5,
-            marginLeft:10
+            marginLeft:widthScale(10),
         },
         image:{
-            height:50,
-            width:50,
+            height:heightScale(50),
+            width:widthScale(50),
         },
         nameEmailContainer:{
             justifyContent:"center",
         },
         userValue:{
-            fontSize:20
+            fontSize:moderateScale(20)
         },
         chatIcon:{
-            width:50,
-            height:50,
+            width:widthScale(50),
+            height:heightScale(50),
             position:"absolute",
             justifyContent:"center",
             alignItems:"center",
