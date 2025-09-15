@@ -183,6 +183,7 @@ const UserScreen = ({ navigation }: UserScreenProps) => {
 
   return (
     <View style={styles.container}>
+      <View style={{flex:5}}>
       <SafeAreaView>
         <FlatList
           data={users}
@@ -211,6 +212,7 @@ const UserScreen = ({ navigation }: UserScreenProps) => {
           )}
         />
       </SafeAreaView>
+      </View>
       <View style={styles.adMobView}>
         <Button title="Interstitial" onPress={showInterstitialAd} />
         <Button title="Rewarded" onPress={showRewardedAd} />
@@ -270,7 +272,7 @@ const useStyle = () => {
       bottom: 10,
     },
     adMobView: {
-      flex: 1,
+      flex: 0.2,
       justifyContent: 'flex-end',
     },
   });
