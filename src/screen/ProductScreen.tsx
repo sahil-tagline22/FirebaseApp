@@ -155,7 +155,7 @@ const useStyle = () => {
     container: {
       backgroundColor: colors.screen,
       flex: 1,
-      paddingBottom: heightScale(10),
+      // paddingBottom: heightScale(5),
     },
     renderItemContainer: {
       width: widthScale(390),

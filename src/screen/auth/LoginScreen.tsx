@@ -312,7 +312,7 @@ const useStyle = () => {
       alignSelf: 'center',
       paddingVertical: heightScale(20),
       paddingHorizontal: widthScale(20),
-      marginTop: heightScale(200),
+      marginVertical: heightScale(250),
     },
     title: {
       textAlign: 'center',
