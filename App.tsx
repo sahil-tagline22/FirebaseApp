@@ -1,4 +1,4 @@
-import { persister, store} from './src/redux/Store';
+import { persister, store } from './src/redux/Store';
 import { Provider } from 'react-redux';
 import { PersistGate } from 'redux-persist/integration/react';
 import HomeStackNavigator from './src/navigation/HomeStackNavigator';
@@ -10,18 +10,24 @@ import { Alert } from 'react-native';
 import { SafeAreaProvider } from 'react-native-safe-area-context';
 // import MapScreen from './src/screen/MapScreen';
 // import MapBoxScreen from './src/screen/MapBoxScreen';
-
+import mobileAds from 'react-native-google-mobile-ads';
 
 const App = () => {
-
   useEffect(() => {
     SplashScreen.hide();
   }, []);
 
   // FCM token get and user permission get
   FcmToken();
-  
-  // Foreground massage send to user 
+
+  // Initialize AdMob
+  mobileAds()
+    .initialize()
+    .then(() => {
+      console.log('AdMob initialized');
+    });
+
+  // Foreground massage send to user
   useEffect(() => {
     const unsubscribe = messaging().onMessage(async remoteMessage => {
       Alert.alert('A new FCM message arrived!', JSON.stringify(remoteMessage));
@@ -29,7 +35,7 @@ const App = () => {
 
     return unsubscribe;
   }, []);
-  
+
   return (
     <Provider store={store}>
       <PersistGate persistor={persister}>
