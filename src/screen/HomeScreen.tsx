@@ -21,6 +21,13 @@ import analytics from '@react-native-firebase/analytics';
 import crashlytics from '@react-native-firebase/crashlytics';
 import { useAppSelector } from '../redux/Store';
 import { Scale } from '../hooks/useScale';
+import {
+  BannerAd,
+  BannerAdSize,
+  TestIds,
+} from 'react-native-google-mobile-ads';
+
+const adUnitId = __DEV__ ? TestIds.ADAPTIVE_BANNER : 'ca-app-pub-3940256099942544/6300978111';
 
 export type ApiData = {
   id: string;
@@ -29,7 +36,7 @@ export type ApiData = {
   dueDate: string;
   createdAt?: string;
   updatedAt?: string;
-  status:'pending' | 'success' ;
+  status: 'pending' | 'success';
 };
 
 type NewTaskData = {
@@ -50,8 +57,8 @@ const HomeScreen = () => {
   const [selectedId, setSelectedId] = useState<string>('');
   const [editTodo, setEditTodo] = useState<boolean>(false);
 
-    const user = useAppSelector(state => state.auth.user)
-    console.log("🚀 ~ HomeScreen ~ user:", user)
+  const user = useAppSelector(state => state.auth.user);
+  console.log('🚀 ~ HomeScreen ~ user:', user);
 
   //analytics
   useEffect(() => {
@@ -94,7 +101,7 @@ const HomeScreen = () => {
   };
 
   //delete data
-  const DeleteData = async (id: string):Promise<void> => {
+  const DeleteData = async (id: string): Promise<void> => {
     try {
       const response: { success: boolean; message: string } = await DeleteTask(
         id,
@@ -109,9 +116,9 @@ const HomeScreen = () => {
   };
 
   //get particular data
-  const GetDataById = async (id: string):Promise<void> => {
+  const GetDataById = async (id: string): Promise<void> => {
     try {
-      const response:{task : ApiData} = await GetTaskById(id);
+      const response: { task: ApiData } = await GetTaskById(id);
       console.log('🚀 ~ GetDataById ~ response:', response.task);
       setTitle(response.task.title);
       setDiscretion(response.task.description);
@@ -159,16 +166,16 @@ const HomeScreen = () => {
   }, [GetData]);
 
   //todo status update
-  const handleClick = async (item:ApiData):Promise<void> => {
-    const updateData:NewTaskData = {
+  const handleClick = async (item: ApiData): Promise<void> => {
+    const updateData: NewTaskData = {
       title: item.title,
       description: item.description,
       status: 'success',
       dueDate: new Date(),
     };
     try {
-      const response:{task : ApiData} = await PutTask(item.id, updateData);
-      console.log("🚀 ~ handleClick ~ response:", response)
+      const response: { task: ApiData } = await PutTask(item.id, updateData);
+      console.log('🚀 ~ handleClick ~ response:', response);
       if (response.task) {
         const updatedTodo = todo.map<ApiData>(allTodo =>
           allTodo.id === item.id ? { ...allTodo, status: 'success' } : allTodo,
@@ -180,9 +187,8 @@ const HomeScreen = () => {
     }
   };
 
-
   // display all todo
-  const renderItemList = ({ item } : {item : ApiData}) => (
+  const renderItemList = ({ item }: { item: ApiData }) => (
     <View style={styles.listContainer}>
       <View style={styles.checkOurUncheckContainer}>
         {item.status === 'pending' ? (
@@ -255,6 +261,14 @@ const HomeScreen = () => {
         keyExtractor={item => item.id}
         renderItem={renderItemList}
       />
+
+      <BannerAd
+        unitId={adUnitId} // 👈 Use real Ad Unit ID in production
+        size={BannerAdSize.ANCHORED_ADAPTIVE_BANNER}
+        requestOptions={{
+          networkExtras:{collapsible:'bottom'}
+        }}
+      />
     </View>
   );
 };
@@ -268,6 +282,8 @@ const useStyle = () => {
     container: {
       flex: 1,
       backgroundColor: color.backGroundColor,
+      justifyContent: 'flex-end',
+      // alignItems:'center'
     },
     inputContainer: {
       // flex:1,
@@ -335,8 +351,8 @@ const useStyle = () => {
       flexDirection: 'row',
       justifyContent: 'flex-end',
     },
-    checkOurUncheckContainer:{
-      marginRight: Scale(10)
-    }
+    checkOurUncheckContainer: {
+      marginRight: Scale(10),
+    },
   });
 };
