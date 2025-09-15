@@ -51,7 +51,7 @@ const CartScreen = ({ navigation }: CartNavigationProps) => {
       headerTitleStyle: { color: color.headerText },
       headerTintColor: color.headerText,
     });
-  }, [color.header, color.headerText, navigation]);
+  }, [color.header, color.headerText, navigation,t]);
 
   // render item list
   const renderItem = ({ item }: { item: Product }) => {

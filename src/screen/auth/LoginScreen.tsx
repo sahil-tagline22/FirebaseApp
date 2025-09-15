@@ -26,18 +26,14 @@ import {
   setRefreshToken,
 } from '../../redux/slice/AccessAndRefreshSlice';
 import analytics from '@react-native-firebase/analytics';
-import {
-  widthPercentageToDP as w,
-  heightPercentageToDP as h,
-} from 'react-native-responsive-screen';
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
 import { useThemeColor } from '../../hooks/useThemeColor';
-import { RFPercentage } from 'react-native-responsive-fontsize';
 import { OnGoogleButtonPress } from '../../api/requests/socials/GoogleAuthentication';
 import { onFacebookButtonPress } from '../../api/requests/socials/FacebookAuthentication';
 import { onMicrosoftButtonPress } from '../../api/requests/socials/MicrosiftAuthentication';
 import { authorize } from 'react-native-app-auth';
 import auth from '@react-native-firebase/auth';
+import { heightScale, moderateScale, widthScale } from '../../hooks/useDimensions';
 
 interface LoginScreenProps {
   navigation: NativeStackNavigationProp<RootStackParamList, 'login'>;
@@ -306,54 +302,54 @@ const useStyle = () => {
   const color = useThemeColor();
   return StyleSheet.create({
     container: {
-      width: w('100%'),
-      height: h('100%'),
+      flex: 1,
       backgroundColor: colors.screen,
     },
     loginContainer: {
       backgroundColor: color.backGroundColor,
-      width: w('90%'),
-      height: h('50%'),
-      borderRadius: w('10%'),
-      marginVertical: h('25%'),
+      width: widthScale(350),
+      borderRadius: moderateScale(20),
       alignSelf: 'center',
+      paddingVertical: heightScale(20),
+      paddingHorizontal: widthScale(20),
+      marginVertical: heightScale(250),
     },
     title: {
       textAlign: 'center',
-      fontSize: RFPercentage(5),
-      marginTop: h('1%'),
+      fontSize: moderateScale(40),
+      // marginTop: heightScale(1),
       fontWeight: '700',
-      marginBottom: w('5%'),
+      // marginBottom: w('5%'),
     },
     loginBtn: {
       backgroundColor: colors.button.button,
-      height: h('5%'),
-      width: w('35%'),
+      height: heightScale(50),
+      width: widthScale(150),
       alignSelf: 'center',
-      marginTop: h('3%'),
-      borderRadius: w('10%'),
+      marginTop: heightScale(25),
+      borderRadius: moderateScale(10),
       justifyContent: 'center',
       alignItems: 'center',
     },
     btnText: {
-      fontSize: RFPercentage(2.5),
+      fontSize: moderateScale(20),
       color: colors.text.inverted,
     },
     footer: {
       flexDirection: 'row',
-      gap: h('0.5%'),
+      gap: widthScale(5),
       justifyContent: 'center',
-      marginTop: h('2%'),
+      marginTop: heightScale(15),
     },
     textLine: {
-      fontSize: RFPercentage(1.9),
+      fontSize: moderateScale(15),
       fontWeight: '500',
     },
     textLogin: {
-      fontSize: RFPercentage(1.9),
+      fontSize: moderateScale(15),
       fontWeight: '500',
       color: colors.text.blue,
-      borderBottomWidth: 1,
+      borderBottomWidth: moderateScale(1),
       borderBottomColor: colors.text.blue,
     },
     socialContainer: {
@@ -362,19 +358,19 @@ const useStyle = () => {
     },
     googleBtnContainer: {
       backgroundColor: colors.button.button,
-      height: h('4%'),
-      width: w('10%'),
-      borderRadius: w('1%'),
-      // marginLeft: w('7%'),
-      marginTop: h('2%'),
+      height: heightScale(40),
+      width: widthScale(40),
+      borderRadius: moderateScale(10),
+      marginTop: heightScale(20),
       justifyContent: 'center',
       alignItems: 'center',
     },
     googleLoginBtnText: {
-      fontSize: h('1.8%'),
+      fontSize: moderateScale(20),
       color: colors.text.inverted,
     },
     loaderOverlay: {
+      flex: 1,
       position: 'absolute',
       top: 0,
       left: 0,

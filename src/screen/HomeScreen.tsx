@@ -20,7 +20,7 @@ import Icon from 'react-native-vector-icons/MaterialIcons';
 import analytics from '@react-native-firebase/analytics';
 import crashlytics from '@react-native-firebase/crashlytics';
 import { useAppSelector } from '../redux/Store';
-// import Triangle from '../components/TestComponent';
+import { Scale } from '../hooks/useScale';
 
 export type ApiData = {
   id: string;
@@ -154,20 +154,11 @@ const HomeScreen = () => {
     }
   };
 
-  //get courant user
-  // const getCourantUser = async () => {
-  //   try {
-  //     const user = await GetUser();
-  //     console.log('🚀 ~ getCourantUser ~ user:', user);
-  //   } catch (error) {
-  //     console.log('🚀 ~ getCourantUser ~ error:', error);
-  //   }
-  // };
-
   useEffect(() => {
     GetData();
   }, [GetData]);
 
+  //todo status update
   const handleClick = async (item:ApiData):Promise<void> => {
     const updateData:NewTaskData = {
       title: item.title,
@@ -189,6 +180,8 @@ const HomeScreen = () => {
     }
   };
 
+
+  // display all todo
   const renderItemList = ({ item } : {item : ApiData}) => (
     <View style={styles.listContainer}>
       <View style={styles.checkOurUncheckContainer}>
@@ -213,14 +206,14 @@ const HomeScreen = () => {
       <View style={styles.deleteEditBtn}>
         {item.status === 'pending' ? (
           <TouchableOpacity
-            style={styles.deleteBtnContainer}
+            style={styles.deleteEditBtnContainer}
             onPress={() => GetDataById(item.id)}
           >
             <Icon name="edit" size={30} color={color.text} />
           </TouchableOpacity>
         ) : null}
         <TouchableOpacity
-          style={styles.deleteBtnContainer}
+          style={styles.deleteEditBtnContainer}
           onPress={() => DeleteData(item.id)}
         >
           <Icon name="delete" size={30} color={color.text} />
@@ -257,8 +250,6 @@ const HomeScreen = () => {
         )}
       </View>
 
-        {/* <Triangle /> */}
-
       <FlatList
         data={todo}
         keyExtractor={item => item.id}
@@ -280,68 +271,64 @@ const useStyle = () => {
     },
     inputContainer: {
       // flex:1,
-      height: '26%',
+      height: Scale(200),
       backgroundColor: color.backGroundColor,
       alignItems: 'center',
       borderBottomColor: color.borderColor,
-      borderBottomWidth: 1,
-      marginBottom: 20,
+      borderBottomWidth: Scale(3),
     },
     titleInputfield: {
-      borderWidth: 1,
+      borderWidth: Scale(1),
       borderColor: color.borderColor,
-      height: 40,
-      width: 370,
-      marginHorizontal: 10,
-      marginTop: 20,
-      paddingHorizontal: 20,
-      fontSize: 20,
+      height: Scale(45),
+      width: Scale(370),
+      marginTop: Scale(20),
+      paddingHorizontal: Scale(10),
+      fontSize: Scale(23),
       color: color.text,
     },
     desInputfield: {
-      borderWidth: 1,
+      borderWidth: Scale(1),
       borderColor: color.borderColor,
-      height: 40,
-      width: 370,
-      marginTop: 10,
-      marginHorizontal: 10,
-      paddingHorizontal: 20,
-      fontSize: 20,
+      height: Scale(45),
+      width: Scale(370),
+      marginTop: Scale(20),
+      paddingHorizontal: Scale(10),
+      fontSize: Scale(23),
       color: color.text,
     },
     btnContainer: {
       backgroundColor: color.btnColor,
-      height: 40,
-      width: 100,
-      marginTop: 15,
+      height: Scale(40),
+      width: Scale(100),
+      marginTop: Scale(15),
       alignItems: 'center',
       justifyContent: 'center',
-      borderRadius: 10,
+      borderRadius: Scale(10),
     },
     btnText: {
-      fontSize: 20,
+      fontSize: Scale(20),
       color: color.text,
     },
     listContainer: {
       backgroundColor: color.backGroundColor,
-      height: 80,
-      marginTop: 10,
-      paddingLeft: 20,
-      borderRadius: 20,
+      height: Scale(80),
+      marginTop: Scale(10),
+      paddingLeft: Scale(15),
+      borderRadius: Scale(20),
       borderColor: color.borderColor,
-      borderWidth: 1,
-      marginHorizontal: 3,
-      marginBottom: 10,
+      borderWidth: Scale(2),
+      marginHorizontal: Scale(3),
+      marginBottom: Scale(5),
       alignItems: 'center',
       flexDirection: 'row',
     },
     listText: {
-      fontSize: 20,
+      fontSize: Scale(20),
       color: color.text,
     },
-    deleteBtnContainer: {
-      // alignSelf: 'flex-end',
-      marginRight: 10,
+    deleteEditBtnContainer: {
+      marginRight: Scale(10),
     },
     deleteEditBtn: {
       flex: 1,
@@ -349,7 +336,7 @@ const useStyle = () => {
       justifyContent: 'flex-end',
     },
     checkOurUncheckContainer:{
-      marginRight: 10
+      marginRight: Scale(10)
     }
   });
 };

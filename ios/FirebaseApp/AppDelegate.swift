@@ -4,6 +4,8 @@ import React
 import React_RCTAppDelegate
 import ReactAppDependencyProvider
 import GoogleMaps
+import GoogleSignIn
+import FBSDKCoreKit
 
 @main
 class AppDelegate: UIResponder, UIApplicationDelegate {
@@ -12,17 +14,23 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
   var reactNativeDelegate: ReactNativeDelegate?
   var reactNativeFactory: RCTReactNativeFactory?
 
-  
-
   func application(
     _ application: UIApplication,
     didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]? = nil
   ) -> Bool {
-    GMSServices.provideAPIKey("AIzaSyDV7i75OJX6fv8m2TCa2q3JsFw-lSCSgNg");
-  // AIzaSyBP_MjNi6Sj-LYMYcuHtPKcZA747rFEJhk
-  // AIzaSyAoLnTtBjqjJ7OMlqWof5RLu52aM46G_ns    --> for ios
-  // AIzaSyDV7i75OJX6fv8m2TCa2q3JsFw-lSCSgNg    --> new key genrate
+
+    
+    ApplicationDelegate.shared.application(
+      application,
+      didFinishLaunchingWithOptions: launchOptions
+    )
+
     FirebaseApp.configure()
+
+   
+    GMSServices.provideAPIKey("AIzaSyDV7i75OJX6fv8m2TCa2q3JsFw-lSCSgNg")
+
+    
     let delegate = ReactNativeDelegate()
     let factory = RCTReactNativeFactory(delegate: delegate)
     delegate.dependencyProvider = RCTAppDependencyProvider()
@@ -40,6 +48,16 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 
     return true
   }
+
+  @available(iOS 9.0, *)
+  func application(_ app: UIApplication, open url: URL,
+                   options: [UIApplication.OpenURLOptionsKey : Any] = [:]) -> Bool {
+
+    let handledByFB = ApplicationDelegate.shared.application(app, open: url, options: options)
+    let handledByGoogle = GIDSignIn.sharedInstance.handle(url)
+
+    return handledByFB || handledByGoogle
+  }
 }
 
 class ReactNativeDelegate: RCTDefaultReactNativeFactoryDelegate {
@@ -49,9 +67,9 @@ class ReactNativeDelegate: RCTDefaultReactNativeFactoryDelegate {
 
   override func bundleURL() -> URL? {
 #if DEBUG
-    RCTBundleURLProvider.sharedSettings().jsBundleURL(forBundleRoot: "index")
+    return RCTBundleURLProvider.sharedSettings().jsBundleURL(forBundleRoot: "index")
 #else
-    Bundle.main.url(forResource: "main", withExtension: "jsbundle")
+    return Bundle.main.url(forResource: "main", withExtension: "jsbundle")
 #endif
   }
 }

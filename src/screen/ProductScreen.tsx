@@ -14,10 +14,6 @@ import React, {
   useState,
 } from 'react';
 import axios from 'axios';
-import {
-  widthPercentageToDP as w,
-  heightPercentageToDP as h,
-} from 'react-native-responsive-screen';
 import { useThemeColor } from '../hooks/useThemeColor';
 import { colors } from '../theme/Colors';
 import { SafeAreaView } from 'react-native-safe-area-context';
@@ -26,6 +22,7 @@ import { NativeStackNavigationProp } from '@react-navigation/native-stack';
 import { RootStackParamList } from '../types/RootStackParamList';
 import { useProductCart } from '../store/useProductCart';
 import { useAppTranslation } from '../hooks/useAppTranslation';
+import { heightScale, moderateScale, widthScale } from '../hooks/useDimensions';
 
 type Product = {
   category: string;
@@ -157,64 +154,62 @@ const useStyle = () => {
   return StyleSheet.create({
     container: {
       backgroundColor: colors.screen,
-      // width: w('100%'),
-      // height: h('100%'),
       flex: 1,
-      paddingBottom: h('0.5%'),
+      // paddingBottom: heightScale(5),
     },
     renderItemContainer: {
-      width: w('100%'),
-      height: h('18%'),
+      width: widthScale(390),
+      height: heightScale(150),
       backgroundColor: color.backGroundColor,
       alignSelf: 'center',
-      marginTop: h('1%'),
+      marginTop: heightScale(10),
       flexDirection: 'row',
-      gap: w('2%'),
-      borderRadius: w('3%'),
+      gap: widthScale(8),
+      borderRadius: widthScale(20),
     },
     imageContainer: {
-      width: 120,
-      height: 120,
+      width: widthScale(120),
+      height: heightScale(130),
       alignSelf: 'center',
-      marginLeft: 10,
+      marginLeft: widthScale(10),
     },
     containerCategory: {
-      fontSize: h('2%'),
+      fontSize: moderateScale(16),
       color: color.text,
     },
     containerDis: {
-      fontSize: h('1.5%'),
+      fontSize: moderateScale(14),
       color: color.text,
     },
     addRemoveBtnContainer: {
       flexDirection: 'row',
-      gap: 20,
+      gap: widthScale(20),
       alignSelf: 'center',
     },
     addToCartBtn: {
       backgroundColor: color.btnColor,
-      height: h('4%'),
-      width: w('60%'),
+      height: heightScale(35),
+      width: widthScale(240),
       justifyContent: 'center',
       alignItems: 'center',
-      borderRadius: 10,
+      borderRadius: moderateScale(10),
     },
     addToCartBtnText: {
-      fontSize: h('2%'),
+      fontSize: moderateScale(16),
       color: color.text,
     },
     cartCount: {
       // backgroundColor: colors.destructive,
-      height: h('4%'),
-      width: w('8%'),
+      height: heightScale(50),
+      width: widthScale(30),
       justifyContent: 'center',
       alignItems: 'center',
-      borderRadius: w('4%'),
+      borderRadius: moderateScale(20),
     },
     cartCountText: {
-      fontSize: h('2%'),
+      fontSize: moderateScale(16),
       color: color.headerText,
-      marginBottom : h('-0.8%')
+      marginBottom : heightScale(-5)
     },
     loaderContainer : {
       flex:1,
@@ -222,7 +217,7 @@ const useStyle = () => {
       alignItems:"center"
     },
     flatListTopMargin : {
-      paddingTop: 10
+      // paddingTop: 10
     }
   });
 };
