@@ -27,6 +27,8 @@ import {
   TestIds,
 } from 'react-native-google-mobile-ads';
 
+const adUnitId = __DEV__ ? TestIds.ADAPTIVE_BANNER : 'ca-app-pub-3940256099942544/6300978111';
+
 export type ApiData = {
   id: string;
   title: string;
@@ -261,8 +263,11 @@ const HomeScreen = () => {
       />
 
       <BannerAd
-        unitId={TestIds.BANNER} // 👈 Use real Ad Unit ID in production
-        size={BannerAdSize.FULL_BANNER}
+        unitId={adUnitId} // 👈 Use real Ad Unit ID in production
+        size={BannerAdSize.ANCHORED_ADAPTIVE_BANNER}
+        requestOptions={{
+          networkExtras:{collapsible:'bottom'}
+        }}
       />
     </View>
   );
