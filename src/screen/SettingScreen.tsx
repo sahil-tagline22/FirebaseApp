@@ -13,7 +13,10 @@ import DatePicker from 'react-native-date-picker'
 import FastImage from "@d11/react-native-fast-image";
 import { Blurhash } from "react-native-blurhash";
 import LottieView from 'lottie-react-native'
-import { heightScale, moderateScale, widthScale } from '../hooks/useDimensions'
+import { heightScale, moderateScale, widthScale } from '../hooks/useDimensions';
+import analytics from '@react-native-firebase/analytics';
+import crashlytics from '@react-native-firebase/crashlytics';
+import pref from '@react-native-firebase/perf';
 
 const languages = [
   {label: 'English', value : 'en'},
@@ -49,6 +52,25 @@ const SettingScreen = () => {
       i18next.changeLanguage(language);
     }
   },[language])
+
+  //analytics,crashlytics,performance
+  useEffect(() => {
+    analytics().logScreenView({
+      screen_name: 'SettingScreen',
+      screen_class: 'SettingScreen',
+    });
+    crashlytics().log('AboutScreen mounted');
+
+     const performance = async()=>{
+      try{
+        const trace = await pref().startScreenTrace('SettingScreen');
+        await trace.stop();
+      }catch(error){
+        console.log('🚀 ~ performance ~ error:', error)
+      }
+    }
+    performance();
+  }, []);
   
   //permission to user to access photo-gallery
   const [filePath, setFilePath] = useState<string>();

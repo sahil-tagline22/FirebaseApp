@@ -31,6 +31,7 @@ import { useThemeColor } from '../hooks/useThemeColor';
 import { useAppSelector } from '../redux/Store';
 import analytics from '@react-native-firebase/analytics';
 import crashlytics from '@react-native-firebase/crashlytics';
+import pref from '@react-native-firebase/perf';
 
 interface ChatScreenProps {
   navigation: NativeStackNavigationProp<RootStackParamList, 'chat'>;
@@ -57,6 +58,16 @@ const ChatScreen = ({ navigation }: ChatScreenProps) => {
       screen_class: 'ChatScreen',
     });
     crashlytics().log('AboutScreen mounted');
+
+     const performance = async()=>{
+      try{
+        const trace = await pref().startScreenTrace('ChatScreen');
+        await trace.stop();
+      }catch(error){
+        console.log('🚀 ~ performance ~ error:', error)
+      }
+    }
+    performance();
   }, []);
 
   useEffect(() => {

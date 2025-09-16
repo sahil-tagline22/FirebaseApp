@@ -1,5 +1,4 @@
 import {
-  Button,
   FlatList,
   Image,
   Platform,
@@ -38,6 +37,7 @@ import {
   RewardedAd,
   RewardedAdEventType,
 } from 'react-native-google-mobile-ads';
+import pref from '@react-native-firebase/perf';
 
 // const interstitial = InterstitialAd.createForAdRequest(TestIds.INTERSTITIAL);
 
@@ -54,13 +54,23 @@ const UserScreen = ({ navigation }: UserScreenProps) => {
   // const color = useThemeColor();
   const styles = useStyle();
 
-  //analytics
+  //analytics,crashlytics,performance
   useEffect(() => {
     analytics().logScreenView({
       screen_name: 'UserScreen',
       screen_class: 'UserScreen',
     });
     crashlytics().log('AboutScreen mounted');
+
+     const performance = async()=>{
+      try{
+        const trace = await pref().startScreenTrace('UserScreen');
+        await trace.stop();
+      }catch(error){
+        console.log('🚀 ~ performance ~ error:', error)
+      }
+    }
+    performance();
   }, []);
 
   useEffect(() => {

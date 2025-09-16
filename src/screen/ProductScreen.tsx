@@ -23,6 +23,9 @@ import { RootStackParamList } from '../types/RootStackParamList';
 import { useProductCart } from '../store/useProductCart';
 import { useAppTranslation } from '../hooks/useAppTranslation';
 import { heightScale, moderateScale, widthScale } from '../hooks/useDimensions';
+import analytics from '@react-native-firebase/analytics';
+import crashlytics from '@react-native-firebase/crashlytics';
+import pref from '@react-native-firebase/perf';
 
 type Product = {
   category: string;
@@ -48,6 +51,25 @@ const ProductScreen = ({ navigation }: ProductScreenProps) => {
   const addToCart = useProductCart(state => state.addToCart);
   const removeFromCart = useProductCart(state => state.removeFromCart);
   const totalProduct = useProductCart(state => state.totalCartProduct);
+
+  //analytics,crashlytics,performance
+  useEffect(() => {
+    analytics().logScreenView({
+      screen_name: 'ProductScreen',
+      screen_class: 'ProductScreen',
+    });
+    crashlytics().log('AboutScreen mounted');
+
+     const performance = async()=>{
+      try{
+        const trace = await pref().startScreenTrace('ProductScreen');
+        await trace.stop();
+      }catch(error){
+        console.log('🚀 ~ performance ~ error:', error)
+      }
+    }
+    performance();
+  }, []);
 
   //check if cart product in exist or not
   const isInCart = (id: number) => {

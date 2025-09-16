@@ -4,18 +4,28 @@ import { getApp } from '@react-native-firebase/app';
 import {getRemoteConfig,setDefaults,fetchAndActivate,getValue} from '@react-native-firebase/remote-config';
 import analytics from '@react-native-firebase/analytics';
 import crashlytics from '@react-native-firebase/crashlytics';
-
+import pref from '@react-native-firebase/perf';
 
 const ThemeScreen = () => {
   const [theme, setTheme] = useState<string>();
 
-  //analytics
+  //analytics,crashlytics,performance
   useEffect(() => {
     analytics().logScreenView({
       screen_name: 'ThemeScreen',
       screen_class: 'ThemeScreen',
     });
     crashlytics().log('AboutScreen mounted');
+
+    const performance = async()=>{
+      try{
+        const trace = await pref().startScreenTrace('ThemeScreen');
+        await trace.stop();
+      }catch(error){
+        console.log('🚀 ~ performance ~ error:', error)
+      }
+    }
+    performance();
   }, []);
 
   useEffect(() => {

@@ -12,6 +12,7 @@ import { Text } from 'react-native-gesture-handler';
 import analytics from '@react-native-firebase/analytics';
 import crashlytics from '@react-native-firebase/crashlytics';
 import { heightScale, moderateScale, widthScale } from '../hooks/useDimensions';
+import pref from '@react-native-firebase/perf';
 
 type Item = {
   body: string;
@@ -34,13 +35,23 @@ const AboutScreen = () => {
   const color = useThemeColor();
   const styles = useStyle();
 
-  //analytics
+  //analytics,crashlytics,performance
   useEffect(() => {
     analytics().logScreenView({
       screen_name: 'AboutScreen',
       screen_class: 'AboutScreen',
     });
     crashlytics().log('AboutScreen mounted');
+
+    const performance = async()=>{
+      try{
+        const trace = await pref().startScreenTrace('AboutScreen');
+        await trace.stop();
+      }catch(error){
+        console.log('🚀 ~ performance ~ error:', error)
+      }
+    }
+    performance();
   }, []);
 
   const initialApiCall = async (page: number) => {

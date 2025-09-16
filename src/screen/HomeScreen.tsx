@@ -26,6 +26,7 @@ import {
   BannerAdSize,
   TestIds,
 } from 'react-native-google-mobile-ads';
+import pref from '@react-native-firebase/perf';
 
 const adUnitId = __DEV__ ? TestIds.ADAPTIVE_BANNER : 'ca-app-pub-3940256099942544/6300978111';
 
@@ -60,14 +61,23 @@ const HomeScreen = () => {
   const user = useAppSelector(state => state.auth.user);
   console.log('🚀 ~ HomeScreen ~ user:', user);
 
-  //analytics
+  //analytics,crashlytics,performance
   useEffect(() => {
     analytics().logScreenView({
       screen_name: 'HomeScreen',
       screen_class: 'HomeScreen',
     });
     crashlytics().log('AboutScreen mounted');
-    // crashlytics().crash();
+    
+    const performance = async()=>{
+      try{
+        const trace = await pref().startScreenTrace('HomeScreen');
+        await trace.stop();
+      }catch(error){
+        console.log('🚀 ~ performance ~ error:', error)
+      }
+    }
+    performance();
   }, []);
 
   //get all todo

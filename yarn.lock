@@ -2080,6 +2080,11 @@
   resolved "https://registry.yarnpkg.com/@react-native-firebase/messaging/-/messaging-23.3.1.tgz#cb35c92df400a35c5fc62ad77cce431a16fcc39d"
   integrity sha512-cUFnAGT/+MYgDj9mxnRQOIiYZF0mA+qprzfa6EXpD66N3Dgetfn3VI2kIlEi24evtbFH3EnKI/u372qhVHzJIw==
 
+"@react-native-firebase/perf@^23.3.1":
+  version "23.3.1"
+  resolved "https://registry.yarnpkg.com/@react-native-firebase/perf/-/perf-23.3.1.tgz#790318c65743d9702303aa3181d6f369982defd6"
+  integrity sha512-FDDZEOFnF+Nm5nIo8+9NwojYHv5JqVM9qKNM/v9O50uTFOGL/Lowl+m/rSFFGVovnVzBntGGCwCaDi1vSOvbMA==
+
 "@react-native-firebase/remote-config@^23.2.0":
   version "23.3.1"
   resolved "https://registry.yarnpkg.com/@react-native-firebase/remote-config/-/remote-config-23.3.1.tgz#80b8386c384e16e6ce2d64b7bc44681cf3d0bf5d"

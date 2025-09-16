@@ -6,7 +6,7 @@ import {
   TouchableOpacity,
   View,
 } from 'react-native';
-import React, { useLayoutEffect } from 'react';
+import React, { useEffect, useLayoutEffect } from 'react';
 import { NativeStackNavigationProp } from '@react-navigation/native-stack';
 import { RootStackParamList } from '../types/RootStackParamList';
 import { useThemeColor } from '../hooks/useThemeColor';
@@ -18,6 +18,10 @@ import {
 } from 'react-native-responsive-screen';
 import Icon from 'react-native-vector-icons/MaterialIcons';
 import { useAppTranslation } from '../hooks/useAppTranslation';
+import analytics from '@react-native-firebase/analytics';
+import crashlytics from '@react-native-firebase/crashlytics';
+import pref from '@react-native-firebase/perf';
+
 
 interface CartNavigationProps {
   navigation: NativeStackNavigationProp<RootStackParamList, 'cart'>;
@@ -41,6 +45,25 @@ const CartScreen = ({ navigation }: CartNavigationProps) => {
   const totalProduct = useProductCart(state => state.totalCartProduct);
   const increaseItemQuantity = useProductCart(state => state.increaseItemQuantity);
   const { t } = useAppTranslation();
+
+  //analytics,crashlytics,performance
+  useEffect(() => {
+    analytics().logScreenView({
+      screen_name: 'ChartScreen',
+      screen_class: 'ChartScreen',
+    });
+    crashlytics().log('AboutScreen mounted');
+
+     const performance = async()=>{
+      try{
+        const trace = await pref().startScreenTrace('ChartScreen');
+        await trace.stop();
+      }catch(error){
+        console.log('🚀 ~ performance ~ error:', error)
+      }
+    }
+    performance();
+  }, []);
 
   // Header style create
   useLayoutEffect(() => {
