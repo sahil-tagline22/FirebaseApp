@@ -1,4 +1,8 @@
 {
   "name": "FirebaseApp",
-  "displayName": "FirebaseApp"
+  "displayName": "FirebaseApp",
+  "react-native-google-mobile-ads": {
+    "android_app_id": "ca-app-pub-3258512684852054~7533398015",
+    "ios_app_id": "ca-app-pub-xxxxxxxx~xxxxxxxx"
+  }
 }
