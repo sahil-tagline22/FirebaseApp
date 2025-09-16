@@ -34,7 +34,8 @@ import { onMicrosoftButtonPress } from '../../api/requests/socials/MicrosiftAuth
 import { authorize } from 'react-native-app-auth';
 import auth from '@react-native-firebase/auth';
 import { heightScale, moderateScale, widthScale } from '../../hooks/useDimensions';
-
+import perf from '@react-native-firebase/perf';
+ 
 interface LoginScreenProps {
   navigation: NativeStackNavigationProp<RootStackParamList, 'login'>;
 }
@@ -82,6 +83,12 @@ const LoginScreen = ({ navigation }: LoginScreenProps) => {
         await analytics().logEvent('login', {
           email: values.email,
         });
+
+        //performance
+        const trace = await perf().startTrace('login_trace');
+        trace.putAttribute('user_email', values.email);
+        trace.putMetric('login_time', new Date().getTime());
+        await trace.stop();
 
         //login user, store token in redux-persisted
         const response = await LoginUser({

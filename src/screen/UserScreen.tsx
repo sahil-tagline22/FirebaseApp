@@ -193,6 +193,7 @@ const UserScreen = ({ navigation }: UserScreenProps) => {
 
   return (
     <View style={styles.container}>
+      <View style={styles.userList}>
       <SafeAreaView>
         <FlatList
           data={users}
@@ -221,6 +222,7 @@ const UserScreen = ({ navigation }: UserScreenProps) => {
           )}
         />
       </SafeAreaView>
+      </View>
       <View style={styles.adMobView}>
         <TouchableOpacity
           onPress={showInterstitialAd}
@@ -287,8 +289,8 @@ const useStyle = () => {
       bottom: 10,
     },
     adMobView: {
-      flex: 1,
-      justifyContent: 'flex-end',
+      flex:0.2,
+      justifyContent:"flex-end"
     },
     adMobButton: {
       backgroundColor: colors.button.button,
@@ -302,6 +304,9 @@ const useStyle = () => {
     adMobButtonText:{
       fontSize: moderateScale(20),
       color: colors.white,
-    }
+    },
+    userList: {
+      flex: 0.8,
+    },
   });
 };
